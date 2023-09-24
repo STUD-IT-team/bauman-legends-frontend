@@ -3,6 +3,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 // Components:
 import Registration from "./views/Registration.vue";
 import Page404 from "./views/Page404.vue";
+import Authorization from "./views/Authorization.vue";
 
 
 
@@ -10,7 +11,10 @@ export default function createVueRouter(Store) {
   const routes = [
     {path: '/register', name: 'registration', component: Registration},
 
+    {path: '/authorization', name: 'authorization', component: Authorization},
+
     {path: '/:pathMatch(.*)*', name: 'default', component: Page404},
+
   ];
 
   const Router = createRouter({
