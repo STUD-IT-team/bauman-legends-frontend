@@ -12,7 +12,7 @@ export default class REST_API {
     }
 
     get(path, data = {}) {
-        let query = Object.entries(data).reduce((query, [key, value]) => query + `${key}=${value}&`, '?');
+        let query = Object.entries(data).reduce((query, [key, value]) => query + `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}&`, '?');
         query = query.replace(/&$/, '');
         return this.request('GET', path + query);
     }
@@ -23,10 +23,20 @@ export default class REST_API {
             {
                 method: method,
                 body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                mode: 'cors',
+                credentials: 'include',
             }
         );
+        let parsedObject = {};
+        try {
+            parsedObject = JSON.parse(await response.text()) || {};
+        } catch {
+        }
         return {
-            data: response.body,
+            data: parsedObject,
             code: response.code,
             ok: response.ok,
         };

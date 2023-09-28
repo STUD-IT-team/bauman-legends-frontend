@@ -46,7 +46,11 @@
 
 <script>
 export default {
-
+  data() {
+    return {
+      cards: [{name: 'rudy', description: 'cool'}]
+    }
+  }
 }
 </script>
 

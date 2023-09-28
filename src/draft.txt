@@ -1,0 +1,35 @@
+/user:
+(login)- POST /auth {email, password, clientBrowser, clientOS}
+(confReq) - POST /email/confirm (запрос на отсылку письма подтверждения почты)
+(confSub)- PUT /email/confirm {secretCode}
+(logout) - DELETE /session
+(logoutAll) - DELETE /sessions/another (завершить все сессии кроме текущей)
+(allSessions) - GET /sessions
+(userById) - GET / {userId}
+(register)- POST / {name, group, password, email, telegram, vk, clientBrowser, clientOS}
+(editUser) PUT / {name, group, password, email, telegram, vk}
+(delUser) - DELETE /
+(newPass) - PUT /password {oldPassword, newPassword}
+(emailReq) - POST /password/restore (запрос на отсылку письма для восстановления) {email}
+(restorePass) - PUT /password/restore {secretCode, newPassword}
+(authCode) - POST /auth/code {secretCode, clientBrowser, clientOS}
+(my profile) - GET /
+
+/team:
+(addTeam) - POST / {name}
+(editTeam) - PUT / {name}
+(getTeam) - GET /
+(delTeam) - DELETE /
+(addMember) - POST /join {id}
+(delMember) - DELETE /member {id}
+(addRole) - PUT /member {id, roleId}
+
+/task:
+(getTask) - GET /
+(takeTask) - POST /take {taskTypeId}
+(getHint) - GET /hint
+(answer) - POST /answer {answer}
+(answerSecret) - POST /answer/secret_task {answer}
+
+/admin:
+(getAdmin) - GET /
