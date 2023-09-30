@@ -1,13 +1,71 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Vue + TS</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <script src="assets/itc-slider.js" defer></script>
+  <link rel="shortcut icon" href="pictures/favicon.ico" type="image/x-icon">
+  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js" defer></script>
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link rel="stylesheet" type="text/css" href="src/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite + Vue + TS</title>
+</head>
+
+<body>
+  <header>
+    <div class="navigation">
+      <nav>
+        <ul>
+          <li><a href="#">Главная</a></li>
+          <li><a href="#">О мероприятии</a></li>
+          <li><a href="#">Контакты</a></li>
+          <li><a href="#"><img class="auth" src="http://placehold.it/25x25/" alt=""></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <div class="container_reg">
+    <div class="block">
+      <h2>О мероприятии</h2>
+      <p>Мы - команда профессиональных кондитеров, которые создают вкуснейшие десерты и торты для наших клиентов.</p>
+      <p>Мы используем только натуральные ингредиенты и современное оборудование, чтобы создавать десерты, которые
+        будут
+        вас вдохновлять на праздники и вечеринки.</p>
+    </div>
+    <div class="block">
+      <h2>Авторизация</h2>
+      <form>
+        <label for="username">Имя пользователя:</label>
+        <input type="text" id="username" name="username"><br>
+
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password"><br>
+        <a class="b_reg" href="#">Еще не регистрировался?</a>
+
+        <input type="submit" value="Войти">
+      </form>
+    </div>
+  </div>
+  <footer>
+    <div class="foooter_text">
+      <h1 class="h1_footer">© 2023 IT-отдел студенческого совета МГТУ имени Н.Э. Баумана <br>
+        Все права защищены.</h1>
+      <p class="p_footer">Студенческий совет обладает исключительным правом на все материалы, размещенные на сайте —
+        и/или
+        имеет разрешение правообладателя на использование таких материалов на сайте.
+        Использование размещенных на сайте материалов (включая тексты, фотографии, видеоматериалы, графические
+        изображения и прочее) не допускается без согласия или иного правообладателя соответствующих
+        материалов.
+        При цитировании материалов, размещенных на сайте, ссылка на сайт является обязательной.</p>
+      <div class="icon-links">
+        <a href="ссылка1"><img src="http://placehold.it/25x25/" alt="Иконка 1"></a>
+        <a href="ссылка2"><img src="http://placehold.it/25x25/" alt="Иконка 2"></a>
+        <a href="ссылка3"><img src="http://placehold.it/25x25/" alt="Иконка 3"></a>
+      </div>
+    </div>
+  </footer>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>
