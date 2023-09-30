@@ -25,8 +25,6 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -77,4 +75,158 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+header {
+  background-color: #f2f2f2;
+  padding: 20px;
+  position: absolute;
+  width: 1200px;
+  top: 0;
+  height: 30px;
+}
+
+.navigation {
+
+}
+
+.navigation nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.navigation nav li {
+  margin: 0 10px;
+}
+
+.navigation nav a {
+  color: #333;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.navigation nav a:hover {
+  color: #9b1111;
+}
+
+.auth {
+  color: blue;
+  width: 25px;
+  height: 25px;
+}
+
+.auth:hover {
+  color: red; 
+}
+
+.container_reg {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 70px;
+}
+
+.block {
+  width: 45%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  height: 350px;
+  margin: 20px 20px 0 20px;
+}
+
+.block h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.block p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.block form {
+  display: flex;
+  flex-direction: column;
+}
+
+.block label {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.block input[type="text"],
+.block input[type="password"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.b_reg {
+  padding-bottom: 10px;
+}
+
+.block input[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.block input[type="submit"]:hover {
+  background-color: #0069d9;
+}
+
+footer {
+  border-top: solid white;
+  width: 1200px;
+  height: 50px;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 20px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.footer_text {
+  width: 500px;
+}
+
+.h1_footer {
+  font-size: 18px;
+  margin-left: 2%;
+  position: absolute;
+}
+
+.p_footer {
+  font-size: 14px;
+  margin-left: 2%;
+  position: absolute;
+  margin-top: 60px;
+  width: 800px;
+}
+
+.icon-links {
+  margin-top: 200px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px;
+}
+
+.icon-links a {
+  text-decoration: none;
+  margin: 0 10px;
 }
