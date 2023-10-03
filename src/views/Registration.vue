@@ -1,78 +1,99 @@
-<style scoped>
-.root-register {
-  width: 100%;
-  height: 100%;
-}
+<style scoped lang="stylus">
+.root-register
+  width 100%
+  height 100%
 
-.root-register .form {
-  margin-top: 200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 20px;
-  width: 100%;
-  max-width: 500px;
-}
+  .form
+    margin-top 200px
+    margin-left auto
+    margin-right auto
+    padding 0 20px
+    width 100%
+    max-width 500px
 
-.root-register .form label {
-  display: inline-block;
-  margin-bottom: 15px;
-  width: 50%;
-}
-.root-register .form input {
-  display: inline-block;
-  width: 50%;
-  padding: 5px 7px;
-}
+    label
+      display inline-block
+      margin-bottom 15px
+      width 50%
 
-.root-register .form button.submit {
-  display: block;
-  width: 100%;
-  margin-top: 20px;
-  padding: 10px;
-  cursor: pointer;
-}
+    input
+      display inline-block
+      width 50%
+      padding 5px 7px
+
+    button.submit
+      display block
+      width 100%
+      margin-top 20px
+      padding 10px
+      cursor pointer
+
 </style>
 
 <template>
   <div class="root-register">
-    <div class="form">
-      <label>Имя</label><input type="text" v-model="newUserData.name" placeholder="ФИО">
-      <label>Учебная группа</label><input type="text" v-model="newUserData.name" placeholder="РК1-11Б">
-      <label>Telegram</label><input type="text" v-model="newUserData.name" placeholder="https://t.me/xxxxxx">
-      <label>VK</label><input type="text" v-model="newUserData.name" placeholder="https://vk.com/xxxxxx">
-      <label>Email</label><input type="text" v-model="newUserData.name" placeholder="ххххх@xxx.xx">
-      <label>Телефон</label><input type="text" v-model="newUserData.name" placeholder="Х-(ХХХ)-ХХХ-ХХ-ХХ">
-
-      <button @click="register" class="submit">Отправить</button>
-    </div>
+    <FormWithErrors
+      :fields="fields"
+      @success="register"
+    ></FormWithErrors>
   </div>
 </template>
 
 <script>
+import FormWithErrors from "../components/FormWithErrors.vue";
+
+
 export default {
+  components: {FormWithErrors},
   data() {
     return {
-      newUserData: {
-        name: undefined,
-        group: undefined,
-        tg: undefined,
-        vk: undefined,
-        email: undefined,
-        telephone: undefined,
-      },
+      fields: {
+        name: {
+          name: 'Имя',
+          type: 'text',
+          placeholder: 'Иванов Иван Иванович',
+          validationRegExp: /^\w+ \w+( \w+)?$/,
+        },
+        group: {
+          name: 'Учебная группа',
+          type: 'text',
+          placeholder: 'ХХх-ххБ',
+          validationRegExp: /^\w\w?\d-\d\d\w?$/,
+          prettifyResult: (str) => str.toUpperCase(),
+        },
+        tg:{
+          name: 'Telegram',
+          type: 'text',
+          placeholder: '@legends_bmstu',
+          validationRegExp: /^((https:\/\/t\.me\/)|@)?\w{5,}$/,
+          prettifyResult: (str) => '@' + str.replace('https://t.me/', '').replace('@', ''),
+        },
+        vk: {
+          name: 'VK',
+          type: 'text',
+          placeholder: 'https://vk.com/legends_bmstu',
+          validationRegExp: /^(https:\/\/vk\.com\/)?\w+$/,
+          prettifyResult: (str) => str.replace('https://vk.com/', ''),
+        },
+        email: {
+          name: 'Email',
+          type: 'text',
+          placeholder: 'legends@bmstu.ru',
+          validationRegExp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        },
+        telephone: {
+          name: 'Телефон',
+          type: 'text',
+          placeholder: '8-(123)-456-78-90',
+          validationRegExp: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+        }
+      }
     }
   },
 
-  computed: {
-  },
-
-  async mounted() {
-  },
-
   methods: {
-    register() {
-      console.log("VALIDATE AND SEND USER DATA");
-      // api.sendRegisterData(this.newUserData);
+    register(data) {
+      this.$api.sendRegisterData(data);
     }
   }
 }

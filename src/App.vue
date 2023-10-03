@@ -1,18 +1,21 @@
-<style scoped>
+<style lang="stylus" scoped>
 /**
  Атрибут scoped позволяет определять стили, влияющие на html-элементы
- только в этом же компоненте, и ни в каких других
+ только в этом же компоненте, и ни в каких других.
+
+ Атрибут lang говорит на каком препроцессоре мы пишем css. Я выбираю stylus.
+ На stylus не нужны символы {};: вместо них важны отступы.
+ И можно делать вложенные элементы, что является отличной заменой БЭМ.
  **/
 
-.wrapper {
-  width: 100%;
-  min-height: 100vh;
-}
-.wrapper > * {
-    position: fixed;
-    width: 100%;
-    min-height: 100vh;
-}
+.wrapper
+  width 100%
+  min-height 100vh
+
+.wrapper > *
+    position fixed
+    width 100%
+    min-height 100vh
 </style>
 
 <template>
@@ -93,7 +96,22 @@ export default {
     // Прописываем в глобавльные свойства частоиспользуемые компоненты, чтобы они были доступны из любых других компонентов
     global.$modal = this.$refs.modal;
     global.$popups = this.$refs.popups;
-    global.$app = this;
+    global.$app = this; // это обычно не используется, но может пригодиться
+
+    // Получаем юзера в хранилище
+    this.$store.dispatch("GET_USER");
   },
+
+  methods: {
+    async logOut() {
+      const {data, code, ok} = await this.$api.signOut();
+      if (!ok) {
+        this.$popups.error('Не получилось выйти из аккаунта', 'Неизвестная ошибка');
+        return;
+      }
+      this.$store.dispatch("DELETE_USER");
+      this.$router.push({name: "signin"});
+    }
+  }
 };
 </script>

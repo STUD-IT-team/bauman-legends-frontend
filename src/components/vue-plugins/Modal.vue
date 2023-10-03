@@ -1,6 +1,4 @@
 <style lang="stylus" scoped>
-  //@require '../../styles/constants.styl'
-
   close-btn-size = 20px
 
   .modal
@@ -60,7 +58,6 @@
 
       <div class="fields-container">
         <div v-if="type === 'prompt'" class="form-group">
-<!--          <FloatingInput type="text" v-model="text" ref="inputText" class="form-control"></FloatingInput>-->
           <input type="text" v-model="text" ref="inputText" class="form-control">
         </div>
       </div>
@@ -79,11 +76,7 @@
 </template>
 
 <script>
-  // import FloatingInput from "../FloatingInput.vue";
-
   export default {
-    // components: {FloatingInput},
-
     data() {
       return {
         type: "",

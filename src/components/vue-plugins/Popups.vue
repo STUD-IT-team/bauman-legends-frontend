@@ -1,6 +1,4 @@
 <style lang="stylus">
-  //@require '../../styles/constants.styl'
-
   indent = 15px
   innerPadding = 10px
   titleMargin = 5px
@@ -59,8 +57,6 @@
 </template>
 
 <script>
-  // import {getChildrenHeight} from "/src/utils/utils";
-
   const DEFAULT_DISSAPPEAR_AFTER_MS = 3000;
   const DEFAULT_TRANSITION_OPACITY_TIME_MS = 500;
   const DEFAULT_TRANSITION_HEIGHT_TIME_MS = 300;
