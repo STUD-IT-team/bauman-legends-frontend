@@ -1,16 +1,16 @@
 import {createRouter, createWebHistory} from 'vue-router'
 
 // Components:
-import Registration from "./views/Registration.vue";
+import Profile from "~/views/Profile.vue";
+import Register from "~/views/register.vue";
 import Page404 from "./views/Page404.vue";
-
 
 
 export default function createVueRouter(Store) {
   const routes = [
-    {path: '/register', name: 'registration', component: Registration, meta: {noLoginRequired: true}},
-    {path: '/login', name: 'signin', component: Registration, meta: {noLoginRequired: true}},
-    {path: '/profile', name: 'profile', component: Registration, meta: {loginRequired: true}},
+    {path: '/register', name: 'registration', component: Register, meta: {noLoginRequired: true}},
+    {path: '/login', name: 'signin', component: Register, meta: {noLoginRequired: true}},
+    {path: '/profile', name: 'profile', component: Profile, meta: {loginRequired: true}},
 
     {path: '/:pathMatch(.*)*', name: 'default', component: Page404},
   ];

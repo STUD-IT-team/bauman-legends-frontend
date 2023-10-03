@@ -19,16 +19,9 @@
 </style>
 
 <template>
-  <div class="wrapper">
-    <router-view v-slot="{ Component }">
-<!--      <transition name="scale-in">-->
-        <component :is="Component"/>
-<!--      </transition>-->
-    </router-view>
-  </div>
-
-  <Modal ref="modal"></Modal>
-  <Popups ref="popups"></Popups>
+  <router-view v-slot="{ Component }">
+    <component :is="Component"/>
+  </router-view>
 </template>
 
 <style>
@@ -85,6 +78,7 @@
 import {getCurrentInstance} from "vue";
 import Modal from "./components/vue-plugins/Modal.vue";
 import Popups from "./components/vue-plugins/Popups.vue";
+import API from "~/api";
 
 
 export default {
@@ -92,8 +86,8 @@ export default {
 
   mounted() {
     const global = getCurrentInstance().appContext.config.globalProperties;
-
     // Прописываем в глобавльные свойства частоиспользуемые компоненты, чтобы они были доступны из любых других компонентов
+    global.$api = new API();
     global.$modal = this.$refs.modal;
     global.$popups = this.$refs.popups;
     global.$app = this; // это обычно не используется, но может пригодиться
