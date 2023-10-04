@@ -1,4 +1,6 @@
 <style lang="stylus" scoped>
+@require '../src/styles/constants.styl'
+
 /**
  Атрибут scoped позволяет определять стили, влияющие на html-элементы
  только в этом же компоненте, и ни в каких других.
@@ -7,6 +9,24 @@
  На stylus не нужны символы {};: вместо них важны отступы.
  И можно делать вложенные элементы, что является отличной заменой БЭМ.
  **/
+.bg
+  position fixed
+  width 100%
+  height 100%
+  background colorEmp2Disabled
+.background-text-image
+  position fixed
+  width 100%
+  height 100%
+  object-fit cover
+.bauman-image
+  position fixed
+  height 100%
+  bottom -6%
+  object-fit contain
+  overflow visible
+  filter invert() hue-rotate(180deg) contrast(2)
+  opacity .5
 
 .wrapper
   width 100%
@@ -19,6 +39,10 @@
 </style>
 
 <template>
+  <div class="bg"></div>
+  <img class="background-text-image" src="../src/res/images/BackgroundPattern.png" alt="Background">
+  <img class="bauman-image" src="../src/res/images/Bauman.png" alt="Bauman">
+
   <div class="wrapper">
     <router-view v-slot="{ Component }">
       <transition name="scale-in">

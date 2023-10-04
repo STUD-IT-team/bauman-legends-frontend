@@ -2,18 +2,19 @@
 @require '../styles/constants.styl'
 @require '../styles/buttons.styl'
 
-border = 1px solid colorBorder
+//bg = colorBg
+bg = transparent
 
 .root-signin
   width 100%
   height 100%
   .form
-    border border
     border-radius borderRadiusL
     padding-left 20px
     padding-right 20px
     padding-bottom 20px
     margin 20px 20px
+    background bg
     .register-link
       text-align left
     .register-button
