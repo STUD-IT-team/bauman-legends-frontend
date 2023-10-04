@@ -19,10 +19,15 @@
 </style>
 
 <template>
-  <router-view v-slot="{ Component }">
-    <component :is="Component"/>
-  </router-view>
+  <div class="wrapper">
+    <router-view v-slot="{ Component }">
+      <transition name="scale-in">
+        <component :is="Component"/>
+      </transition>
+    </router-view>
+  </div>
 </template>
+
 
 <style>
 @keyframes scale-out {

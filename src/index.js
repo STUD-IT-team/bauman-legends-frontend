@@ -7,7 +7,6 @@ import createVueRouter from './Router.js'
 // глобальное подключение css файла с базовыми стилями
 import './styles/fontsLoader.styl';
 import './styles/global.styl';
-import Store from "./Storage.js";
 // Вообще обычно делать import не JS-ных файлов в js нельзя, но Vite это распознает так, как нужно.
 
 // import WS from "./utils/ws";  // Пока что без вебсокетов
