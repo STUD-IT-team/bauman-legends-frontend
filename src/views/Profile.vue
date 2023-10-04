@@ -37,7 +37,7 @@
       <div class="title"> {{teamData.title }} </div>
       <div v-for="member in sortedMembers" class="member">
 
-        <div class="name">{{ member.name }}</div>
+        <div class="name">{{ userNameById(member.id) }}</div>
         <div class="role">{{ member.role }}</div>
       </div>
     </div>
@@ -66,7 +66,7 @@ export default {
       teamData: {
         id: undefined,
         title: undefined,
-        members: [] // 0 - regular 1 - vice 2 - lead
+        members: [] // 0 - regular 1 - vice 2 - lead {userID, roleID}
       }
     }
   },
@@ -77,16 +77,35 @@ export default {
 
   computed(){
     function sortedMember () {
-      return this.teamData.members.slice().sort((a, b) => (a.role > b.role) ? -1 : 1)
+      function comparator(a, b) {
+        if (a.role < b.role)
+          return -1;
+        else if (a.role > b.role)
+          return 1;
+        else{
+          if (userNameById(a.id) < userNameById((b.id)))
+            return 1;
+          else
+            return -1;
+        }
+      }
+
+      return this.teamData.members.slice().sort(comparator)
+    }
+
+    async function userNameById(id){
+      const {data, code, ok} = await this.$api.getUserById(id)
+      if (ok)
+        return data.name
+      else
+        console.log("oops")
     }
   },
 
-
   methods: {
     async getCurTeam(){
-      const {data: teamData, code, ok} = this.$api.getTeam()
-      }
-    }
+      const {data: teamData, code, ok} = await this.$api.getTeam();
+    },
   }
 }
 </script>
