@@ -1,56 +1,92 @@
-<style scoped>
-.flexbox {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  background: indianred;
-}
-.flexbox .card {
-  width: 150px;
-  height: 230px;
-}
-.flexbox .card .title {
-  font-size: 1.5em;
-  font-weight: bold;
-}
-.flexbox .card .description {
-  font-size: 0.8em;
-  color: darkgray;
-}
+<style lang="stylus" scoped>
+.header
+  height 150%
+  background lightcyan
+
+.name
+  color cornflowerblue
+  font-size 13
+
+.team
+  .title
+    color darkseagreen
+    font-size 20
+    font-weight bold
+
+  .member
+    .leader
+      color #51c49f
+      font-weight bolder
+    .name
+      color #51c49f
+    .role
+      color violet
+
 </style>
 
 <template>
-  <div class="root">
-    <div class="title"> PROFILE PAGE</div>
-    <div class="name">Rudy</div>
-    <div class="email">r@mail.ru</div>
+  <header class="header">
+    <div> hello </div>
+  </header>
 
-    <div v-if="cards.length > 5">CARD MORE 5</div>
-    <div v-else>NOT ENOUGH</div>
+  <main class="root">
+    <div class="title"> PROFILE PAGE </div>
 
-    <div class="flexbox">
-      <div v-for="card in cards" class="card">
-        <div class="titlr">{{ card.name }}</div>
-        <div class="description">{{ card.description }}</div>
+    <div class="name"> {{ userData.name }} </div>
+    <div class="team">
+      <div class="title"> {{teamData.title }} </div>
+      <div v-for="member in sortedMembers" class="member">
 
+        <div class="name">{{ member.name }}</div>
+        <div class="role">{{ member.role }}</div>
       </div>
     </div>
 
-
-  </div>
-  <router-link to="/">TO MAIN</router-link>
-
-
+  </main>
+  <footer>
+    <router-link to="/">TO MAIN</router-link>
+  </footer>
 
 </template>
 
 <script>
+
 export default {
   data() {
     return {
-      cards: [{name: 'rudy', description: 'cool'}]
+      userData: {
+        name: this.$user.name,
+        group: this.$user.group,
+        tg: this.$user.tg,
+        vk: this.$user.vk,
+        email: this.$user.email,
+        telephone: this.$user.telephone,
+      },
+      loading: false,
+      teamData: {
+        id: undefined,
+        title: undefined,
+        members: [] // 0 - regular 1 - vice 2 - lead
+      }
+    }
+  },
+
+  async mounted() {
+    await this.getCurTeam()
+  },
+
+  computed(){
+    function sortedMember () {
+      return this.teamData.members.slice().sort((a, b) => (a.role > b.role) ? -1 : 1)
+    }
+  },
+
+
+  methods: {
+    async getCurTeam(){
+      const {data: teamData, code, ok} = this.$api.getTeam()
+      }
     }
   }
 }
 </script>
-
