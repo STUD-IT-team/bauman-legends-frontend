@@ -27,7 +27,10 @@ bg = colorBgDark
                       @success="register"
       ></FormWithErrors>
       <router-link class="signin-link" :to="{name: 'login'}">
-        <button class="signin-button">Войти</button>
+        <button class="signin-button">
+          <CircleLoading v-if="loading"></CircleLoading>
+          <span v-else>Войти</span>
+        </button>
       </router-link>
     </div>
   </div>
@@ -36,10 +39,11 @@ bg = colorBgDark
 <script>
 import FormWithErrors from "../components/FormWithErrors.vue";
 import {detectBrowser, detectOS} from "../utils/utils";
+import CircleLoading from "../components/CircleLoading";
 
 
 export default {
-  components: {FormWithErrors},
+  components: {CircleLoading, FormWithErrors},
   data() {
     return {
       fields: {
@@ -100,13 +104,22 @@ export default {
           validationRegExp: /^.{6,}$/,
           info: 'Минимум 6 символов'
         }
-      }
+      },
+      loading: true,
     }
   },
 
   methods: {
-    register(data) {
-      this.$api.register(data.name, data.group, data.tg, data.vk, data.email, data.phone, data.password, detectBrowser(), detectOS());
+    async register(data) {
+      this.loading = true;
+      const {ok} = await this.$api.register(data.name, data.group, data.tg, data.vk, data.email, data.phone, data.password, detectBrowser(), detectOS());
+      this.loading = false;
+
+      if (!ok) {
+        return;
+      }
+      this.$store.dispatch('GET_USER');
+      this.$router.push({name: 'profile'});
     }
   }
 }

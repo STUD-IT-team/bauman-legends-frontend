@@ -40,8 +40,8 @@
 
 <template>
   <div class="bg"></div>
-  <img class="background-text-image" src="../src/res/images/BackgroundPattern.png" alt="Background">
-  <img class="bauman-image" src="../src/res/images/Bauman.png" alt="Bauman">
+  <img class="background-text-image" src="../src/res/images/BackgroundPattern.png" alt="">
+  <img class="bauman-image" src="../src/res/images/Bauman.png" alt="">
 
   <div class="wrapper">
     <router-view v-slot="{ Component }">

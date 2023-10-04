@@ -19,9 +19,9 @@ export default class API extends REST_API {
     editTeam = (name) => this.put('api/team', {name});
     getTeam = () => this.get('/api/team');
     deleteTeam = () => this.delete('/api/team');
-    addMember = (id) => this.post(`/api/join/${id}`);
+    addMember = (id) => this.post(`/api/team/join/${id}`);
     deleteMember = (id) => this.delete(`/api/team/join/${id}`);
-    setRole = (userId, roleId) => this.put(`/api/team/member/${userId}`, {roleId});
+    setMemberRole = (userId, roleId) => this.put(`/api/team/member/${userId}`, {roleId});
     getTask = () => this.get('/api/task');
     takeTask = (taskTypeId) => this.post('/api/task/take', {taskTypeId});
     getHint = () => this.get('/api/task/hint');

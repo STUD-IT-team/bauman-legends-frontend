@@ -33,10 +33,13 @@ bg = transparent
     <div class="form">
       <FormWithErrors
         :fields="fields"
-        @success="signin"
+        @success="login"
       ></FormWithErrors>
       <router-link class="register-link" :to="{name: 'register'}">
-        <button class="register-button">Зарегистрироваться</button>
+        <button class="register-button">
+          <CircleLoading v-if="loading"></CircleLoading>
+          <span v-else>Зарегистрироваться</span>
+        </button>
       </router-link>
 
       <div class="signin-links">
@@ -50,10 +53,11 @@ bg = transparent
 <script>
 import FormWithErrors from "../components/FormWithErrors.vue";
 import {detectBrowser, detectOS} from "../utils/utils";
+import CircleLoading from "../components/CircleLoading";
 
 
 export default {
-  components: {FormWithErrors},
+  components: {CircleLoading, FormWithErrors},
   data() {
     return {
       fields: {
@@ -71,13 +75,22 @@ export default {
           placeholder: '●●●●●●',
           validationRegExp: /^.{6,}$/,
         }
-      }
+      },
+      loading: false,
     }
   },
 
   methods: {
-    signin(data) {
-      this.$api.login(data.email, data.password, detectBrowser(), detectOS());
+    async login(data) {
+      this.loading = true;
+      const {ok} = await this.$api.login(data.email, data.password, detectBrowser(), detectOS());
+      this.loading = false;
+
+      if (!ok) {
+        return;
+      }
+      this.$store.dispatch('GET_USER');
+      this.$router.push({name: 'profile'});
     }
   }
 }
