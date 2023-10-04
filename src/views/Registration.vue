@@ -1,46 +1,41 @@
 <style scoped lang="stylus">
+@require '../styles/constants.styl'
+@require '../styles/buttons.styl'
+
+border = 1px solid colorBorder
+
 .root-register
   width 100%
   height 100%
-
   .form
-    margin-top 200px
-    margin-left auto
-    margin-right auto
-    padding 0 20px
-    width 100%
-    max-width 500px
-
-    label
-      display inline-block
-      margin-bottom 15px
-      width 50%
-
-    input
-      display inline-block
-      width 50%
-      padding 5px 7px
-
-    button.submit
-      display block
-      width 100%
-      margin-top 20px
-      padding 10px
-      cursor pointer
-
+    border border
+    border-radius borderRadiusL
+    padding-left 20px
+    padding-right 20px
+    padding-bottom 20px
+    margin 20px 20px
+    .signin-link
+      text-align left
+    .signin-button
+      button-submit()
 </style>
 
 <template>
   <div class="root-register">
-    <FormWithErrors
-      :fields="fields"
-      @success="register"
-    ></FormWithErrors>
+    <div class="form">
+      <FormWithErrors :fields="fields"
+                      @success="register"
+      ></FormWithErrors>
+      <router-link class="signin-link" :to="{name: 'login'}">
+        <button class="signin-button">Войти</button>
+      </router-link>
+    </div>
   </div>
 </template>
 
 <script>
 import FormWithErrors from "../components/FormWithErrors.vue";
+import {detectBrowser, detectOS} from "../utils/utils";
 
 
 export default {
@@ -49,43 +44,61 @@ export default {
     return {
       fields: {
         name: {
-          name: 'Имя',
+          title: 'Имя',
+          name: 'name',
           type: 'text',
           placeholder: 'Иванов Иван Иванович',
-          validationRegExp: /^\w+ \w+( \w+)?$/,
+          validationRegExp: /^[а-я]+ [а-я]+( [а-я]+)?$/i,
         },
         group: {
-          name: 'Учебная группа',
+          title: 'Учебная группа',
+          name: 'group',
           type: 'text',
-          placeholder: 'ХХх-ххБ',
-          validationRegExp: /^\w\w?\d-\d\d\w?$/,
+          placeholder: 'ХХх-ххХ',
+          validationRegExp: /^(иу|ибм|мт|см|бмт|рл|э|рк|фн|л|юр|сгн|вуц|гуимц|фмоп|фоф|исот|ркт|ак|пс|рт|лт)\d\d?-1\d[СМБ]$/i,
           prettifyResult: (str) => str.toUpperCase(),
         },
         tg:{
-          name: 'Telegram',
+          title: 'Telegram',
+          name: 'telegram',
           type: 'text',
           placeholder: '@legends_bmstu',
           validationRegExp: /^((https:\/\/t\.me\/)|@)?\w{5,}$/,
           prettifyResult: (str) => '@' + str.replace('https://t.me/', '').replace('@', ''),
+          info: 'В любом формате',
         },
         vk: {
-          name: 'VK',
+          title: 'VK',
+          name: 'vk',
           type: 'text',
           placeholder: 'https://vk.com/legends_bmstu',
           validationRegExp: /^(https:\/\/vk\.com\/)?\w+$/,
           prettifyResult: (str) => str.replace('https://vk.com/', ''),
+          info: 'В любом формате',
         },
         email: {
-          name: 'Email',
+          title: 'E-mail',
+          name: 'email',
           type: 'text',
           placeholder: 'legends@bmstu.ru',
-          validationRegExp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+          validationRegExp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+          prettifyResult: (str) => str.toLowerCase(),
         },
-        telephone: {
-          name: 'Телефон',
+        phone: {
+          title: 'Телефон',
+          name: 'phone',
           type: 'text',
           placeholder: '8-(123)-456-78-90',
-          validationRegExp: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+          validationRegExp: /^((\+7)|8)[-\s.]?((\(\d\d\d\))|(\d\d\d))[-\s.]?\d\d\d[-\s.]?\d\d[-\s.]?\d\d$/,
+          prettifyResult: (str) => str.replace('+7', '8').replace('-', '').replace('(', '').replace(')', ''),
+        },
+        password: {
+          title: 'Пароль',
+          name: 'password',
+          type: 'password',
+          placeholder: '●●●●●●',
+          validationRegExp: /^.{6,}$/,
+          info: 'Минимум 6 символов'
         }
       }
     }
@@ -93,7 +106,7 @@ export default {
 
   methods: {
     register(data) {
-      this.$api.sendRegisterData(data);
+      this.$api.register(data.name, data.group, data.tg, data.vk, data.email, data.phone, data.password, detectBrowser(), detectOS());
     }
   }
 }

@@ -1,4 +1,4 @@
-import REST_API from "./REST_API.js"
+import REST_API from "./REST_API"
 
 export default class API extends REST_API {
     login = (email, password, clientBrowser, clientOS) => this.post('/api/user/auth', {email, password, clientBrowser, clientOS});
@@ -6,7 +6,7 @@ export default class API extends REST_API {
     logout = () => this.delete('/api/user/session');
     getAllSessions = () => this.get('/api/sessions');
     logoutAnother = () => this.delete('/api/user/sessions/another');
-    getMyProfile = () => this.get('/api/user');
+    getUser = () => this.get('/api/user');
     getUserById = (id) => this.get(`/api/user/${id}`);
     sendConfirmationLetter = (name, email) => this.post('/api/email/confirm', {name, email});
     confirmRegistrationByCode = (secretCode) => this.put('api/user/email/confirm', {secretCode});

@@ -78,22 +78,20 @@
 import {getCurrentInstance} from "vue";
 import Modal from "./components/vue-plugins/Modal.vue";
 import Popups from "./components/vue-plugins/Popups.vue";
-import API from "~/api";
+import API from "./utils/api";
 
 
 export default {
   components: {Modal, Popups},
 
-  mounted() {
+  async mounted() {
     const global = getCurrentInstance().appContext.config.globalProperties;
     // Прописываем в глобавльные свойства частоиспользуемые компоненты, чтобы они были доступны из любых других компонентов
-    global.$api = new API();
+    global.$user = this.$store.state.user;
     global.$modal = this.$refs.modal;
     global.$popups = this.$refs.popups;
     global.$app = this; // это обычно не используется, но может пригодиться
-
-    // Получаем юзера в хранилище
-    this.$store.dispatch("GET_USER");
+    global.$api = new API();
   },
 
   methods: {

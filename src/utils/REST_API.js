@@ -13,7 +13,7 @@ export default class REST_API {
 
     get(path, data = {}) {
         let query = Object.entries(data).reduce((query, [key, value]) => query + `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}&`, '?');
-        query = query.replace(/&$/, '');
+        query = query.replace(/[?&]$/, '');
         return this.request('GET', path + query);
     }
 

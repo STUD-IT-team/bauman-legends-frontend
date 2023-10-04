@@ -1,16 +1,19 @@
 import {createRouter, createWebHistory} from 'vue-router'
 
 // Components:
-import Profile from "~/views/Profile.vue";
-import Register from "~/views/register.vue";
+import Profile from "./views/Profile.vue";
+import Registration from "./views/Registration.vue";
 import Page404 from "./views/Page404.vue";
+import SignIn from "./views/SignIn.vue";
 
 
 export default function createVueRouter(Store) {
   const routes = [
-    {path: '/register', name: 'registration', component: Register, meta: {noLoginRequired: true}},
-    {path: '/login', name: 'signin', component: Register, meta: {noLoginRequired: true}},
+    {path: '/register', name: 'register', component: Registration, meta: {noLoginRequired: true}},
+    {path: '/login', name: 'login', component: SignIn, meta: {noLoginRequired: true}},
     {path: '/profile', name: 'profile', component: Profile, meta: {loginRequired: true}},
+    {path: '/sign-in-by-email', name: 'signInByEmail', component: SignIn, meta: {noLoginRequired: true}},
+    {path: '/restore-password', name: 'restorePassword', component: SignIn, meta: {noLoginRequired: true}},
 
     {path: '/:pathMatch(.*)*', name: 'default', component: Page404},
   ];
@@ -21,9 +24,15 @@ export default function createVueRouter(Store) {
   });
 
 
+  let router_got_user = false;
   Router.beforeEach(async (to, from, next) => {
+    if (!router_got_user) {
+      await Store.dispatch('GET_USER');
+      router_got_user = true;
+    }
+
     const notLoginedRedirect = {
-      name: 'signin'
+      name: 'login'
     }
     const loginedRedirect = {
       name: 'profile',
@@ -38,16 +47,17 @@ export default function createVueRouter(Store) {
       return;
     }
 
-
     // Login required redirects
     if (to.matched.some(record => record.meta.loginRequired)) {
       if (Store.state.user.isSignedIn) {
+        next();
         return;
       }
       next(notLoginedRedirect);
       return;
     } else if (to.matched.some(record => record.meta.noLoginRequired)) {
       if (!Store.state.user.isSignedIn) {
+        next();
         return;
       }
       next(loginedRedirect);
