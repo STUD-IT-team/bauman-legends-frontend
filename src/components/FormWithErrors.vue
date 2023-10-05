@@ -15,7 +15,7 @@ input-border = 1px solid colorBorder
 
     .placeholder
       position absolute
-      top 40px
+      top 44px
       left 40px
       font-medium()
       opacity 0
@@ -32,9 +32,10 @@ input-border = 1px solid colorBorder
       font-medium()
       &::placeholder
         visibility hidden
+        opacity 0
       &:placeholder-shown ~ .placeholder
         left 10px
-        opacity .5
+        opacity .35
 
     .error
     .success
@@ -66,7 +67,7 @@ input-border = 1px solid colorBorder
 </style>
 
 <template>
-  <div class="root-form" @keydown.enter="submit" @input="isSubmittedAlready ? checkFormat() : ''">
+  <div class="root-form" @keydown.enter="submit" @input="isSubmittedAlready ? checkFormat : ()=>{}">
     <div class="input-container" v-for="[fieldName, field] in Object.entries(fields)" :class="{error: field.__error, success: field.__success}">
       <label :for="`${uid}-${fieldName}`">{{ field.title }}</label>
       <input v-bind="field" :id="`${uid}-${fieldName}`" v-model="field.value">
@@ -148,6 +149,18 @@ export default {
         res = res && !field.__error;
       });
       return res;
+    },
+
+    __setErrorOnField(field, errorText) {
+      field.__error = true;
+      field.errorText = errorText;
+    },
+    setError(fields, errorText) {
+      if (Array.isArray(fields)) {
+        fields.forEach(field => this.__setErrorOnField(field, errorText));
+        return;
+      }
+      this.__setErrorOnField(fields, errorText);
     }
   }
 }
