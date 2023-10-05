@@ -52,8 +52,8 @@ bg = transparent
 
 <script>
 import FormWithErrors from "../components/FormWithErrors.vue";
-import {detectBrowser, detectOS} from "../utils/utils";
-import CircleLoading from "../components/CircleLoading";
+import {detectBrowser, detectOS} from "~/utils/utils.js";
+import CircleLoading from "../components/CircleLoading.vue";
 
 
 export default {

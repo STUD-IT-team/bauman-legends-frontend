@@ -17,7 +17,15 @@ export default class API extends REST_API {
     authCode = (secretCode, clientBrowser, clientOS) => this.post('api/user/auth/code', {secretCode, clientBrowser, clientOS});
     createTeam = (name) => this.post('api/team', {name});
     editTeam = (name) => this.put('api/team', {name});
-    getTeam = () => this.get('/api/team');
+    getTeam = () => ({
+        data: {
+            id: 1,
+            title: "задуш(н)им",
+            members: [{id: 1, name: "rudy", role: 2}, {id: 2, name: "ross", role: 1}, {id: 3, name: "loki", role: 0}]
+        },
+        code: 200,
+        ok: true,
+    })// this.get('/api/team');
     deleteTeam = () => this.delete('/api/team');
     addMember = (id) => this.post(`/api/team/join/${id}`);
     deleteMember = (id) => this.delete(`/api/team/join/${id}`);

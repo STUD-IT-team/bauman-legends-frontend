@@ -13,40 +13,71 @@
     font-size 20
     font-weight bold
 
+  .id
+    color darkseagreen
+
   .member
     .leader
       color #51c49f
       font-weight bolder
+
     .name
       color #51c49f
+
     .role
       color violet
+
+
 
 </style>
 
 <template>
-  <header class="header">
-    <div> hello </div>
-  </header>
+  <div>
+    <header class="header">
+    </header>
 
-  <main class="root">
-    <div class="title"> PROFILE PAGE </div>
+    <main class="root">
 
-    <div class="name"> {{ userData.name }} </div>
-    <div class="team">
-      <div class="title"> {{teamData.title }} </div>
-      <div v-for="member in sortedMembers" class="member">
+      <div class="name"> Привет, {{ newUserData.name }}!</div>
+      <div class="name"> твой ID#{{ newUserData.id }}</div>
 
-        <div class="name">{{ userNameById(member.id) }}</div>
-        <div class="role">{{ member.role }}</div>
+<!--      команда, если есть-->
+      <div v-if="ifUserInTeam" class="team">
+        <div class="title"> Команда: {{ teamData.title }} </div>
+        <div class="id"> ID#{{ teamData.id }}</div>
+        <div> Участники:</div>
+        <div v-for="member in sortedMembers" class="member">
+          <div class="name">{{ member.name }}</div>
+
+          <select @change="changeMemberRole(member.id, member.role, member)"
+                  :disabled="member.role === TeamRoles.lead || !this.isUserTeamLead" v-model="member._newRole">
+            <option v-if="member.role === TeamRoles.lead" :value="TeamRoles.lead">Капитан</option>
+            <option :value="TeamRoles.subLead">Зам</option>
+            <option :value="TeamRoles.member">Участник</option>
+          </select>
+
+          <div v-if="this.isUserTeamLead" class="buttons-for-lead">
+            <button @click="deleteMemberFromTeam" class="del-user-btn"> Удалить участника</button>
+          </div>
+
+        </div>
+        <div v-if="this.isUserTeamLead" class="buttons-for-lead">
+          <button @click="addMemberToTeam" class="add-member-btn"> Добавить нового участника</button>
+          <button @click="renameTeam" class="rename-team-btn"> Изменить название команды</button>
+          <button @click="deleteTeam" class="delete-team-btn"> Удалить команду</button>
+        </div>
       </div>
-    </div>
-    <CircleLoading v-if="loading"></CircleLoading>
-  </main>
-  <footer>
-    <router-link to="/">TO MAIN</router-link>
-  </footer>
+      <div v-else>
+        <div class="team-invite"> Ты пока не состоишь в команде! </div>
+        <button @click="createTeam"> Создать команду </button>
+        <button @click="showJoinInstruction"> Присоединиться к команде </button>
+      </div>
 
+    </main>
+    <footer>
+      <router-link to="/">TO MAIN</router-link>
+    </footer>
+  </div>
 </template>
 
 
@@ -58,7 +89,7 @@ export default {
   components: {CircleLoading},
   data() {
     return {
-      userData: {
+      newUserData: {
         name: this.$user.name,
         group: this.$user.group,
         tg: this.$user.tg,
@@ -70,45 +101,57 @@ export default {
       teamData: {
         id: undefined,
         title: undefined,
-        members: [] // 0 - regular 1 - vice 2 - lead {userID, roleID}
+        members: [], // 0 - regular /1 - vice /2 - lead {userID, roleID}
+      },
+      TeamRoles: {
+        lead: 2,
+        subLead: 1,
+        member: 0,
       }
     }
   },
 
-  async mounted() {
-    await this.getCurTeam()
+  mounted() {
+    this.getCurTeam();
   },
 
-  computed(){
-    function sortedMember () {
-      function comparator(a, b) {
-        if (a.role < b.role)
-          return -1;
-        else if (a.role > b.role)
+  computed: {
+    isUserTeamLead() {
+      const idx = this.teamData.members.findIndex((member) => member.role === this.TeamRoles.lead && member.id === this.$user.id);
+      return idx !== -1;
+    },
+
+    ifUserInTeam(){
+      return Object.entries(this.teamData).length !== 0;
+    },
+
+    sortedMembers() {
+      const comparator = (a, b) => {
+        if (a.role < b.role) {
           return 1;
-        else{
-          if (userNameById(a.id) < userNameById((b.id)))
-            return 1;
-          else
-            return -1;
+        } else if (a.role > b.role) {
+          return -1;
         }
+        if (a.name < b.name)
+          return 1;
+        return -1;
       }
 
-      return this.teamData.members.slice().sort(comparator)
-    }
-
-    async function userNameById(id){
-      const {data, code, ok} = await this.$api.getUserById(id)
-      if (ok)
-        return data.name
-      else
-        console.log("oops")
-    }
+      return this.teamData.members.slice().sort(comparator);
+    },
   },
 
   methods: {
-    async getCurTeam(){
-      const {data: teamData, code, ok} = await this.$api.getTeam();
+    async getCurTeam() {
+      const {data: teamData, code, ok} = this.$api.getTeam();
+      teamData.members.forEach(member => {
+        member._newRole = member.role;
+      });
+      this.teamData = teamData;
+    },
+
+    showJoinInstruction() {
+      alert('Сообщи капитану свой ID, чтобы он добавил тебя в команду');
     },
 
     async createTeam() {
@@ -121,7 +164,7 @@ export default {
       this.loading = false;
       if (!ok) {
         this.$popups.error("Неизвестная ошибка", "Не удалось создать команду");
-       }
+      }
       this.teamData = teamData;
     },
 
@@ -135,7 +178,7 @@ export default {
       this.loading = false;
       if (!ok) {
         this.$popups.error("Неизвестная ошибка", "Не удалось удалить команду");
-       }
+      }
       this.teamData = {};
     },
 
@@ -154,9 +197,13 @@ export default {
       this.teamData.title = teamName;
     },
 
-    async addMemberToTeam(userId) {
+    async addMemberToTeam() {
+      const newUserId = await this.$modal.prompt('Добавить нового участника', 'Введите ID нового участника');
+      if (!newUserId) {
+        return;
+      }
       this.loading = true;
-      const {data: userData, ok} = await this.$api.addMember(userId);
+      const {data: userData, ok} = await this.$api.addMember(newUserId);
       this.loading = false;
       if (!ok) {
         this.$popups.error("Неизвестная ошибка", "Не удалось добавить пользователя в команду");
