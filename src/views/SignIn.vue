@@ -1,38 +1,52 @@
 <style scoped lang="stylus">
 @require '../styles/constants.styl'
 @require '../styles/buttons.styl'
-
-//bg = colorBg
-bg = transparent
+@require '../styles/footer.styl'
 
 .root-signin
   width 100%
   height 100%
   .form
+    width calc(100% - 40px)
+    margin auto
+    background-color colorBg
     border-radius borderRadiusL
+    padding-top 10px
     padding-left 20px
     padding-right 20px
     padding-bottom 20px
     margin 20px 20px
-    background bg
+    text-align center
+    font-large()
+    font-bold()
+    color colorText1
     .register-link
+      text-decoration none
       text-align left
     .register-button
-      button-submit()
+      button()
     .signin-links
       display flex
       width 100%
-      justify-content space-between
+      margin-top 20px
+      font-small()
+      text-decoration none
+      justify-content space-around
       .signin-by-email-link
+        color colorText1
+        text-decoration none
       .restore-password-link
-        font-small-extra()
+        color colorText1
+        text-decoration none
 </style>
 
 <template>
   <div class="root-signin">
     <div class="form">
+      ВХОД<br>
       <FormWithErrors
         :fields="fields"
+        submitText="Вход"
         @success="signin"
       ></FormWithErrors>
       <router-link class="register-link" :to="{name: 'register'}">
@@ -44,6 +58,7 @@ bg = transparent
         <router-link class="restore-password-link" :to="{name: 'restorePassword'}">Восстановить пароль</router-link>
       </div>
     </div>
+    <img src="../res/images/Gerbs.png" class="logo">
   </div>
 </template>
 
@@ -58,17 +73,15 @@ export default {
     return {
       fields: {
         email: {
-          title: 'E-mail',
           name: 'email',
           type: 'text',
-          placeholder: 'legends@bmstu.ru',
+          placeholder: 'Почта',
           validationRegExp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
         },
         password: {
-          title: 'Пароль',
           name: 'password',
           type: 'password',
-          placeholder: '●●●●●●',
+          placeholder: 'Пароль',
           validationRegExp: /^.{6,}$/,
         }
       }

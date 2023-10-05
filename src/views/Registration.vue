@@ -1,6 +1,7 @@
 <style scoped lang="stylus">
 @require '../styles/constants.styl'
 @require '../styles/buttons.styl'
+@require '../styles/footer.styl'
 
 bg = colorBgDark
 
@@ -8,28 +9,39 @@ bg = colorBgDark
   width 100%
   height 100%
   .form
-    border-radius borderRadiusL
+    width calc(100% - 40px)
+    margin auto
+    background-color colorBg
+    border-radius borderRadiusM
+    padding-top 10px
     padding-left 20px
     padding-right 20px
     padding-bottom 20px
-    margin 20px 20px
-    background bg
+    margin-top 20px
+    text-align center
+    font-large()
+    font-bold()
+    color colorText1
     .signin-link
       text-align left
+      text-decoration none
     .signin-button
-      button-submit()
+      button()
 </style>
 
 <template>
   <div class="root-register">
     <div class="form">
+      РЕГИСТРАЦИЯ<br>
       <FormWithErrors :fields="fields"
+                      submitText="Зарегистрироваться"
                       @success="register"
       ></FormWithErrors>
       <router-link class="signin-link" :to="{name: 'login'}">
         <button class="signin-button">Войти</button>
       </router-link>
     </div>
+    <img src="../res/images/Gerbs.png" class="logo">
   </div>
 </template>
 
@@ -44,61 +56,54 @@ export default {
     return {
       fields: {
         name: {
-          title: 'Имя',
           name: 'name',
           type: 'text',
-          placeholder: 'Иванов Иван Иванович',
+          placeholder: 'ФИО',
           validationRegExp: /^[а-я]+ [а-я]+( [а-я]+)?$/i,
         },
         group: {
-          title: 'Учебная группа',
           name: 'group',
           type: 'text',
-          placeholder: 'ХХх-ххХ',
+          placeholder: 'Учебная группа',
           validationRegExp: /^(иу|ибм|мт|см|бмт|рл|э|рк|фн|л|юр|сгн|вуц|гуимц|фмоп|фоф|исот|ркт|ак|пс|рт|лт)\d\d?-1\d[СМБ]$/i,
           prettifyResult: (str) => str.toUpperCase(),
         },
-        tg:{
-          title: 'Telegram',
-          name: 'telegram',
-          type: 'text',
-          placeholder: '@legends_bmstu',
-          validationRegExp: /^((https:\/\/t\.me\/)|@)?\w{5,}$/,
-          prettifyResult: (str) => '@' + str.replace('https://t.me/', '').replace('@', ''),
-          info: 'В любом формате',
-        },
-        vk: {
-          title: 'VK',
-          name: 'vk',
-          type: 'text',
-          placeholder: 'https://vk.com/legends_bmstu',
-          validationRegExp: /^(https:\/\/vk\.com\/)?\w+$/,
-          prettifyResult: (str) => str.replace('https://vk.com/', ''),
-          info: 'В любом формате',
-        },
         email: {
-          title: 'E-mail',
           name: 'email',
           type: 'text',
-          placeholder: 'legends@bmstu.ru',
+          placeholder: 'Электронная почта',
           validationRegExp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
           prettifyResult: (str) => str.toLowerCase(),
         },
         phone: {
-          title: 'Телефон',
           name: 'phone',
           type: 'text',
-          placeholder: '8-(123)-456-78-90',
+          placeholder: 'Номер телефона',
           validationRegExp: /^((\+7)|8)[-\s.]?((\(\d\d\d\))|(\d\d\d))[-\s.]?\d\d\d[-\s.]?\d\d[-\s.]?\d\d$/,
           prettifyResult: (str) => str.replace('+7', '8').replace('-', '').replace('(', '').replace(')', ''),
         },
+        tg:{
+          name: 'telegram',
+          type: 'text',
+          placeholder: 'Ссылка на Telegram',
+          validationRegExp: /^((https:\/\/t\.me\/)|@)?\w{5,}$/,
+          prettifyResult: (str) => '@' + str.replace('https://t.me/', '').replace('@', ''),
+          // info: 'В любом формате',
+        },
+        vk: {
+          name: 'vk',
+          type: 'text',
+          placeholder: 'Ссылка на Вконтакте',
+          validationRegExp: /^(https:\/\/vk\.com\/)?\w+$/,
+          prettifyResult: (str) => str.replace('https://vk.com/', ''),
+          // info: 'В любом формате',
+        },
         password: {
-          title: 'Пароль',
           name: 'password',
           type: 'password',
-          placeholder: '●●●●●●',
+          placeholder: 'Пароль',
           validationRegExp: /^.{6,}$/,
-          info: 'Минимум 6 символов'
+          // info: 'Минимум 6 символов'
         }
       }
     }
