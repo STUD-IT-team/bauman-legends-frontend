@@ -24,7 +24,7 @@
   position fixed
   height 100%
   bottom -6%
-  left -100px
+  transform translateX(-8%)
   object-fit contain
   overflow visible
   opacity 1
