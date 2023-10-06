@@ -1,7 +1,6 @@
 <style scoped lang="stylus">
 @require '../styles/constants.styl'
 @require '../styles/buttons.styl'
-@require '../styles/footer.styl'
 
 bg = colorBgDark
 
