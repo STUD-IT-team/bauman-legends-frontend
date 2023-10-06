@@ -9,7 +9,7 @@
     width calc(100% - 40px)
     margin auto
     background-color colorBg
-    border-radius borderRadiusL
+    border-radius borderRadiusM
     padding-top 10px
     padding-left 20px
     padding-right 20px
