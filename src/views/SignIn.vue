@@ -32,6 +32,7 @@ bg = transparent
   <div class="root-signin">
     <div class="form">
       <FormWithErrors
+        ref="form"
         :fields="fields"
         @success="login"
       ></FormWithErrors>
@@ -53,7 +54,7 @@ bg = transparent
 <script>
 import FormWithErrors from "../components/FormWithErrors.vue";
 import {detectBrowser, detectOS} from "../utils/utils";
-import CircleLoading from "../components/CircleLoading";
+import CircleLoading from "../components/CircleLoading.vue";
 
 
 export default {
@@ -87,6 +88,7 @@ export default {
       this.loading = false;
 
       if (!ok) {
+        this.$refs.form.setError([this.fields.email, this.fields.password], 'Неверные email или пароль');
         return;
       }
       this.$store.dispatch('GET_USER');

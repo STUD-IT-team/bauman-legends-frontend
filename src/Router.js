@@ -63,6 +63,7 @@ export default function createVueRouter(Store) {
       next(loginedRedirect);
       return;
     }
+    next();
   });
 
   Router.beforeResolve(async (to) => {

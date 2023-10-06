@@ -23,7 +23,8 @@ bg = colorBgDark
 <template>
   <div class="root-register">
     <div class="form">
-      <FormWithErrors :fields="fields"
+      <FormWithErrors ref="form"
+                      :fields="fields"
                       @success="register"
       ></FormWithErrors>
       <router-link class="signin-link" :to="{name: 'login'}">
@@ -39,7 +40,7 @@ bg = colorBgDark
 <script>
 import FormWithErrors from "../components/FormWithErrors.vue";
 import {detectBrowser, detectOS} from "../utils/utils";
-import CircleLoading from "../components/CircleLoading";
+import CircleLoading from "../components/CircleLoading.vue";
 
 
 export default {
@@ -116,6 +117,7 @@ export default {
       this.loading = false;
 
       if (!ok) {
+        this.$refs.form.setError([this.fields.email], 'На указанный email уже зарегестрирован аккаунт');
         return;
       }
       this.$store.dispatch('GET_USER');

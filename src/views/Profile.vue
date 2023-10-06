@@ -51,7 +51,7 @@ export default {
   components: {CircleLoading},
   data() {
     return {
-      cards: [{name: 'rudy', description: 'cool'}]
+      cards: [{name: 'rudy', description: 'cool'}],
 
       loading: false,
     }
