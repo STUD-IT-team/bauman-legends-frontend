@@ -8,14 +8,20 @@ bg = colorBgDark
   width 100%
   height 100%
   .form
-    border-radius borderRadiusL
-    padding-left 20px
-    padding-right 20px
-    padding-bottom 20px
-    margin 20px 20px
-    background bg
+    width calc(100% - 40px)
+    margin auto
+    background-color colorBg
+    border-radius borderRadiusM
+    padding 20px
+    padding-top 10px
+    margin-top 20px
+    text-align center
+    font-large()
+    font-bold()
+    color colorText1
     .signin-link
       text-align left
+      text-decoration none
     .signin-button
       button-submit()
 </style>
@@ -23,9 +29,11 @@ bg = colorBgDark
 <template>
   <div class="root-register">
     <div class="form">
+      РЕГИСТРАЦИЯ<br>
       <FormWithErrors
         ref="form"
         :fields="fields"
+        submitText="Зарегистрироваться"
         @success="register"
       ></FormWithErrors>
       <router-link class="signin-link" :to="{name: 'login'}">
@@ -50,7 +58,7 @@ export default {
     return {
       fields: {
         name: {
-          title: 'Имя',
+          title: 'ФИО',
           name: 'name',
           type: 'text',
           placeholder: 'Иванов Иван Иванович',
@@ -83,7 +91,7 @@ export default {
           info: 'В любом формате',
         },
         email: {
-          title: 'E-mail',
+          title: 'Электронная почта',
           name: 'email',
           type: 'text',
           placeholder: 'legends@bmstu.ru',
@@ -91,7 +99,7 @@ export default {
           prettifyResult: (str) => str.toLowerCase(),
         },
         phone: {
-          title: 'Телефон',
+          title: 'Номер телефона',
           name: 'phone',
           type: 'text',
           placeholder: '8-(123)-456-78-90',

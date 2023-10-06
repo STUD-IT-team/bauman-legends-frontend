@@ -2,38 +2,48 @@
 @require '../styles/constants.styl'
 @require '../styles/buttons.styl'
 
-//bg = colorBg
-bg = transparent
-
 .root-signin
   width 100%
   height 100%
   .form
-    border-radius borderRadiusL
-    padding-left 20px
-    padding-right 20px
-    padding-bottom 20px
-    margin 20px 20px
-    background bg
+    width calc(100% - 40px)
+    background-color colorBg
+    border-radius borderRadiusM
+    padding 20px
+    padding-top 10px
+    margin 20px
+    text-align center
+    font-large()
+    font-bold()
+    color colorText1
     .register-link
+      text-decoration none
       text-align left
     .register-button
       button-submit()
     .signin-links
       display flex
       width 100%
+      margin-top 20px
+      font-small()
+      text-decoration none
       justify-content space-between
       .signin-by-email-link
+        color colorText1
+        text-decoration none
       .restore-password-link
-        font-small-extra()
+        color colorText1
+        text-decoration none
 </style>
 
 <template>
   <div class="root-signin">
     <div class="form">
+      ВХОД<br>
       <FormWithErrors
         ref="form"
         :fields="fields"
+        submitText="Вход"
         @success="login"
       ></FormWithErrors>
       <router-link class="register-link" :to="{name: 'register'}">
@@ -63,7 +73,7 @@ export default {
     return {
       fields: {
         email: {
-          title: 'E-mail',
+          title: 'Электронная почта',
           name: 'email',
           type: 'text',
           placeholder: 'legends@bmstu.ru',

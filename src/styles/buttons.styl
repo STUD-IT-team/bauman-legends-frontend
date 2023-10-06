@@ -6,8 +6,9 @@
 border-color = colorEmp1Inactive
 border-color-hover = colorEmp1
 border-color-disabled = colorEmp1Disabled
-text-color = colorText2
-text-color-hover = colorText1
+text-color = colorBg
+text-color-hover-1 = colorEmp2
+text-color-hover-2 = colorText1
 text-color-disabled = colorText4
 bg-color = colorEmp1Disabled
 bg-color-hover = saturation(bg-color, 120%)
@@ -25,21 +26,23 @@ shadow-color = mix(black, transparent, 70%)
 
 button()
     color text-color
-    width 100%
+    width 70%
     font-medium()
     border-radius 3px
     padding 10px
-    border border-color solid 1px
+    border border-color-2 solid 0px
+    border-radius 1000px
     text-shadow none
     transition all 0.2s ease
     cursor pointer
     box-sizing border-box
-    background bg-color
+    background colorButton
     //box-shadow 5px 5px 10px shadow-color
+    margin auto
     centered-flex-container()
 
     &:hover
-        color text-color-hover
+        color text-color-hover-1
         border-color border-color-hover
         box-shadow 5px 5px 15px shadow-color
 
@@ -49,15 +52,12 @@ button()
         background bg-color-disabled
         box-shadow none
 
-
 button-submit()
     button()
     padding 10px 20px
-    background #444444
-    border border-color-2 solid 1px
-    border-radius 1000px
-    background bg-color-2
+    background colorButtonSubmit
     &:hover
+        color text-color-hover-2
         border-color border-color-2-hover/
     &[disabled]:not([disabled=false])
         background #444444AA
