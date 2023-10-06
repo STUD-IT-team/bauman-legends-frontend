@@ -13,20 +13,30 @@
   position fixed
   width 100%
   height 100%
-  background colorEmp2Disabled
+  background colorBgLightMax
 .background-text-image
   position fixed
   width 100%
   height 100%
   object-fit cover
+  opacity 0.5
 .bauman-image
   position fixed
   height 100%
   bottom -6%
+  left -100px
   object-fit contain
   overflow visible
-  filter invert() hue-rotate(180deg) contrast(2)
-  opacity .5
+  opacity 1
+.logo
+  position fixed
+  object-fit contain
+  overflow visible
+  right 0
+  bottom 0
+  justify-content right
+  height 80px
+  filter brightness(0.1875)
 
 .wrapper
   width 100%
@@ -40,9 +50,9 @@
 
 <template>
   <div class="bg"></div>
-  <img class="background-text-image" src="../src/res/images/BackgroundPattern.png" alt="Background">
+  <img class="background-text-image" src="../src/res/images/BackgroundPatternSmaller.png" alt="Background">
   <img class="bauman-image" src="../src/res/images/Bauman.png" alt="Bauman">
-
+  <img src="./res/images/Gerbs.png" class="logo">
   <div class="wrapper">
     <router-view v-slot="{ Component }">
       <transition name="scale-in">
