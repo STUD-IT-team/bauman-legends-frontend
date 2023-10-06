@@ -1,7 +1,6 @@
 <style scoped lang="stylus">
 @require '../styles/constants.styl'
 @require '../styles/buttons.styl'
-@require '../styles/footer.styl'
 
 .root-signin
   width 100%
@@ -31,7 +30,7 @@
       margin-top 20px
       font-small()
       text-decoration none
-      justify-content space-around
+      justify-content space-between
       .signin-by-email-link
         color colorText1
         text-decoration none
@@ -58,7 +57,6 @@
         <router-link class="restore-password-link" :to="{name: 'restorePassword'}">Восстановить пароль</router-link>
       </div>
     </div>
-    <img src="../res/images/Gerbs.png" class="logo">
   </div>
 </template>
 

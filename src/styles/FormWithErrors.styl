@@ -34,6 +34,7 @@ input-border = 2px solid colorText1
       border-radius borderRadiusL
       font-medium()
       &::placeholder
+        opacity 0
         visibility hidden
       &:placeholder-shown ~ .placeholder
         left 10px
@@ -41,9 +42,10 @@ input-border = 2px solid colorText1
 
     .error
     .success
-      position absolute
-      bottom -1px
-      font-small()
+      position: absolute
+      top 26px
+      right 20px
+      font-small-extra()
       opacity 0
       transition opacity 0.2s ease
     .error

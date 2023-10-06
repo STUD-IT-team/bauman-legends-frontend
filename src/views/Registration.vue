@@ -41,7 +41,6 @@ bg = colorBgDark
         <button class="signin-button">Войти</button>
       </router-link>
     </div>
-    <img src="../res/images/Gerbs.png" class="logo">
   </div>
 </template>
 

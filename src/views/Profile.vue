@@ -1,7 +1,6 @@
 <style scoped lang="stylus">
 @require '../styles/constants.styl'
 @require '../styles/buttons.styl'
-@require '../styles/footer.styl'
 
 .root-profile
   width 100%
@@ -88,6 +87,12 @@
         background colorBg
         font-small-extra()
         color colorBgLightExtra
+    .change-password
+      button()
+      margin 0
+      width 50%
+      color colorEmp2
+      background colorBg
     .dropdown
       width auto
       background colorBg
@@ -103,7 +108,6 @@
 
 <template>
   <div class="root-profile">
-    <img src="../res/images/Gerbs.png" class="logo">
     <div>
     <table class="navbar">
     <th>Профиль/Главная</th>
@@ -184,6 +188,7 @@
       <button class="edit">Изменить</button>
     </div>
 
+    <button class="change-password">Сменить пароль</button>
 
     </div>
     <!-- <div class="title"> PROFILE PAGE</div>
