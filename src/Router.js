@@ -11,7 +11,7 @@ export default function createVueRouter(Store) {
   const routes = [
     {path: '/register', name: 'register', component: Registration, meta: {noLoginRequired: true}},
     {path: '/login', name: 'login', component: SignIn, meta: {noLoginRequired: true}},
-    {path: '/profile', name: 'profile', component: Profile, meta: {loginRequired: true}},
+    {path: '/profile', name: 'profile', component: Profile, meta: {}},
     {path: '/sign-in-by-email', name: 'signInByEmail', component: SignIn, meta: {noLoginRequired: true}},
     {path: '/restore-password', name: 'restorePassword', component: SignIn, meta: {noLoginRequired: true}},
 

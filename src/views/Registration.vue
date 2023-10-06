@@ -23,9 +23,10 @@ bg = colorBgDark
 <template>
   <div class="root-register">
     <div class="form">
-      <FormWithErrors ref="form"
-                      :fields="fields"
-                      @success="register"
+      <FormWithErrors
+        ref="form"
+        :fields="fields"
+        @success="register"
       ></FormWithErrors>
       <router-link class="signin-link" :to="{name: 'login'}">
         <button class="signin-button">
