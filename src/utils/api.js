@@ -31,7 +31,9 @@ export default class API extends REST_API {
     editTeam = (name) => this.put('api/team', {name});
     getTeam = () => ({
         data: {
-
+            id: 1,
+            title: "задуш(н)им",
+            members: [{id: 1, name: "rudy", role: 2}, {id: 2, name: "ross", role: 1}, {id: 3, name: "loki", role: 0}]
         },
         code: 200,
         ok: true,

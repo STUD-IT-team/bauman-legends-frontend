@@ -36,7 +36,9 @@
   bottom 0
   justify-content right
   height 80px
-  filter brightness(0.1875)
+  mix-blend-mode difference
+  z-index 99999999
+  pointer-events none
 
 .wrapper
   width 100%
@@ -50,9 +52,9 @@
 
 <template>
   <div class="bg"></div>
-  <img class="background-text-image" src="../src/res/images/BackgroundPatternSmaller.png" alt="Background">
+  <img class="background-text-image" src="../src/res/images/BackgroundPatternSmaller.png" alt="background">
   <img class="bauman-image" src="../src/res/images/Bauman.png" alt="Bauman">
-  <img src="./res/images/Gerbs.png" class="logo">
+  <img src="./res/images/Gerbs.png" class="logo" alt="crest">
   <div class="wrapper">
     <router-view v-slot="{ Component }">
       <transition name="scale-in">

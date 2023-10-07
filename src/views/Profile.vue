@@ -30,10 +30,12 @@ button-edit()
 
   .main-content
     padding 20px
+    max-width 600px
+    margin 0 auto
     .header
       font-large()
       font-bold()
-      margin 10px 20px
+      margin 20px 20px 10px 20px
       color colorBg
 
     .tasks
@@ -101,6 +103,7 @@ button-edit()
 
           .kick-member-btn
             all unset
+            box-sizing border-box
             cursor pointer
             centered-flex-container()
             width 40px
@@ -174,6 +177,8 @@ button-edit()
         flex 1
         padding 10px 5px
         text-align center
+        margin 0
+        cursor pointer
 </style>
 
 <template>
@@ -206,7 +211,7 @@ button-edit()
         <p class="team-statistics">{{ teamData.rating }} баллов, {{ teamData.place }} место</p>
 
         <p class="team-members-info">Состав команды:</p>
-        <div class="user-row" v-for="member in teamData.members">
+        <div class="user-row" v-for="(member, idx) in teamData.members">
           <div class="name">{{ member.name }}</div>
           <select class="dropdown"
                   @change="changeMemberRole(member.id, member.role, member)"
@@ -217,7 +222,7 @@ button-edit()
             <option :value="TeamRoles.subLead">Зам</option>
             <option :value="TeamRoles.member">Участник</option>
           </select>
-          <button class="kick-member-btn" :class="{'hidden': member.role === TeamRoles.lead}" v-if="(userRole === TeamRoles.lead || userRole === TeamRoles.subLead)" @click="deleteMemberFromTeam"><img src="../res/images/trashbox.svg" alt="Исключить"></button>
+          <button class="kick-member-btn" :class="{'hidden': member.role === TeamRoles.lead}" v-if="(userRole === TeamRoles.lead || userRole === TeamRoles.subLead)" @click="deleteMemberFromTeam(idx)"><img src="../res/images/trashbox.svg" alt="Исключить"></button>
         </div>
 
         <div class="buttons-container">
@@ -400,6 +405,10 @@ export default {
     },
 
     async deleteMemberFromTeam(userIdxInList) {
+      const res = await this.$modals.confirm('Удалить участника', `Вы уверены, что хотите удалить участника "${this.teamData.members[userIdxInList].name}"?`);
+      if (!res) {
+        return;
+      }
       this.loading = true;
       const {ok} = await this.$api.deleteMember(this.teamData.members[userIdxInList].id);
       this.loading = false;

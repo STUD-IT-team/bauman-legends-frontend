@@ -27,8 +27,9 @@ input-border = 2px solid border-color
 
     input
       all unset
+      box-sizing border-box
       display block
-      width calc(100% - 22px)
+      width 100%
       border input-border
       border-top-width 0
       text-align left
