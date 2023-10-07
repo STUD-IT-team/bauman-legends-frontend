@@ -16,6 +16,15 @@ export default defineConfig({
   // },
   server: {
     https: true,
+
+    proxy: {
+      '/api': {
+        target: `http://127.0.0.1:9000`,
+        secure: false,
+        changeOrigin: false,
+        // rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    }
   },
   resolve: {
     alias: [

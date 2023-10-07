@@ -1,52 +1,97 @@
 <style lang="stylus" scoped>
-  //@require '../../styles/constants.styl'
+@require '../../styles/constants.styl'
+@require '../../styles/buttons.styl'
+@require '../../styles/fonts.styl'
 
-  close-btn-size = 20px
+close-btn-size = 20px
 
-  .modal
+.modal
+  position fixed
+  top 0
+  left 0
+  width 100%
+  height 100vh
+  z-index 999
+  backdrop-filter blur(10px)
+  opacity 1
+  transition opacity 0.2s ease
+
+  .modal-background
     position fixed
-    top 0
     left 0
+    top 0
     width 100%
     height 100vh
-    z-index 999
+    background-color black
+    opacity 0.6
+  .form
+    position relative
+    margin 150px auto
+    max-width 600px
+    background colorBg
+    padding 20px
+    border-radius 10px
 
-    .modal-background
-      position fixed
-      left 0
-      top 0
-      width 100%
-      height 100vh
+    .confirm-button
+      width 45%
+      display inline-block
+      text-align center
+      margin-left 2.5%
+      margin-right 2.5%
 
-      background-color #000000AA
+    .close-btn
+      position absolute
+      color colorText2
+      text-shadow colorText2
+      right 20px
+      top 10px
+      width close-btn-size
+      height close-btn-size
+      transition all 0.2s ease
+      cursor pointer
+    .close-btn:hover
+      color colorText1
+      text-shadow colorText1
+      transform scale(1.1)
 
-    .form
-      position relative
+    .info-container
+      .title
+        font-large()
+        color colorText1
+        margin-bottom 10px
+      .description
+        font-medium()
+        color colorText2
 
+    .fields-container
+      .form-group
+        .input
+          all unset
+          box-sizing border-box
+          width 100%
+          padding 5px 15px
+          font-large()
+          color colorText1
+          border 2px solid colorText1
+          border-radius 99999999px
+          margin-top 10px
+    .submit-container
+      .confirm-buttons
+        display flex
+        gap 20px
       .confirm-button
-        width 45%
-        display inline-block
-        margin-left 2.5%
-        margin-right 2.5%
+        button-submit()
+        margin-top 20px
+        width 50%
 
-      .close-btn
-        position absolute
-        color textColor2
-        right 20px
-        top 10px
-        width close-btn-size
-        height close-btn-size
-        transition all 0.2s ease
-        cursor pointer
-      .close-btn:hover
-        color textColor1
-        transform scale(1.1)
+.modal.hidden
+  opacity 0
+  pointer-events none
 </style>
 
 <template>
-  <div class="modal" v-show="isShowed" @keydown.enter.prevent="__resolve(true)" @keydown.esc="__resolve(false)">
-    <div class="modal-background" @click="__resolve(false)">
-    </div>
+  <div class="modal" :class="{hidden: !isShowed}" @keydown.enter.prevent="__resolve(true)" @keydown.esc="__resolve(false)">
+    <div class="modal-background" @click="__resolve(false)"></div>
 
     <div class="form" ref="form">
       <span class="close-btn" @click="__resolve(false)">
@@ -59,18 +104,17 @@
       </div>
 
       <div class="fields-container">
-        <div v-if="type === 'prompt'" class="form-group">
-<!--          <FloatingInput type="text" v-model="text" ref="inputText" class="form-control"></FloatingInput>-->
-          <input type="text" v-model="text" ref="inputText" class="form-control">
+        <div v-if="type === Types.prompt" class="form-group">
+          <input type="text" v-model="text" ref="inputText" class="input" :placeholder="placeholder">
         </div>
       </div>
 
       <div class="submit-container submit-buttons">
         <div class="form-group">
-          <input type="submit" @click="__resolve()" v-if="type !== 'confirm'" ref="buttonOk" value="Ок">
+          <button @click="__resolve()" v-if="type !== Types.confirm" class="confirm-button" ref="buttonOk">Ок</button>
           <div v-else class="confirm-buttons">
-            <input type="submit" @click="__resolve(true)" class="confirm-button" ref="buttonYes" value="Да"/>
-            <input type="submit" @click="__resolve(false)" class="confirm-button btn-danger" value="Нет"/>
+            <button @click="__resolve(true)" class="confirm-button" ref="buttonYes">Да</button>
+            <button @click="__resolve(false)" class="confirm-button btn-danger">Нет</button>
           </div>
         </div>
       </div>
@@ -79,18 +123,21 @@
 </template>
 
 <script>
-  // import FloatingInput from "../FloatingInput.vue";
-
   export default {
-    // components: {FloatingInput},
-
     data() {
       return {
-        type: "",
         title: "",
         description: "",
         isShowed: false,
         text: "",
+        placeholder: "",
+
+        Types: {
+          prompt: 0,
+          confirm: 1,
+          alert: 2,
+        },
+        type: 0,
       };
     },
 
@@ -99,10 +146,11 @@
     },
 
     methods: {
-      async __createModal(title, description = '', type='alert') {
+      async __createModal(title, description = '', placeholder='', type='alert') {
         this.type = type;
         this.title = title;
         this.description = description;
+        this.placeholder = placeholder;
 
         if (this.isShowed) {
           return this.promise;
@@ -111,9 +159,9 @@
 
         await this.$nextTick();
 
-        if (this.type === 'confirm') {
+        if (this.type === this.Types.confirm) {
           this.$refs.buttonYes.focus();
-        } else if (this.type === 'prompt') {
+        } else if (this.type === this.Types.prompt) {
           this.$refs.inputText.focus();
         } else {
           this.$refs.buttonOk.focus();
@@ -131,7 +179,7 @@
           return
         }
 
-        if (this.type !== 'confirm') {
+        if (this.type !== this.Types.confirm) {
           if (result === false) {
             result = null
           } else {
@@ -144,15 +192,15 @@
         this.text = '';
       },
 
-      prompt(title, description, defaultText) {
+      prompt(title, description, defaultText, placeholder) {
         this.text = defaultText;
-        return this.__createModal(title, description, 'prompt');
+        return this.__createModal(title, description, placeholder, this.Types.prompt);
       },
       confirm(title, description) {
-        return this.__createModal(title, description, 'confirm');
+        return this.__createModal(title, description, '', this.Types.confirm);
       },
       alert(title, description) {
-        return this.__createModal(title, description, 'alert');
+        return this.__createModal(title, description, '', this.Types.alert);
       },
     }
   }

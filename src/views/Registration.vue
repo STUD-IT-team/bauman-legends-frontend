@@ -1,78 +1,136 @@
-<style scoped>
-.root-register {
-  width: 100%;
-  height: 100%;
-}
+<style scoped lang="stylus">
+@require '../styles/constants.styl'
+@require '../styles/buttons.styl'
 
-.root-register .form {
-  margin-top: 200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 20px;
-  width: 100%;
-  max-width: 500px;
-}
+bg = colorBgDark
 
-.root-register .form label {
-  display: inline-block;
-  margin-bottom: 15px;
-  width: 50%;
-}
-.root-register .form input {
-  display: inline-block;
-  width: 50%;
-  padding: 5px 7px;
-}
-
-.root-register .form button.submit {
-  display: block;
-  width: 100%;
-  margin-top: 20px;
-  padding: 10px;
-  cursor: pointer;
-}
+.root-register
+  width 100%
+  padding 20px
+  .form
+    max-width 600px
+    margin 20px auto
+    background-color colorBg
+    border-radius borderRadiusM
+    padding 20px
+    padding-top 10px
+    text-align center
+    font-large()
+    font-bold()
+    color colorText1
+    .signin-link
+      text-align left
+      text-decoration none
+    .signin-button
+      button()
 </style>
 
 <template>
   <div class="root-register">
     <div class="form">
-      <label>Имя</label><input type="text" v-model="newUserData.name" placeholder="ФИО">
-      <label>Учебная группа</label><input type="text" v-model="newUserData.name" placeholder="РК1-11Б">
-      <label>Telegram</label><input type="text" v-model="newUserData.name" placeholder="https://t.me/xxxxxx">
-      <label>VK</label><input type="text" v-model="newUserData.name" placeholder="https://vk.com/xxxxxx">
-      <label>Email</label><input type="text" v-model="newUserData.name" placeholder="ххххх@xxx.xx">
-      <label>Телефон</label><input type="text" v-model="newUserData.name" placeholder="Х-(ХХХ)-ХХХ-ХХ-ХХ">
-
-      <button @click="register" class="submit">Отправить</button>
+      РЕГИСТРАЦИЯ<br>
+      <FormWithErrors
+        ref="form"
+        :fields="fields"
+        submitText="Зарегистрироваться"
+        @success="register"
+        :loading="loading"
+      ></FormWithErrors>
+      <router-link class="signin-link" :to="{name: 'login'}">
+        <button class="signin-button">Войти</button>
+      </router-link>
     </div>
   </div>
 </template>
 
 <script>
+import FormWithErrors from "../components/FormWithErrors.vue";
+import {detectBrowser, detectOS} from "../utils/utils";
+import CircleLoading from "../components/CircleLoading.vue";
+import {Validators} from "../utils/validators";
+
+
 export default {
+  components: {CircleLoading, FormWithErrors},
   data() {
     return {
-      newUserData: {
-        name: undefined,
-        group: undefined,
-        tg: undefined,
-        vk: undefined,
-        email: undefined,
-        telephone: undefined,
+      fields: {
+        name: {
+          title: 'ФИО',
+          name: 'name',
+          type: 'text',
+          placeholder: 'Иванов Иван Иванович',
+          validationRegExp: Validators.name.regExp,
+          prettifyResult: Validators.name.prettifyResult,
+        },
+        group: {
+          title: 'Учебная группа',
+          name: 'group',
+          type: 'text',
+          placeholder: 'ОЭ2-11',
+          validationRegExp: Validators.group.regExp,
+          prettifyResult: Validators.group.prettifyResult,
+        },
+        tg:{
+          title: 'Telegram',
+          name: 'telegram',
+          type: 'text',
+          placeholder: '@legends_bmstu',
+          validationRegExp: Validators.tg.regExp,
+          prettifyResult: Validators.tg.prettifyResult,
+          info: 'В любом формате',
+        },
+        vk: {
+          title: 'VK',
+          name: 'vk',
+          type: 'text',
+          placeholder: 'vk.com/legends_bmstu',
+          validationRegExp: Validators.vk.regExp,
+          prettifyResult: Validators.vk.prettifyResult,
+          info: 'В любом формате',
+        },
+        email: {
+          title: 'Электронная почта',
+          name: 'email',
+          type: 'text',
+          placeholder: 'legends@bmstu.ru',
+          validationRegExp: Validators.email.regExp,
+          prettifyResult: Validators.email.prettifyResult,
+        },
+        phone: {
+          title: 'Номер телефона',
+          name: 'phone',
+          type: 'text',
+          placeholder: '8-(123)-456-78-90',
+          validationRegExp: Validators.phone.regExp,
+          prettifyResult: Validators.phone.prettifyResult,
+        },
+        password: {
+          title: 'Пароль',
+          name: 'password',
+          type: 'password',
+          placeholder: '●●●●●●',
+          validationRegExp: Validators.password.regExp,
+          prettifyResult: Validators.password.prettifyResult,
+          info: 'Минимум 6 символов'
+        }
       },
+      loading: false,
     }
   },
 
-  computed: {
-  },
-
-  async mounted() {
-  },
-
   methods: {
-    register() {
-      console.log("VALIDATE AND SEND USER DATA");
-      // api.sendRegisterData(this.newUserData);
+    async register(data) {
+      this.loading = true;
+      const {ok} = await this.$api.register(data.name, data.group, data.tg, data.vk, data.email, data.phone, data.password, detectBrowser(), detectOS());
+      this.loading = false;
+
+      if (!ok) {
+        this.$refs.form.setError([this.fields.email], 'На указанный email уже зарегестрирован аккаунт');
+        return;
+      }
+      this.$store.dispatch('GET_USER');
+      this.$router.push({name: 'profile'});
     }
   }
 }
