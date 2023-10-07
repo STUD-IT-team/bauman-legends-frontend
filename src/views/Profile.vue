@@ -15,8 +15,8 @@
     padding 10px
     font-large()
     color colorText1
-    align-content: space-between
-    text-align left
+    display flex
+    justify-content space-between
   .header
       font-large()
       font-bold()
