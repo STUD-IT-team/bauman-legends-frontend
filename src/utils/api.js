@@ -6,12 +6,24 @@ export default class API extends REST_API {
     logout = () => this.delete('/api/user/session');
     getAllSessions = () => this.get('/api/sessions');
     logoutAnother = () => this.delete('/api/user/sessions/another');
-    getUser = () => this.get('/api/user');
+    getUser = () => ({
+        data: {
+            id: 1,
+            name: "Тяпкин Сергей Серегевич",
+            group: "РК2-11М",
+            tg: "tyapkin_s",
+            vk: "tyapkin_s",
+            email: "tyapkin2002@mail.ru",
+            phone: "89160932860",
+        },
+        code: 200,
+        ok: true,
+    })//this.get('/api/user');
     getUserById = (id) => this.get(`/api/user/${id}`);
     sendConfirmationLetter = (name, email) => this.post('/api/email/confirm', {name, email});
     confirmRegistrationByCode = (secretCode) => this.put('api/user/email/confirm', {secretCode});
     changePassword = (oldPassword, newPassword) => this.put('api/user/password/restore', {oldPassword, newPassword});
-    editProfile = (name, group, tg, vk, email, phone, password) => this.put('api', {name, group, tg, vk, email, phone, password});
+    editProfile = (name, group, tg, vk, email, phone) => this.put('api', {name, group, tg, vk, email, phone});
     sendRestorePasswordLetter = (secretCode, newPassword) => this.post('api/user/password/restore', {secretCode, newPassword});
     restorePassword = (secretCode, newPassword) => this.put('api/user/password', {secretCode, newPassword});
     authCode = (secretCode, clientBrowser, clientOS) => this.post('api/user/auth/code', {secretCode, clientBrowser, clientOS});
@@ -19,9 +31,7 @@ export default class API extends REST_API {
     editTeam = (name) => this.put('api/team', {name});
     getTeam = () => ({
         data: {
-            id: 1,
-            title: "задуш(н)им",
-            members: [{id: 1, name: "rudy", role: 2}, {id: 2, name: "ross", role: 1}, {id: 3, name: "loki", role: 0}]
+
         },
         code: 200,
         ok: true,

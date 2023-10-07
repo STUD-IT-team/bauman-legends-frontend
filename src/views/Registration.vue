@@ -47,6 +47,7 @@ bg = colorBgDark
 import FormWithErrors from "../components/FormWithErrors.vue";
 import {detectBrowser, detectOS} from "../utils/utils";
 import CircleLoading from "../components/CircleLoading.vue";
+import {Validators} from "../utils/validators";
 
 
 export default {
@@ -59,23 +60,24 @@ export default {
           name: 'name',
           type: 'text',
           placeholder: 'Иванов Иван Иванович',
-          validationRegExp: /^[а-я]+ [а-я]+( [а-я]+)?$/i,
+          validationRegExp: Validators.name.regExp,
+          prettifyResult: Validators.name.prettifyResult,
         },
         group: {
           title: 'Учебная группа',
           name: 'group',
           type: 'text',
           placeholder: 'ОЭ2-11',
-          validationRegExp: /^(иу|ибм|мт|см|бмт|рл|э|рк|фн|л|юр|сгн|вуц|гуимц|уц|фмоп|фоф|исот|ркт|ак|пс|рт|лт|оэ|оэп)\d\d?и?-1\d[АМБ]?$/i,
-          prettifyResult: (str) => str.toUpperCase(),
+          validationRegExp: Validators.group.regExp,
+          prettifyResult: Validators.group.prettifyResult,
         },
         tg:{
           title: 'Telegram',
           name: 'telegram',
           type: 'text',
           placeholder: '@legends_bmstu',
-          validationRegExp: /^((https:\/\/)?(t\.me\/)|@)?\w{5,}$/,
-          prettifyResult: (str) => '@' + str.replace('https://', '').replace('t.me/', '').replace('@', ''),
+          validationRegExp: Validators.tg.regExp,
+          prettifyResult: Validators.tg.prettifyResult,
           info: 'В любом формате',
         },
         vk: {
@@ -83,8 +85,8 @@ export default {
           name: 'vk',
           type: 'text',
           placeholder: 'vk.com/legends_bmstu',
-          validationRegExp: /^(https:\/\/)?(vk\.com\/|@)?\w+$/,
-          prettifyResult: (str) => str.replace('https://', '').replace('vk.com/', '').replace('@', ''),
+          validationRegExp: Validators.vk.regExp,
+          prettifyResult: Validators.vk.prettifyResult,
           info: 'В любом формате',
         },
         email: {
@@ -92,23 +94,24 @@ export default {
           name: 'email',
           type: 'text',
           placeholder: 'legends@bmstu.ru',
-          validationRegExp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-          prettifyResult: (str) => str.toLowerCase(),
+          validationRegExp: Validators.email.regExp,
+          prettifyResult: Validators.email.prettifyResult,
         },
         phone: {
           title: 'Номер телефона',
           name: 'phone',
           type: 'text',
           placeholder: '8-(123)-456-78-90',
-          validationRegExp: /^((\+7)|8)[-\s.]?((\(\d\d\d\))|(\d\d\d))[-\s.]?\d\d\d[-\s.]?\d\d[-\s.]?\d\d$/,
-          prettifyResult: (str) => str.replace('+7', '8').replace('-', '').replace('(', '').replace(')', ''),
+          validationRegExp: Validators.phone.regExp,
+          prettifyResult: Validators.phone.prettifyResult,
         },
         password: {
           title: 'Пароль',
           name: 'password',
           type: 'password',
           placeholder: '●●●●●●',
-          validationRegExp: /^.{6,}$/,
+          validationRegExp: Validators.password.regExp,
+          prettifyResult: Validators.password.prettifyResult,
           info: 'Минимум 6 символов'
         }
       },

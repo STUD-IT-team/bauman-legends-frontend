@@ -8,8 +8,8 @@ const Store = new Vuex.Store({
       group: String(),
       tg: String(),
       vk: String(),
-      teamId: Number(),
-      teamName: String(),
+      email: String(),
+      phone: String(),
 
       isSignedIn: false,
     },
@@ -21,8 +21,8 @@ const Store = new Vuex.Store({
       state.user.group = String(userData.group);
       state.user.tg = String(userData.tg);
       state.user.vk = String(userData.vk);
-      state.user.teamId = Number(userData.teamId);
-      state.user.teamName = String(userData.teamName);
+      state.user.email = String(userData.email);
+      state.user.phone = String(userData.phone);
 
       state.user.isSignedIn = true;
     },

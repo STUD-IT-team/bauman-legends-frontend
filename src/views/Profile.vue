@@ -21,7 +21,6 @@ button-edit()
 
   .navbar
     width 100%
-    margin-bottom 20px
     background-color colorBg
     padding 10px
     font-large()
@@ -29,155 +28,173 @@ button-edit()
     display flex
     justify-content space-between
 
-  .header
-    font-large()
-    font-bold()
-    margin 10px 20px
-    color colorBg
-
-  .tasks
-    padding 0
-    margin 0 20px
-    display grid
-    grid-template-columns 1fr 1fr
-    grid-auto-rows 1fr
-    column-gap 5px
-    row-gap 5px
-
-    .task-button
-      button()
-      border-radius 8px
-      background colorBg
-      color colorText1
-      width 100%
-      height 100%
-
-  .box
-    background-color colorBg
-    border-radius borderRadiusM
+  .main-content
     padding 20px
-    padding-top 10px
-    margin 10px 20px
-    text-align left
-    align-content left
-    font-medium()
-    color colorText1
+    .header
+      font-large()
+      font-bold()
+      margin 10px 20px
+      color colorBg
 
-    &.team-block
-      .team-name-container
-        display flex
-        justify-content space-between
-        align-items center
-        .team-name
+    .tasks
+      padding 0
+      margin 0
+      display grid
+      grid-template-columns 1fr 1fr
+      grid-auto-rows 1fr
+      column-gap 5px
+      row-gap 5px
+
+      .task-button
+        button()
+        border-radius 8px
+        background colorBg
+        color colorText1
+        width 100%
+        height 100%
+
+    .box
+      background-color colorBg
+      border-radius borderRadiusM
+      padding 20px
+      padding-top 10px
+      margin 10px 0
+      text-align left
+      align-content left
+      font-medium()
+      color colorText1
+
+      &.team-block
+        .team-name-container
+          display flex
+          justify-content space-between
+          align-items center
+          .team-name
+            font-large()
+            font-bold()
+          .team-id
+            font-medium()
+            color colorText3
+            margin 0
+            padding 0 10px
+            display inline-block
+          .rename-team-button
+            button-edit()
+
+        .team-statistics
+          font-small()
+          color colorText3
+          padding 0
+          display block
+          margin 5px 0 15px 0
+
+        .team-members-info
           font-large()
           font-bold()
-        .team-id
-          font-medium()
-          color colorText3
-          margin 0
-          padding 0 10px
-          display inline-block
-        .rename-team-button
-          button-edit()
 
-      .team-statistics
-        font-small()
-        color colorText3
-        padding 0
-        display block
-        margin 5px 0 15px 0
+        .user-row
+          display flex
+          margin-top 5px
+          .name
+            flex 1
+            margin auto
 
-      .team-members-info
-        font-large()
-        font-bold()
+          .kick-member-btn
+            all unset
+            cursor pointer
+            centered-flex-container()
+            width 40px
+            img
+              width 30px
+              height 30px
+            &.hidden
+              pointer-events none
+              img
+                visibility hidden
 
-      .user-row
-        display flex
-        margin-top 5px
-        .name
-          flex 1
-          margin auto
+        .buttons-container
+          display flex
+          margin-top 20px
+          gap 20px
+          .add-member-btn
+            button()
+            padding 5px 20px
+            flex 1
+            img
+              width 30px
+              height 30px
+              margin-right 10px
+          .delete-team-btn
+            button-danger()
+            flex 0
+            padding 5px 20px
 
-        .kick-member-btn
-          all unset
-          cursor pointer
-          centered-flex-container()
-          width 40px
-          img
-            width 30px
-            height 30px
+      &.user-block
+        .data-row
+          display flex
+          margin 10px 0
+          .user-name
+            font-large()
+            font-bold()
+            margin 5px 0
+          .field
+            color colorBgLightExtra
+          .data
+            flex 1
+            margin-left 10px
+            color colorText1
+          .button-edit
+            button-edit()
 
-      .buttons-container
-        display flex
-        margin-top 15px
-        gap 20px
-        .add-member-btn
+        .change-password
           button()
-          padding 5px 20px
-          flex 1
-          img
-            width 30px
-            height 30px
-            margin-right 10px
-        .delete-team-btn
-          button-danger()
-          flex 0
-          padding 5px 20px
+          margin 0
+          width unset
+          color colorEmp1
+          background colorBg
+          padding 10px 20px 0 20px
 
-    &.user-block
-      .user-name
-        margin 5px 0
-
-      .data-row
-        display flex
-        margin 10px 0
-
-        .field
-          color colorBgLightExtra
-        .data
-          flex 1
-          margin-left 10px
-          color colorText1
-        .button-edit
-          button-edit()
-
-      .change-password
-        button()
-        margin 0
-        width 50%
-        color colorEmp2
+      .dropdown
+        width auto
         background colorBg
+        text-small()
+        color colorText1
+        display inline-block
+        padding 2px 10px
+        margin 0
+        border colorBgLightExtra solid 1px
+        border-radius 8px
 
-    .dropdown
-      width auto
-      background colorBg
-      text-small()
-      color colorText1
-      display inline-block
-      padding 2px 10px
-      margin 0
-      border colorBgLightExtra solid 1px
-      border-radius 8px
+    .buttons-create-team-container
+      display flex
+      gap 5px
+      .create-team-button
+      .join-team-button
+        centered-flex-container()
+        flex 1
+        padding 10px 5px
+        text-align center
 </style>
 
 <template>
   <div class="root-profile">
     <header class="navbar">
-      <span>Профиль/Главная</span>
-      <span>00:04:20</span>
+      <span>Профиль / Главная</span>
+<!--      <span>00:04:20</span>-->
     </header>
 
-    <header class="header">ДОСТУПНЫЕ ЗАДАНИЯ</header>
-    <div class="tasks">
-      <button class="task-button">Онлайн-задание</button>
-      <button class="task-button">Фото-задание</button>
-      <button class="task-button">Путешествие в НОЦ</button>
-      <button class="task-button">Задание с актёром</button>
-    </div>
+    <div class="main-content">
 
-    <header class="header">МОЯ КОМАНДА</header>
-    <div class="box team-block">
-      <div  v-if="ifUserInTeam">
+      <header class="header">ДОСТУПНЫЕ ЗАДАНИЯ</header>
+      <div class="tasks">
+        <button class="task-button">Онлайн-задание</button>
+        <button class="task-button">Фото-задание</button>
+        <button class="task-button">Путешествие в НОЦ</button>
+        <button class="task-button">Задание с актёром</button>
+      </div>
+
+      <header class="header">МОЯ КОМАНДА</header>
+      <div v-if="ifUserInTeam" class="box team-block">
         <div class="team-name-container">
           <span>
             <span class="team-name">{{ teamData.title }}</span>
@@ -193,14 +210,14 @@ button-edit()
           <div class="name">{{ member.name }}</div>
           <select class="dropdown"
                   @change="changeMemberRole(member.id, member.role, member)"
-                  :disabled="member.role === TeamRoles.lead || !this.isUserTeamLead"
+                  :disabled="member.role === TeamRoles.lead || userRole !== TeamRoles.lead"
                   v-model="member._newRole"
           >
             <option v-if="member.role === TeamRoles.lead" :value="TeamRoles.lead">Капитан</option>
             <option :value="TeamRoles.subLead">Зам</option>
             <option :value="TeamRoles.member">Участник</option>
           </select>
-          <button class="kick-member-btn" v-if="this.isUserTeamLead || true" @click="deleteMemberFromTeam"><img src="../res/images/trashbox.svg" alt="Исключить"></button>
+          <button class="kick-member-btn" :class="{'hidden': member.role === TeamRoles.lead}" v-if="(userRole === TeamRoles.lead || userRole === TeamRoles.subLead)" @click="deleteMemberFromTeam"><img src="../res/images/trashbox.svg" alt="Исключить"></button>
         </div>
 
         <div class="buttons-container">
@@ -209,45 +226,50 @@ button-edit()
           <button @click="deleteTeam" class="delete-team-btn">Удалить команду</button>
         </div>
       </div>
-
       <div v-else>
-        <div class="team-invite">Ты пока не состоишь в команде!</div>
-        <button @click="createTeam">Создать команду</button>
-        <button @click="showJoinInstruction">Присоединиться к команде</button>
-      </div>
-    </div>
-
-    <header class="header">ПРОФИЛЬ</header>
-    <div class="box user-block">
-      <div class="user-name">ФАМИЛИЯ ИМЯ ОТЧЕСТВО</div>
-      <div class="data-row">
-        <div class="field">Группа:</div>
-        <div class="data">ИУ4-72б</div>
-        <button class="button-edit">Изменить</button>
-      </div>
-      <div class="data-row">
-        <div class="field">Email:</div>
-        <div class="data">my_mail@mail.com</div>
-        <button class="button-edit">Изменить</button>
-      </div>
-      <div class="data-row">
-        <div class="field">Telegram:</div>
-        <div class="data">@OneVVTG</div>
-        <button class="button-edit">Изменить</button>
-      </div>
-      <div class="data-row">
-        <div class="field">Вконтакте:</div>
-        <div class="data">vk.com/onevvvk</div>
-        <button class="button-edit">Изменить</button>
-      </div>
-      <div class="data-row">
-        <div class="field">Номер телефона:</div>
-        <div class="data">8-800-555-35-35</div>
-        <button class="button-edit">Изменить</button>
+        <div class="buttons-create-team-container">
+          <button @click="createTeam" class="create-team-button box">Создать команду</button>
+          <button @click="showJoinInstruction" class="join-team-button box">Присоединиться к команде</button>
+        </div>
       </div>
 
-      <button class="change-password">Сменить пароль</button>
+      <header class="header">ПРОФИЛЬ</header>
+      <div class="box user-block">
+        <div class="data-row">
+          <div class="user-name">{{ $user.name }}</div>
+          <div class="data"></div>
+          <button class="button-edit" @click="changeUserParam('name')">Изменить</button>
+        </div>
+        <div class="data-row">
+          <div class="field">Группа:</div>
+          <div class="data">{{ $user.group }}</div>
+          <button class="button-edit" @click="changeUserParam('group')">Изменить</button>
+        </div>
+        <div class="data-row">
+          <div class="field">Email:</div>
+          <div class="data">{{ $user.email }}</div>
+          <button class="button-edit" @click="changeUserParam('email')">Изменить</button>
+        </div>
+        <div class="data-row">
+          <div class="field">Telegram:</div>
+          <div class="data">@{{ $user.tg }}</div>
+          <button class="button-edit" @click="changeUserParam('tg')">Изменить</button>
+        </div>
+        <div class="data-row">
+          <div class="field">Вконтакте:</div>
+          <div class="data">vk.com/{{ $user.vk }}</div>
+          <button class="button-edit" @click="changeUserParam('vk')">Изменить</button>
+        </div>
+        <div class="data-row">
+          <div class="field">Номер телефона:</div>
+          <div class="data">{{ $user.phone }}</div>
+          <button class="button-edit" @click="changeUserParam('phone')">Изменить</button>
+        </div>
 
+        <router-link :to="{name: 'changePassword'}">
+          <button class="change-password">Сменить пароль</button>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -261,15 +283,6 @@ export default {
   components: {CircleLoading},
   data() {
     return {
-      newUserData: {
-        name: this.$user.name,
-        group: this.$user.group,
-        tg: this.$user.tg,
-        vk: this.$user.vk,
-        email: this.$user.email,
-        telephone: this.$user.telephone,
-      },
-      loading: false,
       teamData: {
         id: undefined,
         title: undefined,
@@ -279,7 +292,9 @@ export default {
         lead: 2,
         subLead: 1,
         member: 0,
-      }
+      },
+
+      loading: false,
     }
   },
 
@@ -288,9 +303,9 @@ export default {
   },
 
   computed: {
-    isUserTeamLead() {
-      const idx = this.teamData.members.findIndex((member) => member.role === this.TeamRoles.lead && member.id === this.$user.id);
-      return idx !== -1;
+    userRole() {
+      const userInTeam = this.teamData.members.find((member) => member.id === this.$user.id);
+      return userInTeam?.role;
     },
 
     ifUserInTeam() {
@@ -316,14 +331,14 @@ export default {
   methods: {
     async getCurTeam() {
       const {data: teamData, code, ok} = this.$api.getTeam();
-      teamData.members.forEach(member => {
+      teamData.members?.forEach(member => {
         member._newRole = member.role;
       });
       this.teamData = teamData;
     },
 
     showJoinInstruction() {
-      alert('Сообщи капитану свой ID, чтобы он добавил тебя в команду');
+      this.$modals.alert('Сообщи капитану свой ID, чтобы он добавил тебя в команду');
     },
 
     async createTeam() {
@@ -406,6 +421,30 @@ export default {
       userObject.role = roleId;
       userObject._newRole = userObject.role;
     },
+
+    async changeUserParam(fieldName) {
+      const newUserData = {
+        name: this.$user.name,
+        group: this.$user.group,
+        tg: this.$user.tg,
+        vk: this.$user.vk,
+        email: this.$user.email,
+        phone: this.$user.phone,
+      };
+      newUserData[fieldName] = await this.$modals.prompt("Изменить значение поля", "Введите новое значение", newUserData[fieldName]);
+      if (!newUserData[fieldName]) {
+        return;
+      }
+
+      this.loading = true;
+      const {ok} = await this.$api.editProfile(newUserData.name, newUserData.group, newUserData.tg, newUserData.vk, newUserData.email, newUserData.phone);
+      this.loading = false;
+      if (!ok) {
+        this.$popups.error(`Не удалось изменить значение поля ${fieldName}`);
+        return;
+      }
+      this.$user[fieldName] = newUserData[fieldName];
+    }
   }
 }
 </script>
