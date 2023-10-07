@@ -32,22 +32,41 @@
     align-content left
     font-medium()
     color colorText1
-    .s1
+    .team-info
+      display grid
+      grid-template-columns auto max-content
+      justify-items space-between
+      .team-header
+        .team-name
+          font-large()
+          font-bold()
+          margin auto
+          display inline-block
+        .team-id
+          flex 1
+          font-medium()
+          color colorText3
+          margin 0
+          padding 0 10px
+          display inline-block
+      .edit
+        margin-right 0
+        button-inline() 
+        width auto
+        padding-top 3px
+        background colorBg
+        font-small-extra()
+        color colorBgLightExtra
+      .rating
+        font-small()
+        color colorText3
+        margin 0
+        padding 0
+        display inline-block
+    .s1 
       font-large()
       font-bold()
       margin auto
-      display inline-block
-    .s2
-      font-medium()
-      color colorText3
-      margin 0
-      padding 0 10px
-      display inline-block
-    .s3
-      font-small()
-      color colorText3
-      margin 0
-      padding 0
       display inline-block
     .name-row
       display flex
@@ -65,6 +84,27 @@
         margin 0
         border colorBgLightExtra solid 1px
         border-radius 8px
+    .buttons
+      margin-top 10px
+      display flex
+      justify-content space-between
+      gap 10px
+      .add-member
+        button()
+        padding 5px 20px
+        margin 0
+        font-small()
+        .plus-icon
+          height 2rem
+          padding-right 10px
+      .delete-team
+        button()
+        padding 5px 20px
+        margin 0
+        font-small()
+        background colorDanger
+        &:hover
+          color colorDangerDark
 </style>
 
 <template>
@@ -72,44 +112,56 @@
     <div class="header">ДОСТУПНЫЕ ЗАДАНИЯ</div>
       <div class="tasks">
         <button class="task-button">Онлайн-задание</button>
-        <button class="task-button">Фото-задание</button>
+        <button class="task-button">Фотозадание</button>
         <button class="task-button">Путешествие в НОЦ</button>
         <button class="task-button">Задание с актёром</button>
       </div>
       <div class="header">МОЯ КОМАНДА</div>
       <div class="box">
-        <p class="s1">Умные мИУсли</p>
-        <p class="s2">#0002</p><br>
-        <p class="s3">15 баллов, 3 место</p>
-        <br><br>
+        <div class="team-info">
+          <div class="team-header">
+            <div class="team-name">Умные мИУсли</div>
+            <div class="team-id">#0002</div>
+          </div>
+          <button class="edit">Изменить</button>
+          <div class="rating">15 баллов, 3 место</div>
+        </div>
+        <br>
         <!-- Это бы в отдельную вьюшку -->
         <p class="s1">Состав команды:</p><br>
         <div class="name-row">
-        <div class="name">Луцук Ренат</div>
-        <select class=dropdown>
-          <option selected hidden>Роль</option>
-          <option>Капитан</option>
-          <option>Зам</option>
-          <option>Участник</option>
-        </select>
+          <div class="name">Луцук Ренат</div>
+          <select class=dropdown>
+            <option selected hidden>Роль</option>
+            <option>Капитан</option>
+            <option>Зам</option>
+            <option>Участник</option>
+          </select>
         </div>
         <div class="name-row">
-        <div class="name">Мельников Дмитрий</div>
-        <select class=dropdown>
-          <option selected hidden>Роль</option>
-          <option>Капитан</option>
-          <option>Зам</option>
-          <option>Участник</option>
-        </select>
+          <div class="name">Мельников Дмитрий</div>
+          <select class=dropdown>
+            <option selected hidden>Роль</option>
+            <option>Капитан</option>
+            <option>Зам</option>
+            <option>Участник</option>
+          </select>
         </div>
         <div class="name-row">
-        <div class="name">Новиков Тимофей</div>
-        <select class=dropdown>
-          <option selected hidden>Роль</option>
-          <option>Капитан</option>
-          <option>Зам</option>
-          <option>Участник</option>
-        </select>
+          <div class="name">Новиков Тимофей</div>
+          <select class=dropdown>
+            <option selected hidden>Роль</option>
+            <option>Капитан</option>
+            <option>Зам</option>
+            <option>Участник</option>
+          </select>
+        </div>
+        <div class="buttons">
+          <button class="add-member">
+            <img class="plus-icon" src="../res/images/plus.svg">
+            Добавить участника
+          </button>
+          <button class="delete-team">Удалить команду</button>
         </div>
       </div>
     </div>

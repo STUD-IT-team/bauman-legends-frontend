@@ -54,7 +54,6 @@
       .edit
         button-inline()
         width auto
-        margin-left 10px
         padding 0
         background colorBg
         font-small-extra()
@@ -64,8 +63,10 @@
       font-small()
       margin 0
       width auto
-      color colorText1
+      color colorEmp1
       background colorBg
+      &:hover
+        color colorText1
     
 
 </style>
