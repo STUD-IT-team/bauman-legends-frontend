@@ -26,6 +26,7 @@ bg = colorBgDark
       text-decoration none
     .signin-button
       button()
+      min-width 70%
 </style>
 
 <template>

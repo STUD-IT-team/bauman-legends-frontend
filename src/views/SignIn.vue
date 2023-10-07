@@ -24,6 +24,7 @@
       text-align left
     .register-button
       button()
+      min-width 70%
     .signin-links
       display flex
       width 100%
