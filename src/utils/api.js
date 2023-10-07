@@ -6,19 +6,7 @@ export default class API extends REST_API {
     logout = () => this.delete('/api/user/session');
     getAllSessions = () => this.get('/api/sessions');
     logoutAnother = () => this.delete('/api/user/sessions/another');
-    getUser = () => ({
-        data: {
-            id: 1,
-            name: "Тяпкин Сергей Серегевич",
-            group: "РК2-11М",
-            tg: "tyapkin_s",
-            vk: "tyapkin_s",
-            email: "tyapkin2002@mail.ru",
-            phone: "89160932860",
-        },
-        code: 200,
-        ok: true,
-    })//this.get('/api/user');
+    getUser = () => this.get('/api/user');
     getUserById = (id) => this.get(`/api/user/${id}`);
     sendConfirmationLetter = (name, email) => this.post('/api/email/confirm', {name, email});
     confirmRegistrationByCode = (secretCode) => this.put('api/user/email/confirm', {secretCode});
@@ -29,15 +17,7 @@ export default class API extends REST_API {
     authCode = (secretCode, clientBrowser, clientOS) => this.post('api/user/auth/code', {secretCode, clientBrowser, clientOS});
     createTeam = (name) => this.post('api/team', {name});
     editTeam = (name) => this.put('api/team', {name});
-    getTeam = () => ({
-        data: {
-            id: 1,
-            title: "задуш(н)им",
-            members: [{id: 1, name: "rudy", role: 2}, {id: 2, name: "ross", role: 1}, {id: 3, name: "loki", role: 0}]
-        },
-        code: 200,
-        ok: true,
-    })// this.get('/api/team');
+    getTeam = () => this.get('/api/team');
     deleteTeam = () => this.delete('/api/team');
     addMember = (id) => this.post(`/api/team/join/${id}`);
     deleteMember = (id) => this.delete(`/api/team/join/${id}`);
