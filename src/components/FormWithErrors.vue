@@ -36,9 +36,8 @@ input-border = 2px solid border-color
       padding-bottom 10px
       padding-left 17px
       border-radius borderRadiusL
-      background linear-gradient(180deg, border-color, border-color 1px, transparent 2px) no-repeat
-      background-size 100%
-      background-position-x 50%
+      outline input-border
+      outline-offset -2px
       transition all 0.2s ease, background-size 0.1s ease
       font-medium()
       &::placeholder
@@ -46,7 +45,8 @@ input-border = 2px solid border-color
         visibility hidden
       &:focus
       &:not(:placeholder-shown)
-        background-size 0
+        outline-color transparent
+        outline-offset 5px
       &:not(:placeholder-shown) ~ label
       &:focus ~ label
         left 15px

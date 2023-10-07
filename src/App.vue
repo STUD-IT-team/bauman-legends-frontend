@@ -60,6 +60,9 @@
       </transition>
     </router-view>
   </div>
+
+  <Modal ref="modal"></Modal>
+  <Popups ref="popups"></Popups>
 </template>
 
 
@@ -127,7 +130,7 @@ export default {
     const global = getCurrentInstance().appContext.config.globalProperties;
     // Прописываем в глобавльные свойства частоиспользуемые компоненты, чтобы они были доступны из любых других компонентов
     global.$user = this.$store.state.user;
-    global.$modal = this.$refs.modal;
+    global.$modals = this.$refs.modal;
     global.$popups = this.$refs.popups;
     global.$app = this; // это обычно не используется, но может пригодиться
     global.$api = new API();
