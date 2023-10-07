@@ -3,45 +3,66 @@
 @require '../styles/constants.styl'
 @require '../styles/fonts.styl'
 
-input-border = 1px solid colorBorder
+border-color = colorText1
+input-border = 2px solid border-color
 
 .root-form
   .input-container
     position relative
-    padding-top 10px
-    padding-bottom 15px
-    label
-      font-medium()
+    padding-top 12px
 
+    label
     .placeholder
       position absolute
-      top 44px
-      left 40px
+      top 22px
+      left 10px
+      text-align left
+      padding-left 10px
       font-medium()
-      opacity 0
+      opacity .5
       transition all 0.2s ease
       pointer-events none
+    label
+      opacity 1
 
     input
       all unset
       display block
       width calc(100% - 22px)
       border input-border
-      padding 10px 10px
-      border-radius borderRadiusM
+      border-top-width 0
+      text-align left
+      padding-top 10px
+      padding-bottom 10px
+      padding-left 17px
+      border-radius borderRadiusL
+      background linear-gradient(180deg, border-color, border-color 1px, transparent 2px) no-repeat
+      background-size 100%
+      background-position-x 50%
+      transition all 0.2s ease, background-size 0.1s ease
       font-medium()
       &::placeholder
-        visibility hidden
         opacity 0
-      &:placeholder-shown ~ .placeholder
-        left 10px
-        opacity .35
+        visibility hidden
+      &:focus
+      &:not(:placeholder-shown)
+        background-size 0
+      &:not(:placeholder-shown) ~ label
+      &:focus ~ label
+        left 15px
+        top 2px
+        opacity 0.3
+      &:not(:focus) ~ .placeholder
+      &:not(:placeholder-shown) ~ .placeholder
+        opacity 0
+        left 40px
 
     .error
     .success
       position absolute
-      bottom -1px
-      font-small()
+      top 26px
+      right 20px
+      font-small-extra()
       opacity 0
       transition opacity 0.2s ease
     .error
@@ -49,7 +70,10 @@ input-border = 1px solid colorBorder
     .success
       color colorSuccess
     .info
+      text-align left
+      padding-left 20px
       font-small-extra()
+      opacity 0.5
 
     &.error
       color colorError
@@ -63,26 +87,32 @@ input-border = 1px solid colorBorder
   .submit
     button-submit()
     margin-top 10px
-    margin-bottom 20px
+    margin-bottom 10px
 </style>
 
 <template>
   <div class="root-form" @keydown.enter="submit" @input="isSubmittedAlready ? checkFormat : ()=>{}">
     <div class="input-container" v-for="[fieldName, field] in Object.entries(fields)" :class="{error: field.__error, success: field.__success}">
-      <label :for="`${uid}-${fieldName}`">{{ field.title }}</label>
       <input v-bind="field" :id="`${uid}-${fieldName}`" v-model="field.value">
+      <label :for="`${uid}-${fieldName}`">{{ field.title }}</label>
       <div class="info" v-if="field.info">{{ field.info }}</div>
       <div class="placeholder">{{ field.placeholder }}</div>
       <div class="error">{{ field.errorText || 'Неверный формат' }}</div>
       <div class="success">{{ field.successText || 'Успех' }}</div>
     </div>
 
-    <button class="submit" @click="submit">{{ submitText || 'Отправить' }}</button>
+    <button class="submit" @click="submit">
+      <CircleLoading v-if="loading"></CircleLoading>
+      <span v-else>{{ submitText || 'Отправить' }}</span>
+    </button>
   </div>
 </template>
 
 <script>
+import CircleLoading from "./CircleLoading.vue";
+
 export default {
+  components: {CircleLoading},
   emits: ['success', 'error'],
 
   props: {
@@ -107,6 +137,7 @@ export default {
     },
     submitText: String,
     setSuccesses: Boolean,
+    loading: Boolean,
   },
 
   data() {

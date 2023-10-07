@@ -6,15 +6,14 @@ bg = colorBgDark
 
 .root-register
   width 100%
-  height 100%
+  padding 20px
   .form
-    width calc(100% - 40px)
-    margin auto
+    max-width 600px
+    margin 20px auto
     background-color colorBg
     border-radius borderRadiusM
     padding 20px
     padding-top 10px
-    margin-top 20px
     text-align center
     font-large()
     font-bold()
@@ -23,7 +22,7 @@ bg = colorBgDark
       text-align left
       text-decoration none
     .signin-button
-      button-submit()
+      button()
 </style>
 
 <template>
@@ -35,12 +34,10 @@ bg = colorBgDark
         :fields="fields"
         submitText="Зарегистрироваться"
         @success="register"
+        :loading="loading"
       ></FormWithErrors>
       <router-link class="signin-link" :to="{name: 'login'}">
-        <button class="signin-button">
-          <CircleLoading v-if="loading"></CircleLoading>
-          <span v-else>Войти</span>
-        </button>
+        <button class="signin-button">Войти</button>
       </router-link>
     </div>
   </div>
@@ -115,7 +112,7 @@ export default {
           info: 'Минимум 6 символов'
         }
       },
-      loading: true,
+      loading: false,
     }
   },
 

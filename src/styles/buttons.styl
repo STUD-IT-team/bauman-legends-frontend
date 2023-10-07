@@ -28,10 +28,9 @@ button()
     color text-color
     width 70%
     font-medium()
-    border-radius 3px
     padding 10px
     border border-color-2 solid 0px
-    border-radius 1000px
+    border-radius 999999999px
     text-shadow none
     transition all 0.2s ease
     cursor pointer
@@ -44,7 +43,7 @@ button()
     &:hover
         color text-color-hover-1
         border-color border-color-hover
-        box-shadow 5px 5px 15px shadow-color
+        //box-shadow 5px 5px 15px shadow-color
 
     &[disabled]:not([disabled=false])
         pointer-events none
@@ -58,10 +57,10 @@ button-submit()
     background colorButtonSubmit
     &:hover
         color text-color-hover-2
-        border-color border-color-2-hover/
+        border-color border-color-hover-2
     &[disabled]:not([disabled=false])
-        background #444444AA
-        border-color empColor1_4
+        background colorBgLight
+        border-color border-color-disabled-2
 
 button-danger()
     button()

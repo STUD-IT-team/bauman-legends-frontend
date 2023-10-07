@@ -43,7 +43,7 @@
   min-height 100vh
 
 .wrapper > *
-    position fixed
+    position absolute
     width 100%
     min-height 100vh
 </style>

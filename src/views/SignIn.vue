@@ -4,14 +4,14 @@
 
 .root-signin
   width 100%
-  height 100%
+  padding 20px
   .form
-    width calc(100% - 40px)
+    margin 20px auto
+    max-width 600px
     background-color colorBg
     border-radius borderRadiusM
     padding 20px
     padding-top 10px
-    margin 20px
     text-align center
     font-large()
     font-bold()
@@ -20,7 +20,7 @@
       text-decoration none
       text-align left
     .register-button
-      button-submit()
+      button()
     .signin-links
       display flex
       width 100%
@@ -45,12 +45,10 @@
         :fields="fields"
         submitText="Вход"
         @success="login"
+        :loading="loading"
       ></FormWithErrors>
       <router-link class="register-link" :to="{name: 'register'}">
-        <button class="register-button">
-          <CircleLoading v-if="loading"></CircleLoading>
-          <span v-else>Зарегистрироваться</span>
-        </button>
+        <button class="register-button">Зарегистрироваться</button>
       </router-link>
 
       <div class="signin-links">
