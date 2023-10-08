@@ -148,14 +148,21 @@ button-edit()
             color colorText1
           .button-edit
             button-edit()
+        .buttons-row
+          display flex
+          justify-content space-between
+          align-items center
 
-        .change-password
-          button()
-          margin 0
-          width unset
-          color colorEmp1
-          background colorBg
-          padding 10px 20px 0 20px
+          .change-password
+          .logout-button
+            button()
+            margin 0
+            width unset
+            color colorEmp1
+            background colorBg
+            padding 10px 20px
+          .logout-button
+            color colorError
 
       .dropdown
         width auto
@@ -199,7 +206,7 @@ button-edit()
       </div>
 
       <header class="header">МОЯ КОМАНДА</header>
-      <div v-if="ifUserInTeam" class="box team-block">
+      <div v-if="this.teamData.__gotten" class="box team-block">
         <div class="team-name-container">
           <span>
             <span class="team-name">{{ teamData.title }}</span>
@@ -258,7 +265,7 @@ button-edit()
         <div class="data-row">
           <div class="field">Telegram:</div>
           <div class="data">@{{ $user.tg }}</div>
-          <button class="button-edit" @click="changeUserParam('tg')">Изменить</button>
+          <button class="button-edit" @click="changeUserParam('telegram', 'tg')">Изменить</button>
         </div>
         <div class="data-row">
           <div class="field">Вконтакте:</div>
@@ -268,12 +275,16 @@ button-edit()
         <div class="data-row">
           <div class="field">Номер телефона:</div>
           <div class="data">{{ $user.phone }}</div>
-          <button class="button-edit" @click="changeUserParam('phone')">Изменить</button>
+          <button class="button-edit" @click="changeUserParam('phone_number', 'phone')">Изменить</button>
         </div>
 
-        <router-link :to="{name: 'changePassword'}">
-          <button class="change-password">Сменить пароль</button>
-        </router-link>
+        <div class="buttons-row">
+          <router-link :to="{name: 'changePassword'}">
+            <button class="change-password">Сменить пароль</button>
+          </router-link>
+
+          <button class="logout-button" @click="logout">Выйти</button>
+        </div>
       </div>
     </div>
   </div>
@@ -292,6 +303,7 @@ export default {
         id: undefined,
         title: undefined,
         members: [],
+        __gotten: false,
       },
       TeamRoles: {
         lead: 2,
@@ -313,10 +325,6 @@ export default {
       return userInTeam?.role;
     },
 
-    ifUserInTeam() {
-      return Object.entries(this.teamData).length !== 0;
-    },
-
     sortedMembers() {
       const comparator = (a, b) => {
         if (a.role < b.role) {
@@ -336,10 +344,17 @@ export default {
   methods: {
     async getCurTeam() {
       const {data: teamData, code, ok} = this.$api.getTeam();
-      teamData.members?.forEach(member => {
+      teamData?.members?.forEach(member => {
         member._newRole = member.role;
       });
-      this.teamData = teamData;
+      if (!ok || Object.entries(teamData).length === 0) {
+        this.teamData.__gotten = false;
+        return;
+      }
+      this.teamData.id = teamData.id;
+      this.teamData.title = teamData.title;
+      this.teamData.members = teamData.members;
+      this.teamData.__gotten = true;
     },
 
     showJoinInstruction() {
@@ -431,14 +446,14 @@ export default {
       userObject._newRole = userObject.role;
     },
 
-    async changeUserParam(fieldName) {
+    async changeUserParam(fieldName, fieldNameUser=fieldName) {
       const newUserData = {
         name: this.$user.name,
         group: this.$user.group,
-        tg: this.$user.tg,
+        telegram: this.$user.tg,
         vk: this.$user.vk,
         email: this.$user.email,
-        phone: this.$user.phone,
+        phone_number: this.$user.phone,
       };
       newUserData[fieldName] = await this.$modals.prompt("Изменить значение поля", "Введите новое значение", newUserData[fieldName]);
       if (!newUserData[fieldName]) {
@@ -446,13 +461,26 @@ export default {
       }
 
       this.loading = true;
-      const {ok} = await this.$api.editProfile(newUserData.name, newUserData.group, newUserData.tg, newUserData.vk, newUserData.email, newUserData.phone);
+      const {ok} = await this.$api.editProfile(newUserData.name, newUserData.group, newUserData.telegram, newUserData.vk, newUserData.email, newUserData.phone_number);
       this.loading = false;
       if (!ok) {
         this.$popups.error(`Не удалось изменить значение поля ${fieldName}`);
         return;
       }
-      this.$user[fieldName] = newUserData[fieldName];
+      this.$user[fieldNameUser] = newUserData[fieldName];
+    },
+
+    async logout() {
+      this.loading = true;
+      const {data, code, ok} = await this.$api.logout();
+      this.loading = true;
+
+      if (!ok) {
+        this.$popups.error('Не получилось выйти из аккаунта', 'Неизвестная ошибка');
+        return;
+      }
+      this.$store.dispatch("DELETE_USER");
+      this.$router.push({name: "login"});
     }
   }
 }
