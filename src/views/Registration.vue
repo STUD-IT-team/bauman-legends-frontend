@@ -62,6 +62,7 @@ export default {
           placeholder: 'Иванов Иван Иванович',
           validationRegExp: Validators.name.regExp,
           prettifyResult: Validators.name.prettifyResult,
+          autocomplete: 'name',
         },
         group: {
           title: 'Учебная группа',
@@ -70,6 +71,7 @@ export default {
           placeholder: 'ОЭ2-11',
           validationRegExp: Validators.group.regExp,
           prettifyResult: Validators.group.prettifyResult,
+          autocomplete: 'group',
         },
         tg:{
           title: 'Telegram',
@@ -79,6 +81,7 @@ export default {
           validationRegExp: Validators.tg.regExp,
           prettifyResult: Validators.tg.prettifyResult,
           info: 'В любом формате',
+          autocomplete: 'telegram',
         },
         vk: {
           title: 'VK',
@@ -88,6 +91,7 @@ export default {
           validationRegExp: Validators.vk.regExp,
           prettifyResult: Validators.vk.prettifyResult,
           info: 'В любом формате',
+          autocomplete: 'vk',
         },
         email: {
           title: 'Электронная почта',
@@ -96,6 +100,7 @@ export default {
           placeholder: 'legends@bmstu.ru',
           validationRegExp: Validators.email.regExp,
           prettifyResult: Validators.email.prettifyResult,
+          autocomplete: 'email',
         },
         phone: {
           title: 'Номер телефона',
@@ -104,6 +109,7 @@ export default {
           placeholder: '8-(123)-456-78-90',
           validationRegExp: Validators.phone.regExp,
           prettifyResult: Validators.phone.prettifyResult,
+          autocomplete: 'tel',
         },
         password: {
           title: 'Пароль',
@@ -112,7 +118,8 @@ export default {
           placeholder: '●●●●●●',
           validationRegExp: Validators.password.regExp,
           prettifyResult: Validators.password.prettifyResult,
-          info: 'Минимум 6 символов'
+          info: 'Минимум 6 символов',
+          autocomplete: 'password',
         }
       },
       loading: false,
@@ -129,7 +136,9 @@ export default {
         this.$refs.form.setError([this.fields.email], 'На указанный email уже зарегестрирован аккаунт');
         return;
       }
-      this.$store.dispatch('GET_USER');
+      this.loading = true;
+      await this.$store.dispatch('GET_USER');
+      this.loading = true;
       this.$router.push({name: 'profile'});
     }
   }
