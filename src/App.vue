@@ -61,12 +61,10 @@ footer-height-small = 20px
 
 .all-page-wrapper
   width 100%
-  heihgt 100%
   min-height 100vh
   .content-wrapper
     width 100%
     min-height 100vh
-    heihgt 100%
     & > *
       //position absolute
       width 100%
