@@ -216,7 +216,7 @@ button-edit()
 <!--      </div>-->
 
       <header class="header">МОЯ КОМАНДА</header>
-      <div class="info">Создание команды станет доступно 12 октября</div>
+      <div class="info">Создание команды станет доступно 14 октября</div>
 <!--      <div v-if="this.teamData.__gotten" class="box team-block">-->
 <!--        <div class="team-name-container">-->
 <!--          <span>-->
@@ -303,6 +303,7 @@ button-edit()
 
 <script>
 import CircleLoading from "../components/CircleLoading.vue";
+import {Validators} from "../utils/validators";
 
 
 export default {
@@ -456,7 +457,7 @@ export default {
       userObject._newRole = userObject.role;
     },
 
-    async changeUserParam(fieldName, fieldNameUser=fieldName) {
+    async changeUserParam(fieldName, fieldNameUser=fieldName, overrideHavingValue=null) {
       const newUserData = {
         name: this.$user.name,
         group: this.$user.group,
@@ -465,11 +466,16 @@ export default {
         email: this.$user.email,
         phone_number: this.$user.phone,
       };
-      newUserData[fieldName] = await this.$modals.prompt("Изменить значение поля", "Введите новое значение", newUserData[fieldName]);
-      if (!newUserData[fieldName]) {
+      const inputValue = await this.$modals.prompt(overrideHavingValue ? "Неверный формат" : "Изменить значение поля", "Введите новое значение", overrideHavingValue || newUserData[fieldName]);
+      if (!inputValue) {
+        return;
+      }
+      if (!Validators[fieldNameUser].validate(inputValue)) {
+        this.changeUserParam(fieldName, fieldNameUser=fieldName, inputValue);
         return;
       }
 
+      newUserData[fieldName] = Validators[fieldNameUser].prettifyResult(inputValue);
       this.loading = true;
       const {ok} = await this.$api.editProfile(newUserData.name, newUserData.group, newUserData.telegram, newUserData.vk, newUserData.email, newUserData.phone_number);
       this.loading = false;

@@ -1,5 +1,7 @@
 <style lang="stylus" scoped>
 @require '../src/styles/constants.styl'
+@require '../src/styles/fonts.styl'
+@require '../src/styles/utils.styl'
 
 /**
  Атрибут scoped позволяет определять стили, влияющие на html-элементы
@@ -9,58 +11,139 @@
  На stylus не нужны символы {};: вместо них важны отступы.
  И можно делать вложенные элементы, что является отличной заменой БЭМ.
  **/
-.bg
-  position fixed
-  width 100%
-  height 100%
-  background colorBgLightMax
+
+footer-height = 80px
+footer-height-mobile = 55px
+footer-height-small = 20px
+
 .background-text-image
   position fixed
   width 100%
   height 100%
   object-fit cover
   opacity 0.5
+  z-index -1
 .bauman-image
   position fixed
   height 100%
+  max-height 1000px
+  @media({mobile})
+    max-height 700px
   bottom -6%
-  transform translateX(-8%)
+  left unquote('max(calc(50% - 330px), 0px)')
+  transform translateX(-14%)
   object-fit contain
   overflow visible
-  opacity 1
+  opacity .7
+  transition all 1s ease
+  pointer-events none
 .logo
   position fixed
   object-fit contain
   overflow visible
   right 0
-  bottom 0
+  bottom 10px
   justify-content right
-  height 80px
+  height footer-height + 40px
+  @media ({mobile})
+    height footer-height-mobile + 20px
   mix-blend-mode difference
   z-index 99999999
   pointer-events none
+  transition all 0.2s ease
+  &.small
+    height footer-height
+    bottom 0
+    @media ({mobile})
+      height footer-height-mobile
 
-.wrapper
+.all-page-wrapper
   width 100%
+  heihgt 100%
   min-height 100vh
-  & > *
-    position absolute
+  .content-wrapper
     width 100%
     min-height 100vh
-    margin-bottom 60px
+    heihgt 100%
+    & > *
+      //position absolute
+      width 100%
+      height 100%
+      min-height 100vh
+      margin-bottom 60px
+
+  .footer
+    position fixed
+    width 100%
+    bottom 0
+    height footer-height
+    background colorBgDark
+    transition all 0.2s ease
+    padding 20px
+    display flex
+    gap 20px
+    @media (max-width: 400px)
+      flex-direction column
+
+    @media ({mobile})
+      padding 10px
+      height footer-height-mobile
+
+    .title
+      font-medium()
+      color colorText2
+      transition all 0.2s ease
+      margin-bottom 5px
+      @media ({mobile})
+        margin-bottom 0
+    .info
+      font-small()
+      color colorText3
+      display flex
+      align-items center
+      gap 5px
+      img
+        width 20px
+        height 20px
+
+    &.small
+      height footer-height-small
+      padding-top 5px
+      .title
+        color colorText4
+        @media ({mobile})
+          font-small-extra()
+      a
+        pointer-events none
 </style>
 
 <template>
-  <div class="bg"></div>
   <img class="background-text-image" src="../src/res/images/BackgroundPatternSmaller.png" alt="background">
   <img class="bauman-image" src="../src/res/images/Bauman.png" alt="Bauman">
-  <img src="./res/images/Gerbs.png" class="logo" alt="crest">
-  <div class="wrapper">
-    <router-view v-slot="{ Component }">
-      <transition name="scale-in">
-        <component :is="Component"/>
-      </transition>
-    </router-view>
+  <img src="./res/images/Gerbs.png" class="logo" alt="crest" :class="{small: isFooterShown}">
+  <div class="all-page-wrapper">
+    <div class="content-wrapper">
+      <router-view v-slot="{ Component }">
+        <transition name="scale-in">
+          <component :is="Component"/>
+        </transition>
+      </router-view>
+    </div>
+    <div class="footer" :class="{small: !isFooterShown}" @click="isFooterShown = !isFooterShown">
+      <a href="https://t.me/tyapkin_s" target="_blank">
+        <div class="title">Техническая поддержка</div>
+        <div class="info">
+          <img src="../src/res/images/telegram-logo.svg" alt="tg">Сергей Тяпкин
+        </div>
+      </a>
+      <a>
+        <div class="title">Сайт создан</div>
+        <div class="info" style="gap: 0;">
+          <img src="../src/res/images/vk-logo.svg" alt="tg" style="opacity: 0; max-width: 0;">
+          IT-отделом СтудСовета
+        </div>
+      </a>
+    </div>
   </div>
 
   <Modal ref="modal"></Modal>
@@ -128,6 +211,13 @@ import API from "./utils/api";
 export default {
   components: {Modal, Popups},
 
+  data() {
+    return {
+      prevScrolledPos: 0,
+      isFooterShown: false,
+    }
+  },
+
   async mounted() {
     const global = getCurrentInstance().appContext.config.globalProperties;
     // Прописываем в глобавльные свойства частоиспользуемые компоненты, чтобы они были доступны из любых других компонентов
@@ -136,6 +226,12 @@ export default {
     global.$popups = this.$refs.popups;
     global.$app = this; // это обычно не используется, но может пригодиться
     global.$api = new API();
+
+    document.addEventListener('scroll', (event) => {
+      if (window.scrollY < this.prevScrolledPos)
+        this.isFooterShown = false;
+      this.prevScrolledPos = window.scrollY;
+    });
   },
 };
 </script>

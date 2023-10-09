@@ -72,6 +72,7 @@ input-border = 2px solid border-color
       color colorSuccess
     .info
       text-align left
+      margin-top 2px
       padding-left 20px
       font-small-extra()
       opacity 0.5
