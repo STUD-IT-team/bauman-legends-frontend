@@ -43,11 +43,11 @@
 .wrapper
   width 100%
   min-height 100vh
-
-.wrapper > *
+  & > *
     position absolute
     width 100%
     min-height 100vh
+    margin-bottom 60px
 </style>
 
 <template>

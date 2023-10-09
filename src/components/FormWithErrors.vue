@@ -103,8 +103,10 @@ input-border = 2px solid border-color
     </div>
 
     <button class="submit" @click="submit">
-      <CircleLoading v-if="loading" size="40px"></CircleLoading>
-      <span v-else>{{ submitText || 'Отправить' }}</span>
+      <transition name="opacity" mode="out-in" duration="200">
+        <CircleLoading v-if="loading" size="1.2em"></CircleLoading>
+        <span v-else>{{ submitText || 'Отправить' }}</span>
+      </transition>
     </button>
   </div>
 </template>

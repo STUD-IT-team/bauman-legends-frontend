@@ -17,7 +17,6 @@ button-edit()
 
 .root-profile
   width 100%
-  height 100%
 
   .navbar
     width 100%
@@ -37,6 +36,9 @@ button-edit()
       font-bold()
       margin 20px 20px 10px 20px
       color colorBg
+    .info
+      font-medium()
+      margin-left 20px
 
     .tasks
       padding 0
@@ -133,14 +135,14 @@ button-edit()
             padding 5px 20px
 
       &.user-block
+        .user-name-row
         .data-row
           display flex
+          flex-wrap wrap
           margin 10px 0
-          .user-name
-            font-large()
-            font-bold()
-            margin 5px 0
           .field
+            @media(max-width: 400px)
+              width 100%
             color colorBgLightExtra
           .data
             flex 1
@@ -148,6 +150,13 @@ button-edit()
             color colorText1
           .button-edit
             button-edit()
+            text-align right
+        .user-name-row
+          justify-content space-between
+          .user-name
+            font-large()
+            font-bold()
+            margin 5px 0
         .buttons-row
           display flex
           justify-content space-between
@@ -198,12 +207,13 @@ button-edit()
     <div class="main-content">
 
       <header class="header">ДОСТУПНЫЕ ЗАДАНИЯ</header>
-      <div class="tasks">
-        <button class="task-button">Онлайн-задание</button>
-        <button class="task-button">Фото-задание</button>
-        <button class="task-button">Путешествие в НОЦ</button>
-        <button class="task-button">Задание с актёром</button>
-      </div>
+      <div class="info">Задания станут доступны после начала предварительного этапа</div>
+<!--      <div class="tasks">-->
+<!--        <button class="task-button">Онлайн-задание</button>-->
+<!--        <button class="task-button">Фото-задание</button>-->
+<!--        <button class="task-button">Путешествие в НОЦ</button>-->
+<!--        <button class="task-button">Задание с актёром</button>-->
+<!--      </div>-->
 
       <header class="header">МОЯ КОМАНДА</header>
       <div v-if="this.teamData.__gotten" class="box team-block">
@@ -247,9 +257,8 @@ button-edit()
 
       <header class="header">ПРОФИЛЬ</header>
       <div class="box user-block">
-        <div class="data-row">
+        <div class="user-name-row">
           <div class="user-name">{{ $user.name }}</div>
-          <div class="data"></div>
           <button class="button-edit" @click="changeUserParam('name')">Изменить</button>
         </div>
         <div class="data-row">
