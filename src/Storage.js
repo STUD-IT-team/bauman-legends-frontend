@@ -19,10 +19,10 @@ const Store = new Vuex.Store({
       state.user.id = Number(userData.id);
       state.user.name = String(userData.name);
       state.user.group = String(userData.group);
-      state.user.tg = String(userData.tg);
+      state.user.tg = String(userData.telegram);
       state.user.vk = String(userData.vk);
       state.user.email = String(userData.email);
-      state.user.phone = String(userData.phone);
+      state.user.phone = String(userData.phone_number);
 
       state.user.isSignedIn = true;
     },

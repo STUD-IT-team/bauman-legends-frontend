@@ -94,7 +94,7 @@ input-border = 2px solid border-color
 <template>
   <div class="root-form" @keydown.enter="submit" @input="isSubmittedAlready ? checkFormat : ()=>{}">
     <div class="input-container" v-for="[fieldName, field] in Object.entries(fields)" :class="{error: field.__error, success: field.__success}">
-      <input v-bind="field" :id="`${uid}-${fieldName}`" v-model="field.value">
+      <input v-bind="field" :id="`${uid}-${fieldName}`" v-model="field.value" :autocomplete="field.autocomplete || 'off'">
       <label :for="`${uid}-${fieldName}`">{{ field.title }}</label>
       <div class="info" v-if="field.info">{{ field.info }}</div>
       <div class="placeholder">{{ field.placeholder }}</div>
@@ -103,8 +103,10 @@ input-border = 2px solid border-color
     </div>
 
     <button class="submit" @click="submit">
-      <CircleLoading v-if="loading"></CircleLoading>
-      <span v-else>{{ submitText || 'Отправить' }}</span>
+      <transition name="opacity" mode="out-in" duration="200">
+        <CircleLoading v-if="loading" size="1.2em"></CircleLoading>
+        <span v-else>{{ submitText || 'Отправить' }}</span>
+      </transition>
     </button>
   </div>
 </template>

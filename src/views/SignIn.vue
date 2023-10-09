@@ -51,10 +51,10 @@
         <button class="register-button">Зарегистрироваться</button>
       </router-link>
 
-      <div class="signin-links">
-        <router-link class="signin-by-email-link" :to="{name: 'signInByEmail'}">Войти по почте</router-link>
-        <router-link class="restore-password-link" :to="{name: 'restorePassword'}">Восстановить пароль</router-link>
-      </div>
+<!--      <div class="signin-links">-->
+<!--        <router-link class="signin-by-email-link" :to="{name: 'signInByEmail'}">Войти по почте</router-link>-->
+<!--        <router-link class="restore-password-link" :to="{name: 'restorePassword'}">Восстановить пароль</router-link>-->
+<!--      </div>-->
     </div>
   </div>
 </template>
@@ -63,6 +63,7 @@
 import FormWithErrors from "../components/FormWithErrors.vue";
 import {detectBrowser, detectOS} from "../utils/utils";
 import CircleLoading from "../components/CircleLoading.vue";
+import {Validators} from "../utils/validators";
 
 
 export default {
@@ -75,14 +76,18 @@ export default {
           name: 'email',
           type: 'text',
           placeholder: 'legends@bmstu.ru',
-          validationRegExp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+          validationRegExp: Validators.email.regExp,
+          prettifyResult: Validators.email.prettifyResult,
+          autocomplete: 'email',
         },
         password: {
           title: 'Пароль',
           name: 'password',
           type: 'password',
           placeholder: '●●●●●●',
-          validationRegExp: /^.{6,}$/,
+          validationRegExp: Validators.password.regExp,
+          prettifyResult: Validators.password.prettifyResult,
+          autocomplete: 'password',
         }
       },
       loading: false,
@@ -99,7 +104,9 @@ export default {
         this.$refs.form.setError([this.fields.email, this.fields.password], 'Неверные email или пароль');
         return;
       }
-      this.$store.dispatch('GET_USER');
+      this.loading = true;
+      await this.$store.dispatch('GET_USER');
+      this.loading = false;
       this.$router.push({name: 'profile'});
     }
   }

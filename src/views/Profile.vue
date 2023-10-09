@@ -17,7 +17,6 @@ button-edit()
 
 .root-profile
   width 100%
-  height 100%
 
   .navbar
     width 100%
@@ -37,6 +36,9 @@ button-edit()
       font-bold()
       margin 20px 20px 10px 20px
       color colorBg
+    .info
+      font-medium()
+      margin-left 20px
 
     .tasks
       padding 0
@@ -133,14 +135,14 @@ button-edit()
             padding 5px 20px
 
       &.user-block
+        .user-name-row
         .data-row
           display flex
+          flex-wrap wrap
           margin 10px 0
-          .user-name
-            font-large()
-            font-bold()
-            margin 5px 0
           .field
+            @media(max-width: 400px)
+              width 100%
             color colorBgLightExtra
           .data
             flex 1
@@ -148,14 +150,28 @@ button-edit()
             color colorText1
           .button-edit
             button-edit()
+            text-align right
+        .user-name-row
+          justify-content space-between
+          .user-name
+            font-large()
+            font-bold()
+            margin 5px 0
+        .buttons-row
+          display flex
+          justify-content space-between
+          align-items center
 
-        .change-password
-          button()
-          margin 0
-          width unset
-          color colorEmp1
-          background colorBg
-          padding 10px 20px 0 20px
+          .change-password
+          .logout-button
+            button()
+            margin 0
+            width unset
+            color colorEmp1
+            background colorBg
+            padding 10px 20px
+          .logout-button
+            color colorError
 
       .dropdown
         width auto
@@ -191,58 +207,59 @@ button-edit()
     <div class="main-content">
 
       <header class="header">ДОСТУПНЫЕ ЗАДАНИЯ</header>
-      <div class="tasks">
-        <button class="task-button">Онлайн-задание</button>
-        <button class="task-button">Фото-задание</button>
-        <button class="task-button">Путешествие в НОЦ</button>
-        <button class="task-button">Задание с актёром</button>
-      </div>
+      <div class="info">Задания станут доступны после начала предварительного этапа</div>
+<!--      <div class="tasks">-->
+<!--        <button class="task-button">Онлайн-задание</button>-->
+<!--        <button class="task-button">Фото-задание</button>-->
+<!--        <button class="task-button">Путешествие в НОЦ</button>-->
+<!--        <button class="task-button">Задание с актёром</button>-->
+<!--      </div>-->
 
       <header class="header">МОЯ КОМАНДА</header>
-      <div v-if="ifUserInTeam" class="box team-block">
-        <div class="team-name-container">
-          <span>
-            <span class="team-name">{{ teamData.title }}</span>
-            <span class="team-id">#{{ String(teamData.id || '').padStart(4, '0') }}</span>
-          </span>
-
-          <button @click="renameTeam" class="rename-team-button">Изменить</button>
-        </div>
-        <p class="team-statistics">{{ teamData.rating }} баллов, {{ teamData.place }} место</p>
-
-        <p class="team-members-info">Состав команды:</p>
-        <div class="user-row" v-for="(member, idx) in teamData.members">
-          <div class="name">{{ member.name }}</div>
-          <select class="dropdown"
-                  @change="changeMemberRole(member.id, member.role, member)"
-                  :disabled="member.role === TeamRoles.lead || userRole !== TeamRoles.lead"
-                  v-model="member._newRole"
-          >
-            <option v-if="member.role === TeamRoles.lead" :value="TeamRoles.lead">Капитан</option>
-            <option :value="TeamRoles.subLead">Зам</option>
-            <option :value="TeamRoles.member">Участник</option>
-          </select>
-          <button class="kick-member-btn" :class="{'hidden': member.role === TeamRoles.lead}" v-if="(userRole === TeamRoles.lead || userRole === TeamRoles.subLead)" @click="deleteMemberFromTeam(idx)"><img src="../res/images/trashbox.svg" alt="Исключить"></button>
-        </div>
-
-        <div class="buttons-container">
-          <button @click="addMemberToTeam" class="add-member-btn">
-            <img src="../res/images/plus.svg" alt="Добавить участника">Добавить участника</button>
-          <button @click="deleteTeam" class="delete-team-btn">Удалить команду</button>
-        </div>
-      </div>
-      <div v-else>
-        <div class="buttons-create-team-container">
-          <button @click="createTeam" class="create-team-button box">Создать команду</button>
-          <button @click="showJoinInstruction" class="join-team-button box">Присоединиться к команде</button>
-        </div>
-      </div>
+      <div class="info">Создание команды станет доступно 12 октября</div>
+<!--      <div v-if="this.teamData.__gotten" class="box team-block">-->
+<!--        <div class="team-name-container">-->
+<!--          <span>-->
+<!--            <span class="team-name">{{ teamData.title }}</span>-->
+<!--            <span class="team-id">#{{ String(teamData.id || '').padStart(4, '0') }}</span>-->
+<!--          </span>-->
+<!---->
+<!--          <button @click="renameTeam" class="rename-team-button">Изменить</button>-->
+<!--        </div>-->
+<!--        <p class="team-statistics">{{ teamData.rating }} баллов, {{ teamData.place }} место</p>-->
+<!---->
+<!--        <p class="team-members-info">Состав команды:</p>-->
+<!--        <div class="user-row" v-for="(member, idx) in teamData.members">-->
+<!--          <div class="name">{{ member.name }}</div>-->
+<!--          <select class="dropdown"-->
+<!--                  @change="changeMemberRole(member.id, member.role, member)"-->
+<!--                  :disabled="member.role === TeamRoles.lead || userRole !== TeamRoles.lead"-->
+<!--                  v-model="member._newRole"-->
+<!--          >-->
+<!--            <option v-if="member.role === TeamRoles.lead" :value="TeamRoles.lead">Капитан</option>-->
+<!--            <option :value="TeamRoles.subLead">Зам</option>-->
+<!--            <option :value="TeamRoles.member">Участник</option>-->
+<!--          </select>-->
+<!--          <button class="kick-member-btn" :class="{'hidden': member.role === TeamRoles.lead}" v-if="(userRole === TeamRoles.lead || userRole === TeamRoles.subLead)" @click="deleteMemberFromTeam(idx)"><img src="../res/images/trashbox.svg" alt="Исключить"></button>-->
+<!--        </div>-->
+<!---->
+<!--        <div class="buttons-container">-->
+<!--          <button @click="addMemberToTeam" class="add-member-btn">-->
+<!--            <img src="../res/images/plus.svg" alt="Добавить участника">Добавить участника</button>-->
+<!--          <button @click="deleteTeam" class="delete-team-btn">Удалить команду</button>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div v-else>-->
+<!--        <div class="buttons-create-team-container">-->
+<!--          <button @click="createTeam" class="create-team-button box">Создать команду</button>-->
+<!--          <button @click="showJoinInstruction" class="join-team-button box">Присоединиться к команде</button>-->
+<!--        </div>-->
+<!--      </div>-->
 
       <header class="header">ПРОФИЛЬ</header>
       <div class="box user-block">
-        <div class="data-row">
+        <div class="user-name-row">
           <div class="user-name">{{ $user.name }}</div>
-          <div class="data"></div>
           <button class="button-edit" @click="changeUserParam('name')">Изменить</button>
         </div>
         <div class="data-row">
@@ -258,7 +275,7 @@ button-edit()
         <div class="data-row">
           <div class="field">Telegram:</div>
           <div class="data">@{{ $user.tg }}</div>
-          <button class="button-edit" @click="changeUserParam('tg')">Изменить</button>
+          <button class="button-edit" @click="changeUserParam('telegram', 'tg')">Изменить</button>
         </div>
         <div class="data-row">
           <div class="field">Вконтакте:</div>
@@ -268,12 +285,16 @@ button-edit()
         <div class="data-row">
           <div class="field">Номер телефона:</div>
           <div class="data">{{ $user.phone }}</div>
-          <button class="button-edit" @click="changeUserParam('phone')">Изменить</button>
+          <button class="button-edit" @click="changeUserParam('phone_number', 'phone')">Изменить</button>
         </div>
 
-        <router-link :to="{name: 'changePassword'}">
-          <button class="change-password">Сменить пароль</button>
-        </router-link>
+        <div class="buttons-row">
+          <router-link :to="{name: 'changePassword'}">
+            <button class="change-password">Сменить пароль</button>
+          </router-link>
+
+          <button class="logout-button" @click="logout">Выйти</button>
+        </div>
       </div>
     </div>
   </div>
@@ -292,6 +313,7 @@ export default {
         id: undefined,
         title: undefined,
         members: [],
+        __gotten: false,
       },
       TeamRoles: {
         lead: 2,
@@ -313,10 +335,6 @@ export default {
       return userInTeam?.role;
     },
 
-    ifUserInTeam() {
-      return Object.entries(this.teamData).length !== 0;
-    },
-
     sortedMembers() {
       const comparator = (a, b) => {
         if (a.role < b.role) {
@@ -336,10 +354,17 @@ export default {
   methods: {
     async getCurTeam() {
       const {data: teamData, code, ok} = this.$api.getTeam();
-      teamData.members?.forEach(member => {
+      teamData?.members?.forEach(member => {
         member._newRole = member.role;
       });
-      this.teamData = teamData;
+      if (!ok || Object.entries(teamData).length === 0) {
+        this.teamData.__gotten = false;
+        return;
+      }
+      this.teamData.id = teamData.id;
+      this.teamData.title = teamData.title;
+      this.teamData.members = teamData.members;
+      this.teamData.__gotten = true;
     },
 
     showJoinInstruction() {
@@ -431,14 +456,14 @@ export default {
       userObject._newRole = userObject.role;
     },
 
-    async changeUserParam(fieldName) {
+    async changeUserParam(fieldName, fieldNameUser=fieldName) {
       const newUserData = {
         name: this.$user.name,
         group: this.$user.group,
-        tg: this.$user.tg,
+        telegram: this.$user.tg,
         vk: this.$user.vk,
         email: this.$user.email,
-        phone: this.$user.phone,
+        phone_number: this.$user.phone,
       };
       newUserData[fieldName] = await this.$modals.prompt("Изменить значение поля", "Введите новое значение", newUserData[fieldName]);
       if (!newUserData[fieldName]) {
@@ -446,13 +471,26 @@ export default {
       }
 
       this.loading = true;
-      const {ok} = await this.$api.editProfile(newUserData.name, newUserData.group, newUserData.tg, newUserData.vk, newUserData.email, newUserData.phone);
+      const {ok} = await this.$api.editProfile(newUserData.name, newUserData.group, newUserData.telegram, newUserData.vk, newUserData.email, newUserData.phone_number);
       this.loading = false;
       if (!ok) {
         this.$popups.error(`Не удалось изменить значение поля ${fieldName}`);
         return;
       }
-      this.$user[fieldName] = newUserData[fieldName];
+      this.$user[fieldNameUser] = newUserData[fieldName];
+    },
+
+    async logout() {
+      this.loading = true;
+      const {data, code, ok} = await this.$api.logout();
+      this.loading = true;
+
+      if (!ok) {
+        this.$popups.error('Не получилось выйти из аккаунта', 'Неизвестная ошибка');
+        return;
+      }
+      this.$store.dispatch("DELETE_USER");
+      this.$router.push({name: "login"});
     }
   }
 }

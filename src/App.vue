@@ -43,11 +43,11 @@
 .wrapper
   width 100%
   min-height 100vh
-
-.wrapper > *
+  & > *
     position absolute
     width 100%
     min-height 100vh
+    margin-bottom 60px
 </style>
 
 <template>
@@ -137,17 +137,5 @@ export default {
     global.$app = this; // это обычно не используется, но может пригодиться
     global.$api = new API();
   },
-
-  methods: {
-    async logOut() {
-      const {data, code, ok} = await this.$api.signOut();
-      if (!ok) {
-        this.$popups.error('Не получилось выйти из аккаунта', 'Неизвестная ошибка');
-        return;
-      }
-      this.$store.dispatch("DELETE_USER");
-      this.$router.push({name: "signin"});
-    }
-  }
 };
 </script>
