@@ -1,11 +1,10 @@
 export const Validators = {
   name: {
-    regExp: /^[а-я]+ +[а-я]+( +[а-я]+)?$/i,
+    regExp: /^[а-я]+([- ]?[а-я]+)? +[а-я]+([- ]?[а-я]+)?( [а-я]+)?$/i,
     validate: (str) => this.regExp.test(str),
-    prettifyResult: (str) => str.replaceAll(/ +/g, ' '),
   },
   group: {
-    regExp: /^(иу|ибм|мт|см|бмт|рл|э|рк|фн|л|юр|сгн|вуц|гуимц|уц|фмоп|фоф|исот|ркт|ак|пс|рт|лт|оэ|оэп)\d\d?и?-1\d[АМБ]?$/i,
+    regExp: /(^(иу|ибм|мт|см|бмт|рл|э|рк|фн|л|сгн|вуц|гуимц|уц|фмоп|фоф|исот|ркт|ак|пс|рт|лт|оэ|оэп)\d\d?и?-1\d[АМБамб]?$)|(^юр-1\d$)/i,
     validate: (str) => this.regExp.test(str),
     prettifyResult: (str) => str.toUpperCase(),
   },
