@@ -36,8 +36,8 @@ button-edit()
       margin-top 10px
       @media({desktop})
         margin-top 20px
-      backdrop-filter blur(10px)
-      background mix(colorBgLightMax, transparent, 40%)
+      //backdrop-filter blur(10px)
+      background mix(colorBgLightMax, transparent, 70%)
       border-radius borderRadiusM
       .header
         font-large()
