@@ -31,159 +31,166 @@ button-edit()
     padding 20px
     max-width 600px
     margin 0 auto
-    .header
-      font-large()
-      font-bold()
-      margin 20px 20px 10px 20px
-      color colorBg
-    .info
-
-      font-medium()
-      margin-left 20px
-
-    .tasks
-      padding 0
-      margin 0
-      display grid
-      grid-template-columns 1fr 1fr
-      grid-auto-rows 1fr
-      column-gap 5px
-      row-gap 5px
-
-      .task-button
-        button()
-        border-radius 8px
-        background colorBg
-        color colorText1
-        width 100%
-        height 100%
-
-    .box
-      background-color colorBg
-      border-radius borderRadiusM
-      padding 20px
+    .content-block
       padding-top 10px
-      margin 10px 0
-      text-align left
-      align-content left
-      font-medium()
-      color colorText1
+      margin-top 10px
+      @media({desktop})
+        margin-top 20px
+      backdrop-filter blur(10px)
+      background mix(colorBgLightMax, transparent, 40%)
+      border-radius borderRadiusM
+      .header
+        font-large()
+        font-bold()
+        margin 0 20px 10px 20px
+        color colorBg
+      .info
+        font-medium()
+        margin-left 20px
 
-      &.team-block
-        .team-name-container
-          display flex
-          justify-content space-between
-          align-items center
-          .team-name
-            font-large()
-            font-bold()
-          .team-id
-            font-medium()
-            color colorText3
-            margin 0
-            padding 0 10px
-            display inline-block
-          .rename-team-button
-            button-edit()
-
-        .team-statistics
-          font-small()
-          color colorText3
-          padding 0
-          display block
-          margin 5px 0 15px 0
-
-        .team-members-info
-          font-large()
-          font-bold()
-
-        .user-row
-          display flex
-          margin-top 5px
-          .name
-            flex 1
-            margin auto
-
-          .kick-member-btn
-            all unset
-            box-sizing border-box
-            cursor pointer
-            centered-flex-container()
-            width 40px
-            img
-              width 30px
-              height 30px
-            &.hidden
-              pointer-events none
-              img
-                visibility hidden
-
-        .buttons-container
-          display flex
-          margin-top 20px
-          gap 20px
-          .add-member-btn
-            button()
-            padding 5px 20px
-            flex 1
-            img
-              width 30px
-              height 30px
-              margin-right 10px
-          .delete-team-btn
-            button-danger()
-            flex 0
-            padding 5px 20px
-
-      &.user-block
-        .user-name-row
-        .data-row
-          display flex
-          flex-wrap wrap
-          margin 10px 0
-          .field
-            @media(max-width: 400px)
-              width 100%
-            color colorBgLightExtra
-          .data
-            flex 1
-            margin-left 10px
-            color colorText1
-          .button-edit
-            button-edit()
-            text-align right
-        .user-name-row
-          justify-content space-between
-          .user-name
-            font-large()
-            font-bold()
-            margin 5px 0
-        .buttons-row
-          display flex
-          justify-content space-between
-          align-items center
-
-          .change-password
-          .logout-button
-            button()
-            margin 0
-            width unset
-            color colorEmp1
-            background colorBg
-            padding 10px 20px
-          .logout-button
-            color colorError
-
-      .dropdown
-        width auto
-        background colorBg
-        text-small()
-        color colorText1
-        display inline-block
-        padding 2px 10px
+      .tasks
+        padding 0
         margin 0
-        border colorBgLightExtra solid 1px
-        border-radius 8px
+        display grid
+        grid-template-columns 1fr 1fr
+        grid-auto-rows 1fr
+        column-gap 5px
+        row-gap 5px
+
+        .task-button
+          button()
+          border-radius 8px
+          background colorBg
+          color colorText1
+          width 100%
+          height 100%
+
+      .box
+        background-color colorBg
+        border-radius borderRadiusM
+        padding 20px
+        padding-top 10px
+        margin 10px 0
+        text-align left
+        align-content left
+        font-medium()
+        color colorText1
+
+        &.team-block
+          .team-name-container
+            display flex
+            justify-content space-between
+            align-items center
+            .team-name
+              font-large()
+              font-bold()
+            .team-id
+              font-medium()
+              color colorText3
+              margin 0
+              padding 0 10px
+              display inline-block
+            .rename-team-button
+              button-edit()
+
+          .team-statistics
+            font-small()
+            color colorText3
+            padding 0
+            display block
+            margin 5px 0 15px 0
+
+          .team-members-info
+            font-large()
+            font-bold()
+
+          .user-row
+            display flex
+            margin-top 5px
+            .name
+              flex 1
+              margin auto
+
+            .kick-member-btn
+              all unset
+              box-sizing border-box
+              cursor pointer
+              centered-flex-container()
+              width 40px
+              img
+                width 30px
+                height 30px
+              &.hidden
+                pointer-events none
+                img
+                  visibility hidden
+
+          .buttons-container
+            display flex
+            margin-top 20px
+            gap 20px
+            .add-member-btn
+              button()
+              padding 5px 20px
+              flex 1
+              img
+                width 30px
+                height 30px
+                margin-right 10px
+            .delete-team-btn
+              button-danger()
+              flex 0
+              padding 5px 20px
+
+        &.user-block
+          .user-name-row
+          .data-row
+            display flex
+            flex-wrap wrap
+            margin 10px 0
+            .field
+              @media(max-width: 400px)
+                width 100%
+              color colorBgLightExtra
+            .data
+              flex 1
+              margin-left 10px
+              color colorText1
+            .button-edit
+              button-edit()
+              text-align right
+          .user-name-row
+            justify-content space-between
+            .user-name
+              font-large()
+              font-bold()
+              margin 5px 0
+          .buttons-row
+            display flex
+            justify-content space-between
+            align-items center
+
+            .change-password
+            .logout-button
+              button()
+              margin 0
+              width unset
+              color colorEmp1
+              background colorBg
+              padding 10px 20px
+            .logout-button
+              color colorError
+
+        .dropdown
+          width auto
+          background colorBg
+          text-small()
+          color colorText1
+          display inline-block
+          padding 2px 10px
+          margin 0
+          border colorBgLightExtra solid 1px
+          border-radius 8px
 
     .buttons-create-team-container
       display flex
@@ -206,95 +213,100 @@ button-edit()
     </header>
 
     <div class="main-content">
+      <div class="content-block">
+        <header class="header">ДОСТУПНЫЕ ЗАДАНИЯ</header>
+        <div class="info">Задания станут доступны после начала предварительного этапа</div>
+  <!--      <div class="tasks">-->
+  <!--        <button class="task-button">Онлайн-задание</button>-->
+  <!--        <button class="task-button">Фото-задание</button>-->
+  <!--        <button class="task-button">Путешествие в НОЦ</button>-->
+  <!--        <button class="task-button">Задание с актёром</button>-->
+  <!--      </div>-->
+      </div>
 
-      <header class="header">ДОСТУПНЫЕ ЗАДАНИЯ</header>
-      <div class="info">Задания станут доступны после начала предварительного этапа</div>
-<!--      <div class="tasks">-->
-<!--        <button class="task-button">Онлайн-задание</button>-->
-<!--        <button class="task-button">Фото-задание</button>-->
-<!--        <button class="task-button">Путешествие в НОЦ</button>-->
-<!--        <button class="task-button">Задание с актёром</button>-->
-<!--      </div>-->
+      <div class="content-block">
+        <header class="header">МОЯ КОМАНДА</header>
+        <div class="info">Создание команды станет доступно 14 октября</div>
+  <!--      <div v-if="this.teamData.__gotten" class="box team-block">-->
+  <!--        <div class="team-name-container">-->
+  <!--          <span>-->
+  <!--            <span class="team-name">{{ teamData.title }}</span>-->
+  <!--            <span class="team-id">#{{ String(teamData.id || '').padStart(4, '0') }}</span>-->
+  <!--          </span>-->
+  <!---->
+  <!--          <button @click="renameTeam" class="rename-team-button">Изменить</button>-->
+  <!--        </div>-->
+  <!--        <p class="team-statistics">{{ teamData.rating }} баллов, {{ teamData.place }} место</p>-->
+  <!---->
+  <!--        <p class="team-members-info">Состав команды:</p>-->
+  <!--        <div class="user-row" v-for="(member, idx) in teamData.members">-->
+  <!--          <div class="name">{{ member.name }}</div>-->
+  <!--          <select class="dropdown"-->
+  <!--                  @change="changeMemberRole(member.id, member.role, member)"-->
+  <!--                  :disabled="member.role === TeamRoles.lead || userRole !== TeamRoles.lead"-->
+  <!--                  v-model="member._newRole"-->
+  <!--          >-->
+  <!--            <option v-if="member.role === TeamRoles.lead" :value="TeamRoles.lead">Капитан</option>-->
+  <!--            <option :value="TeamRoles.subLead">Зам</option>-->
+  <!--            <option :value="TeamRoles.member">Участник</option>-->
+  <!--          </select>-->
+  <!--          <button class="kick-member-btn" :class="{'hidden': member.role === TeamRoles.lead}" v-if="(userRole === TeamRoles.lead || userRole === TeamRoles.subLead)" @click="deleteMemberFromTeam(idx)"><img src="../res/images/trashbox.svg" alt="Исключить"></button>-->
+  <!--        </div>-->
+  <!---->
+  <!--        <div class="buttons-container">-->
+  <!--          <button @click="addMemberToTeam" class="add-member-btn">-->
+  <!--            <img src="../res/images/plus.svg" alt="Добавить участника">Добавить участника</button>-->
+  <!--          <button @click="deleteTeam" class="delete-team-btn">Удалить команду</button>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--      <div v-else>-->
+  <!--        <div class="buttons-create-team-container">-->
+  <!--          <button @click="createTeam" class="create-team-button box">Создать команду</button>-->
+  <!--          <button @click="showJoinInstruction" class="join-team-button box">Присоединиться к команде</button>-->
+  <!--        </div>-->
+  <!--      </div>-->
+      </div>
 
-      <header class="header">МОЯ КОМАНДА</header>
-      <div class="info">Создание команды станет доступно 14 октября</div>
-<!--      <div v-if="this.teamData.__gotten" class="box team-block">-->
-<!--        <div class="team-name-container">-->
-<!--          <span>-->
-<!--            <span class="team-name">{{ teamData.title }}</span>-->
-<!--            <span class="team-id">#{{ String(teamData.id || '').padStart(4, '0') }}</span>-->
-<!--          </span>-->
-<!---->
-<!--          <button @click="renameTeam" class="rename-team-button">Изменить</button>-->
-<!--        </div>-->
-<!--        <p class="team-statistics">{{ teamData.rating }} баллов, {{ teamData.place }} место</p>-->
-<!---->
-<!--        <p class="team-members-info">Состав команды:</p>-->
-<!--        <div class="user-row" v-for="(member, idx) in teamData.members">-->
-<!--          <div class="name">{{ member.name }}</div>-->
-<!--          <select class="dropdown"-->
-<!--                  @change="changeMemberRole(member.id, member.role, member)"-->
-<!--                  :disabled="member.role === TeamRoles.lead || userRole !== TeamRoles.lead"-->
-<!--                  v-model="member._newRole"-->
-<!--          >-->
-<!--            <option v-if="member.role === TeamRoles.lead" :value="TeamRoles.lead">Капитан</option>-->
-<!--            <option :value="TeamRoles.subLead">Зам</option>-->
-<!--            <option :value="TeamRoles.member">Участник</option>-->
-<!--          </select>-->
-<!--          <button class="kick-member-btn" :class="{'hidden': member.role === TeamRoles.lead}" v-if="(userRole === TeamRoles.lead || userRole === TeamRoles.subLead)" @click="deleteMemberFromTeam(idx)"><img src="../res/images/trashbox.svg" alt="Исключить"></button>-->
-<!--        </div>-->
-<!---->
-<!--        <div class="buttons-container">-->
-<!--          <button @click="addMemberToTeam" class="add-member-btn">-->
-<!--            <img src="../res/images/plus.svg" alt="Добавить участника">Добавить участника</button>-->
-<!--          <button @click="deleteTeam" class="delete-team-btn">Удалить команду</button>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div v-else>-->
-<!--        <div class="buttons-create-team-container">-->
-<!--          <button @click="createTeam" class="create-team-button box">Создать команду</button>-->
-<!--          <button @click="showJoinInstruction" class="join-team-button box">Присоединиться к команде</button>-->
-<!--        </div>-->
-<!--      </div>-->
+      <div class="content-block">
+        <header class="header">ПРОФИЛЬ</header>
+        <div class="box user-block">
+          <div class="user-name-row">
+            <div class="user-name">{{ $user.name }}</div>
+            <button class="button-edit" @click="changeUserParam('name')">Изменить</button>
+          </div>
+          <div class="data-row">
+            <div class="field">Группа:</div>
+            <div class="data">{{ $user.group }}</div>
+            <button class="button-edit" @click="changeUserParam('group')">Изменить</button>
+          </div>
+          <div class="data-row">
+            <div class="field">Email:</div>
+            <div class="data">{{ $user.email }}</div>
+            <button class="button-edit" @click="changeUserParam('email')">Изменить</button>
+          </div>
+          <div class="data-row">
+            <div class="field">Telegram:</div>
+            <div class="data">@{{ $user.tg }}</div>
+            <button class="button-edit" @click="changeUserParam('telegram', 'tg')">Изменить</button>
+          </div>
+          <div class="data-row">
+            <div class="field">Вконтакте:</div>
+            <div class="data">vk.com/{{ $user.vk }}</div>
+            <button class="button-edit" @click="changeUserParam('vk')">Изменить</button>
+          </div>
+          <div class="data-row">
+            <div class="field">Номер телефона:</div>
+            <div class="data">{{ $user.phone }}</div>
+            <button class="button-edit" @click="changeUserParam('phone_number', 'phone')">Изменить</button>
+          </div>
 
-      <header class="header">ПРОФИЛЬ</header>
-      <div class="box user-block">
-        <div class="user-name-row">
-          <div class="user-name">{{ $user.name }}</div>
-          <button class="button-edit" @click="changeUserParam('name')">Изменить</button>
-        </div>
-        <div class="data-row">
-          <div class="field">Группа:</div>
-          <div class="data">{{ $user.group }}</div>
-          <button class="button-edit" @click="changeUserParam('group')">Изменить</button>
-        </div>
-        <div class="data-row">
-          <div class="field">Email:</div>
-          <div class="data">{{ $user.email }}</div>
-          <button class="button-edit" @click="changeUserParam('email')">Изменить</button>
-        </div>
-        <div class="data-row">
-          <div class="field">Telegram:</div>
-          <div class="data">@{{ $user.tg }}</div>
-          <button class="button-edit" @click="changeUserParam('telegram', 'tg')">Изменить</button>
-        </div>
-        <div class="data-row">
-          <div class="field">Вконтакте:</div>
-          <div class="data">vk.com/{{ $user.vk }}</div>
-          <button class="button-edit" @click="changeUserParam('vk')">Изменить</button>
-        </div>
-        <div class="data-row">
-          <div class="field">Номер телефона:</div>
-          <div class="data">{{ $user.phone }}</div>
-          <button class="button-edit" @click="changeUserParam('phone_number', 'phone')">Изменить</button>
-        </div>
+          <div class="buttons-row">
+            <router-link :to="{name: 'changePassword'}">
+              <button class="change-password">Сменить пароль</button>
+            </router-link>
 
-        <div class="buttons-row">
-          <router-link :to="{name: 'changePassword'}">
-            <button class="change-password">Сменить пароль</button>
-          </router-link>
-
-          <button class="logout-button" @click="logout">Выйти</button>
+            <button class="logout-button" @click="logout">Выйти</button>
+          </div>
         </div>
       </div>
     </div>
