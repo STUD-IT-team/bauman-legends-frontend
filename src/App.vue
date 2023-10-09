@@ -32,7 +32,7 @@ footer-height-small = 20px
     &.small
       max-height 400px
   bottom -6%
-  left unquote('max(calc(50% - 330px), 0px)')
+  left unquote('max(calc(50% - 367px), 0px)')
   transform translateX(-14%)
   object-fit contain
   overflow visible
