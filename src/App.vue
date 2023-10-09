@@ -28,7 +28,9 @@ footer-height-small = 20px
   height 100%
   max-height 1000px
   @media({mobile})
-    max-height 700px
+    max-height 600px
+    &.small
+      max-height 400px
   bottom -6%
   left unquote('max(calc(50% - 330px), 0px)')
   transform translateX(-14%)
@@ -69,8 +71,10 @@ footer-height-small = 20px
       //position absolute
       width 100%
       height 100%
-      min-height 100vh
-      margin-bottom 60px
+      min-height calc(100vh - 60px)
+      margin-bottom footer-height
+      @media({mobile})
+        margin-bottom footer-height-mobile
 
   .footer
     position fixed
@@ -119,7 +123,7 @@ footer-height-small = 20px
 
 <template>
   <img class="background-text-image" src="../src/res/images/BackgroundPatternSmaller.png" alt="background">
-  <img class="bauman-image" src="../src/res/images/Bauman.png" alt="Bauman">
+  <img class="bauman-image" src="../src/res/images/Bauman.png" alt="Bauman" :class="{small: isBaumanImageSmall}">
   <img src="./res/images/Gerbs.png" class="logo" alt="crest" :class="{small: isFooterShown}">
   <div class="all-page-wrapper">
     <div class="content-wrapper">
@@ -215,6 +219,7 @@ export default {
     return {
       prevScrolledPos: 0,
       isFooterShown: false,
+      isBaumanImageSmall: true,
     }
   },
 
@@ -232,6 +237,20 @@ export default {
         this.isFooterShown = false;
       this.prevScrolledPos = window.scrollY;
     });
+  },
+
+  watch: {
+    $route(to, from) {
+      console.log(to.path)
+      console.log(this.$router.resolve({name: 'login'}).fullPath)
+      this.isBaumanImageSmall = !(
+        to.path === this.$router.resolve({name: 'page404'}).fullPath ||
+        to.path === this.$router.resolve({name: 'login'}).fullPath ||
+        to.path === this.$router.resolve({name: 'register'}).fullPath ||
+        to.path === this.$router.resolve({name: 'restorePassword'}).fullPath ||
+        to.path === this.$router.resolve({name: 'changePassword'}).fullPath
+      );
+    }
   },
 };
 </script>

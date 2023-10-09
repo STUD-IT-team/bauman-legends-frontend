@@ -5,18 +5,19 @@ import Profile from "./views/Profile.vue";
 import Registration from "./views/Registration.vue";
 import Page404 from "./views/Page404.vue";
 import SignIn from "./views/SignIn.vue";
+import ChangePassword from "./views/ChangePassword.vue";
 
 
 export default function createVueRouter(Store) {
   const routes = [
     {path: '/register', name: 'register', component: Registration, meta: {noLoginRequired: true}},
     {path: '/login', name: 'login', component: SignIn, meta: {noLoginRequired: true}},
-    {path: '/profile', name: 'profile', component: Profile, meta: {loginRequired: true}},
+    {path: '/profile', name: 'profile', component: Profile, meta: {loginRequired: false}},
     {path: '/login/email', name: 'signInByEmail', component: SignIn, meta: {noLoginRequired: true}},
+    {path: '/password/change', name: 'changePassword', component: ChangePassword, meta: {loginRequired: true}},
     {path: '/password/restore', name: 'restorePassword', component: SignIn, meta: {noLoginRequired: true}},
-    {path: '/password/change', name: 'changePassword', component: SignIn, meta: {loginRequired: true}},
 
-    {path: '/:pathMatch(.*)*', name: 'default', component: Page404},
+    {path: '/:pathMatch(.*)*', name: 'page404', component: Page404},
   ];
 
   const Router = createRouter({
@@ -49,14 +50,14 @@ export default function createVueRouter(Store) {
     }
 
     // Login required redirects
-    if (to.matched.some(record => record.meta.loginRequired)) {
+    if (to.matched.some(record => record.meta.loginRequired === true)) {
       if (Store.state.user.isSignedIn) {
         next();
         return;
       }
       next(notLoginedRedirect);
       return;
-    } else if (to.matched.some(record => record.meta.noLoginRequired)) {
+    } else if (to.matched.some(record => record.meta.noLoginRequired === true)) {
       if (!Store.state.user.isSignedIn) {
         next();
         return;

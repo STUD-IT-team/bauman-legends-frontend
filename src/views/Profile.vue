@@ -37,6 +37,7 @@ button-edit()
       margin 20px 20px 10px 20px
       color colorBg
     .info
+
       font-medium()
       margin-left 20px
 
