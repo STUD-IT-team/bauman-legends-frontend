@@ -84,6 +84,7 @@ footer-height-small = 20px
     padding 20px
     display flex
     gap 20px
+    cursor pointer
     @media (max-width: 400px)
       flex-direction column
 
@@ -117,6 +118,13 @@ footer-height-small = 20px
           font-small-extra()
       a
         pointer-events none
+
+    @media ({desktop})
+      &.small:hover
+        height footer-height-small + 10px
+      &:hover
+        .title
+          color colorText1
 </style>
 
 <template>
