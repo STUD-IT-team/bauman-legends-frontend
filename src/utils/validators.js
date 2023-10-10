@@ -15,7 +15,7 @@ export const Validators = {
     prettifyResult:  (str) => str.replace('https://', '').replace('t.me/', '').replace('@', ''),
   },
   vk: {
-    regExp: /^(https:\/\/)?(vk\.com\/|@)?(\w+\.)*\w$/,
+    regExp: /^(https:\/\/)?(vk\.com\/|@)?(\w+\.)*\w+$/,
     validate: (str) => this.regExp.test(str),
     prettifyResult: (str) => str.replace('https://', '').replace('vk.com/', '').replace('@', ''),
   },
