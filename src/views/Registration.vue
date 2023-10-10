@@ -120,6 +120,14 @@ export default {
           prettifyResult: Validators.password.prettifyResult,
           info: 'Минимум 6 символов',
           autocomplete: 'password',
+        },
+        passwordAgain: {
+          title: 'Пароль ещё раз',
+          name: 'password',
+          type: 'password',
+          placeholder: '●●●●●●',
+          validationRegExp: Validators.password.regExp,
+          prettifyResult: Validators.password.prettifyResult,
         }
       },
       loading: false,
@@ -128,6 +136,11 @@ export default {
 
   methods: {
     async register(data) {
+      if (data.password !== data.passwordAgain) {
+        this.$refs.form.setError([this.fields.password, this.fields.passwordAgain], 'Пароли не совпадают');
+        return;
+      }
+
       this.loading = true;
       const {ok} = await this.$api.register(data.name, data.group, data.tg, data.vk, data.email, data.phone, data.password, detectBrowser(), detectOS());
       this.loading = false;
