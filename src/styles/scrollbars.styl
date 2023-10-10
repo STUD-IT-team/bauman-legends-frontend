@@ -1,11 +1,13 @@
 @require 'constants.styl'
 
-scroll-bg-color = colorBg1
-scroll-thumb-color = colorEmp1Disabled
-scroll-thumb-color-hover = colorEmp1
+scroll-bg-color = colorBgLightMax
+scroll-thumb-color = #bad5ed
+scroll-thumb-color-hover = saturate(scroll-thumb-color, 150%)
 scrollbar-width-worded = bold
 scrollbar-width = 10px
 scrollbar-border = 2px
+//scroll-track-radius = (scrollbar-width / 2)
+scroll-track-radius = 0
 
 scrollable()
   overflow-y auto
@@ -21,7 +23,7 @@ scrollable()
     height scrollbar-width
   &::-webkit-scrollbar-track
     background scroll-bg-color
-    border-radius (scrollbar-width / 2)
+    border-radius scroll-track-radius
   &::-webkit-scrollbar-thumb
     background-color scroll-thumb-color
     border-radius (scrollbar-width / 2)

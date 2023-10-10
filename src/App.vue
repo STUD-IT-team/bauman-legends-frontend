@@ -37,8 +37,10 @@ footer-height-small = 20px
   object-fit contain
   overflow visible
   opacity .7
-  transition all 1s ease
+  transition all 1s ease, opacity .5s ease
   pointer-events none
+  &.transparent
+    opacity 0
 .logo
   position fixed
   object-fit contain
@@ -69,9 +71,10 @@ footer-height-small = 20px
       //position absolute
       width 100%
       height 100%
-      min-height calc(100vh - 60px)
+      min-height 'calc(100vh - %s)' % footer-height
       margin-bottom footer-height
       @media({mobile})
+        min-height 'calc(100vh - %s)' % footer-height-mobile
         margin-bottom footer-height-mobile
 
   .footer
@@ -129,12 +132,15 @@ footer-height-small = 20px
 
 <template>
   <img class="background-text-image" src="../src/res/images/BackgroundPatternSmaller.png" alt="background">
-  <img class="bauman-image" src="../src/res/images/Bauman.png" alt="Bauman" :class="{small: isBaumanImageSmall}">
+  <img class="bauman-image" src="../src/res/images/Bauman.png" alt="Bauman" :class="{small: isBaumanImageSmall, transparent: isBaumanTransparent}">
   <img src="./res/images/Gerbs.png" class="logo" alt="crest" :class="{small: isFooterShown}">
   <div class="all-page-wrapper">
     <div class="content-wrapper">
       <router-view v-slot="{ Component }">
-        <transition name="scale-in">
+        <transition name="scale-in" duration="200"
+          @after-enter="isBaumanTransparent = false"
+          @before-leave="isBaumanTransparent = true"
+        >
           <component :is="Component"/>
         </transition>
       </router-view>
@@ -187,10 +193,12 @@ footer-height-small = 20px
   }
 }
 .scale-in-enter-active {
+  position: absolute;
   overflow: hidden;
   animation: scale-in .2s ease;
 }
 .scale-in-leave-active {
+  position: absolute;
   overflow: hidden;
   animation: scale-out .2s ease;
 }
@@ -226,6 +234,7 @@ export default {
       prevScrolledPos: 0,
       isFooterShown: false,
       isBaumanImageSmall: true,
+      isBaumanTransparent: false,
     }
   },
 

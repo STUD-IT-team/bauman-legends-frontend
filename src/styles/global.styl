@@ -1,5 +1,8 @@
+@require 'scrollbars.styl'
+
 html
     overflow-x hidden
+    scrollable()
 
 *
     box-sizing border-box
@@ -10,10 +13,10 @@ body
     width 100vw
     min-height 100vh
     position relative
-    background white
     overflow-x hidden
     font-family Arial, monospace
     background #e7e7e7
+    overflow-y hidden
 
 #app
     width 100%

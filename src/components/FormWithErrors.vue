@@ -22,6 +22,7 @@ input-border = 2px solid border-color
       opacity .5
       transition all 0.2s ease
       pointer-events none
+      user-select none
     label
       opacity 1
 
@@ -66,6 +67,8 @@ input-border = 2px solid border-color
       font-small-extra()
       opacity 0
       transition opacity 0.2s ease
+      pointer-events none
+      user-select none
     .error
       color colorError
     .success
@@ -76,6 +79,7 @@ input-border = 2px solid border-color
       padding-left 20px
       font-small-extra()
       opacity 0.5
+      user-select none
 
     &.error
       color colorError
