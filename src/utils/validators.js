@@ -28,7 +28,7 @@ export const Validators = {
   },
 }
 Object.entries(Validators).forEach(([name, validator]) => {
-  validator.validate = (str) => validator.regExp.test(str);
+  validator.validate = (str) => validator.regExp.test(str.trim());
 });
 
 

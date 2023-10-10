@@ -484,7 +484,7 @@ export default {
         return;
       }
       if (!Validators[fieldNameUser].validate(inputValue)) {
-        this.changeUserParam(fieldName, fieldNameUser=fieldName, inputValue);
+        this.changeUserParam(fieldName, fieldNameUser, inputValue);
         return;
       }
 
