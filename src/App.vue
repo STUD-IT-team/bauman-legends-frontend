@@ -15,11 +15,17 @@
 footer-height = 80px
 footer-height-mobile = 55px
 footer-height-small = 20px
+footer-height-mobile-small = 30px
 
 .background-text-image
   position fixed
   width 100%
   height 100%
+  margin 0
+  overflow hidden
+  background-attachment fixed
+  background-size cover
+  background-repeat no-repeat
   object-fit cover
   opacity 0.5
   z-index -1
@@ -46,10 +52,11 @@ footer-height-small = 20px
   object-fit contain
   overflow visible
   right 0
-  bottom 10px
+  bottom footer-height-small - 10px
   justify-content right
   height footer-height + 40px
   @media ({mobile})
+    bottom footer-height-mobile-small - 10px
     height footer-height-mobile + 20px
   mix-blend-mode difference
   z-index 99999999
@@ -115,9 +122,12 @@ footer-height-small = 20px
     &.small
       height footer-height-small
       padding-top 5px
+      @media ({mobile})
+        height footer-height-mobile-small
       .title
         color colorText4
         @media ({mobile})
+          margin-bottom 10px
           font-small-extra()
       a
         pointer-events none

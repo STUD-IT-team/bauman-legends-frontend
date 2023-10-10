@@ -301,7 +301,7 @@ button-edit()
           </div>
 
           <div class="buttons-row">
-            <router-link :to="{name: 'changePassword'}">
+            <router-link :to="{name: 'changePassword'}" style="opacity: 0; pointer-events: none;">
               <button class="change-password">Сменить пароль</button>
             </router-link>
 
