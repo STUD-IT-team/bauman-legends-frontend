@@ -8,15 +8,15 @@ export const Validators = {
     prettifyResult: (str) => str.toUpperCase(),
   },
   tg: {
-    regExp: /^((https:\/\/)?(t\.me\/)|@)?\w{5,}$/,
+    regExp: /^((https:\/\/)?(t\.me\/)|@)?\w{5,}$/i,
     prettifyResult:  (str) => str.replace('https://', '').replace('t.me/', '').replace('@', ''),
   },
   vk: {
-    regExp: /^(https:\/\/)?(vk\.com\/|@)?(\w+\.)*\w+$/,
+    regExp: /^(https:\/\/)?(vk\.com\/|@)?(\w+\.)*\w+$/i,
     prettifyResult: (str) => str.replace('https://', '').replace('vk.com/', '').replace('@', ''),
   },
   email: {
-    regExp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    regExp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i,
     prettifyResult: (str) => str.toLowerCase(),
   },
   phone: {
@@ -24,7 +24,7 @@ export const Validators = {
     prettifyResult: (str) => str.replace('+7', '8').replace('-', '').replace('(', '').replace(')', ''),
   },
   password: {
-    regExp: /^.{6,}$/,
+    regExp: /^.{6,}$/i,
   },
 }
 Object.entries(Validators).forEach(([name, validator]) => {
