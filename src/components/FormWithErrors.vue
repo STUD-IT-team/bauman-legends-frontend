@@ -103,7 +103,7 @@ input-border = 2px solid border-color
       <label :for="`${uid}-${fieldName}`">{{ field.title }}</label>
       <div class="info" v-if="field.info">{{ field.info }}</div>
       <div class="placeholder">{{ field.placeholder }}</div>
-      <div class="error">{{ field.errorText || 'Неверный формат' }}</div>
+      <div class="error">{{ field.overrideErrorText || field.errorText || 'Неверный формат' }}</div>
       <div class="success">{{ field.successText || 'Успех' }}</div>
     </div>
 
@@ -131,6 +131,7 @@ export default {
         some_field: {
           name: String(),
           errorText: String(),
+          overrideErrorText: null,
           successText: String(),
           value: String(),
           regExp: RegExp,
@@ -184,6 +185,9 @@ export default {
         } else {
           field.__error = false;
         }
+        if (field.__error) {
+          field.overrideErrorText = null;
+        }
         field.__success = this.setSuccesses && !field.__error;
         res = res && !field.__error;
       });
@@ -192,7 +196,7 @@ export default {
 
     __setErrorOnField(field, errorText) {
       field.__error = true;
-      field.errorText = errorText;
+      field.overrideErrorText = errorText;
     },
     setError(fields, errorText) {
       if (Array.isArray(fields)) {
