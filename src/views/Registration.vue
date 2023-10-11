@@ -6,17 +6,14 @@ bg = colorBgDark
 
 .root-register
   width 100%
-  height 100%
+  padding 20px
   .form
-    width calc(100% - 40px)
-    margin auto
+    max-width 600px
+    margin 20px auto
     background-color colorBg
     border-radius borderRadiusM
+    padding 20px
     padding-top 10px
-    padding-left 20px
-    padding-right 20px
-    padding-bottom 20px
-    margin-top 20px
     text-align center
     font-large()
     font-bold()
@@ -33,9 +30,12 @@ bg = colorBgDark
   <div class="root-register">
     <div class="form">
       РЕГИСТРАЦИЯ<br>
-      <FormWithErrors :fields="fields"
-                      submitText="Зарегистрироваться"
-                      @success="register"
+      <FormWithErrors
+        ref="form"
+        :fields="fields"
+        submitText="Зарегистрироваться"
+        @success="register"
+        :loading="loading"
       ></FormWithErrors>
       <router-link class="signin-link" :to="{name: 'login'}">
         <button class="signin-button">Войти</button>
@@ -47,70 +47,100 @@ bg = colorBgDark
 <script>
 import FormWithErrors from "../components/FormWithErrors.vue";
 import {detectBrowser, detectOS} from "../utils/utils";
+import CircleLoading from "../components/CircleLoading.vue";
+import {Validators} from "../utils/validators";
 
 
 export default {
-  components: {FormWithErrors},
+  components: {CircleLoading, FormWithErrors},
   data() {
     return {
       fields: {
         name: {
+          title: 'ФИО',
           name: 'name',
           type: 'text',
-          placeholder: 'ФИО',
-          validationRegExp: /^[а-я]+ [а-я]+( [а-я]+)?$/i,
+          placeholder: 'Иванов Иван Иванович',
+          validationRegExp: Validators.name.regExp,
+          prettifyResult: Validators.name.prettifyResult,
+          autocomplete: 'name',
         },
         group: {
+          title: 'Учебная группа',
           name: 'group',
           type: 'text',
-          placeholder: 'Учебная группа',
-          validationRegExp: /^(иу|ибм|мт|см|бмт|рл|э|рк|фн|л|юр|сгн|вуц|гуимц|фмоп|фоф|исот|ркт|ак|пс|рт|лт)\d\d?-1\d[СМБ]$/i,
-          prettifyResult: (str) => str.toUpperCase(),
-        },
-        email: {
-          name: 'email',
-          type: 'text',
-          placeholder: 'Электронная почта',
-          validationRegExp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-          prettifyResult: (str) => str.toLowerCase(),
-        },
-        phone: {
-          name: 'phone',
-          type: 'text',
-          placeholder: 'Номер телефона',
-          validationRegExp: /^((\+7)|8)[-\s.]?((\(\d\d\d\))|(\d\d\d))[-\s.]?\d\d\d[-\s.]?\d\d[-\s.]?\d\d$/,
-          prettifyResult: (str) => str.replace('+7', '8').replace('-', '').replace('(', '').replace(')', ''),
+          placeholder: 'ОЭ2-11',
+          validationRegExp: Validators.group.regExp,
+          prettifyResult: Validators.group.prettifyResult,
+          autocomplete: 'group',
         },
         tg:{
+          title: 'Telegram',
           name: 'telegram',
           type: 'text',
-          placeholder: 'Ссылка на Telegram',
-          validationRegExp: /^((https:\/\/t\.me\/)|@)?\w{5,}$/,
-          prettifyResult: (str) => '@' + str.replace('https://t.me/', '').replace('@', ''),
-          // info: 'В любом формате',
+          placeholder: '@legends_bmstu',
+          validationRegExp: Validators.tg.regExp,
+          prettifyResult: Validators.tg.prettifyResult,
+          info: 'В любом формате',
+          autocomplete: 'telegram',
         },
         vk: {
+          title: 'VK',
           name: 'vk',
           type: 'text',
-          placeholder: 'Ссылка на Вконтакте',
-          validationRegExp: /^(https:\/\/vk\.com\/)?\w+$/,
-          prettifyResult: (str) => str.replace('https://vk.com/', ''),
-          // info: 'В любом формате',
+          placeholder: 'vk.com/legends_bmstu',
+          validationRegExp: Validators.vk.regExp,
+          prettifyResult: Validators.vk.prettifyResult,
+          info: 'В любом формате',
+          autocomplete: 'vk',
+        },
+        email: {
+          title: 'Электронная почта',
+          name: 'email',
+          type: 'text',
+          placeholder: 'legends@bmstu.ru',
+          validationRegExp: Validators.email.regExp,
+          prettifyResult: Validators.email.prettifyResult,
+          autocomplete: 'email',
+        },
+        phone: {
+          title: 'Номер телефона',
+          name: 'phone',
+          type: 'text',
+          placeholder: '8-(123)-456-78-90',
+          validationRegExp: Validators.phone.regExp,
+          prettifyResult: Validators.phone.prettifyResult,
+          autocomplete: 'tel',
         },
         password: {
+          title: 'Пароль',
           name: 'password',
           type: 'password',
-          placeholder: 'Пароль',
-          validationRegExp: /^.{6,}$/,
-          // info: 'Минимум 6 символов'
+          placeholder: '●●●●●●',
+          validationRegExp: Validators.password.regExp,
+          prettifyResult: Validators.password.prettifyResult,
+          info: 'Минимум 6 символов',
+          autocomplete: 'password',
         }
-      }
+      },
+      loading: false,
     }
   },
 
   methods: {
-    register(data) {
-      this.$api.register(data.name, data.group, data.tg, data.vk, data.email, data.phone, data.password, detectBrowser(), detectOS());
+    async register(data) {
+      this.loading = true;
+      const {ok} = await this.$api.register(data.name, data.group, data.tg, data.vk, data.email, data.phone, data.password, detectBrowser(), detectOS());
+      this.loading = false;
+
+      if (!ok) {
+        this.$refs.form.setError([this.fields.email], 'На указанный email уже зарегестрирован аккаунт');
+        return;
+      }
+      this.loading = true;
+      await this.$store.dispatch('GET_USER');
+      this.loading = true;
+      this.$router.push({name: 'profile'});
     }
   }
 }

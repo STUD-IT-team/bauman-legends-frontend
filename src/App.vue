@@ -36,23 +36,25 @@
   bottom 0
   justify-content right
   height 80px
-  filter brightness(0.1875)
+  mix-blend-mode difference
+  z-index 99999999
+  pointer-events none
 
 .wrapper
   width 100%
   min-height 100vh
 
 .wrapper > *
-    position fixed
+    position absolute
     width 100%
     min-height 100vh
 </style>
 
 <template>
   <div class="bg"></div>
-  <img class="background-text-image" src="../src/res/images/BackgroundPatternSmaller.png" alt="Background">
+  <img class="background-text-image" src="../src/res/images/BackgroundPatternSmaller.png" alt="background">
   <img class="bauman-image" src="../src/res/images/Bauman.png" alt="Bauman">
-  <img src="./res/images/Gerbs.png" class="logo">
+  <img src="./res/images/Gerbs.png" class="logo" alt="crest">
   <div class="wrapper">
     <router-view v-slot="{ Component }">
       <transition name="scale-in">
@@ -60,6 +62,9 @@
       </transition>
     </router-view>
   </div>
+
+  <Modal ref="modal"></Modal>
+  <Popups ref="popups"></Popups>
 </template>
 
 
@@ -127,22 +132,10 @@ export default {
     const global = getCurrentInstance().appContext.config.globalProperties;
     // Прописываем в глобавльные свойства частоиспользуемые компоненты, чтобы они были доступны из любых других компонентов
     global.$user = this.$store.state.user;
-    global.$modal = this.$refs.modal;
+    global.$modals = this.$refs.modal;
     global.$popups = this.$refs.popups;
     global.$app = this; // это обычно не используется, но может пригодиться
     global.$api = new API();
   },
-
-  methods: {
-    async logOut() {
-      const {data, code, ok} = await this.$api.signOut();
-      if (!ok) {
-        this.$popups.error('Не получилось выйти из аккаунта', 'Неизвестная ошибка');
-        return;
-      }
-      this.$store.dispatch("DELETE_USER");
-      this.$router.push({name: "signin"});
-    }
-  }
 };
 </script>

@@ -4,17 +4,14 @@
 
 .root-signin
   width 100%
-  height 100%
+  padding 20px
   .form
-    width calc(100% - 40px)
-    margin auto
+    margin 20px auto
+    max-width 600px
     background-color colorBg
     border-radius borderRadiusM
+    padding 20px
     padding-top 10px
-    padding-left 20px
-    padding-right 20px
-    padding-bottom 20px
-    margin 20px 20px
     text-align center
     font-large()
     font-bold()
@@ -45,18 +42,20 @@
     <div class="form">
       ВХОД<br>
       <FormWithErrors
+        ref="form"
         :fields="fields"
         submitText="Вход"
-        @success="signin"
+        @success="login"
+        :loading="loading"
       ></FormWithErrors>
       <router-link class="register-link" :to="{name: 'register'}">
         <button class="register-button">Зарегистрироваться</button>
       </router-link>
 
-      <div class="signin-links">
-        <router-link class="signin-by-email-link" :to="{name: 'signInByEmail'}">Войти по почте</router-link>
-        <router-link class="restore-password-link" :to="{name: 'restorePassword'}">Восстановить пароль</router-link>
-      </div>
+<!--      <div class="signin-links">-->
+<!--        <router-link class="signin-by-email-link" :to="{name: 'signInByEmail'}">Войти по почте</router-link>-->
+<!--        <router-link class="restore-password-link" :to="{name: 'restorePassword'}">Восстановить пароль</router-link>-->
+<!--      </div>-->
     </div>
   </div>
 </template>
@@ -64,32 +63,52 @@
 <script>
 import FormWithErrors from "../components/FormWithErrors.vue";
 import {detectBrowser, detectOS} from "../utils/utils";
+import CircleLoading from "../components/CircleLoading.vue";
+import {Validators} from "../utils/validators";
 
 
 export default {
-  components: {FormWithErrors},
+  components: {CircleLoading, FormWithErrors},
   data() {
     return {
       fields: {
         email: {
+          title: 'Электронная почта',
           name: 'email',
           type: 'text',
-          placeholder: 'Почта',
-          validationRegExp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+          placeholder: 'legends@bmstu.ru',
+          validationRegExp: Validators.email.regExp,
+          prettifyResult: Validators.email.prettifyResult,
+          autocomplete: 'email',
         },
         password: {
+          title: 'Пароль',
           name: 'password',
           type: 'password',
-          placeholder: 'Пароль',
-          validationRegExp: /^.{6,}$/,
+          placeholder: '●●●●●●',
+          validationRegExp: Validators.password.regExp,
+          prettifyResult: Validators.password.prettifyResult,
+          autocomplete: 'password',
         }
-      }
+      },
+      loading: false,
     }
   },
 
   methods: {
-    signin(data) {
-      this.$api.login(data.email, data.password, detectBrowser(), detectOS());
+    async login(data) {
+      this.loading = true;
+      const {ok} = await this.$api.login(data.email, data.password, detectBrowser(), detectOS());
+      this.loading = false;
+
+      if (!ok) {
+        this.$refs.form.setError([this.fields.email, this.fields.password], 'Неверные email или пароль');
+        return;
+      }
+      this.loading = true;
+      await this.$store.dispatch('GET_USER');
+      this.loading = false;
+      this.$router.push({name: 'profile'});
     }
   }
 }
