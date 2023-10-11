@@ -9,11 +9,11 @@ export const Validators = {
   },
   tg: {
     regExp: /^((https:\/\/)?(t\.me\/)|@)?\w{5,}$/i,
-    prettifyResult:  (str) => str.replace('https://', '').replace('t.me/', '').replace('@', ''),
+    prettifyResult:  (str) => str.replace(/https:\/\//i, '').replace(/t\.me\//i, '').replace('@', ''),
   },
   vk: {
     regExp: /^(https:\/\/)?(vk\.com\/|@)?(\w+\.)*\w+$/i,
-    prettifyResult: (str) => str.replace('https://', '').replace('vk.com/', '').replace('@', ''),
+    prettifyResult: (str) => str.replace(/https:\/\//i, '').replace(/vk\.com\//i, '').replace('@', ''),
   },
   email: {
     regExp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i,
