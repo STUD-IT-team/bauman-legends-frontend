@@ -26,7 +26,6 @@ shadow-color = mix(black, transparent, 70%)
 
 button()
     color text-color
-    width 70%
     font-medium()
     padding 10px
     border border-color-2 solid 0px
@@ -44,6 +43,21 @@ button()
         color text-color-hover-1
         border-color border-color-hover
         //box-shadow 5px 5px 15px shadow-color
+
+    &[disabled]:not([disabled=false])
+        pointer-events none
+        color text-color-disabled
+        background bg-color-disabled
+        box-shadow none
+
+button-inline()
+    button()
+    padding 0
+
+    &:hover
+        color text-color-hover-1
+        border-color border-color-hover
+        box-shadow: none
 
     &[disabled]:not([disabled=false])
         pointer-events none

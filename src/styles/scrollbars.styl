@@ -11,6 +11,7 @@ scroll-track-radius = 0
 
 scrollable()
   overflow-y auto
+
   scrollbar-width scrollbar-width-worded
   scrollbar-height scrollbar-width-worded
   scrollbar-color scroll-thumb-color scroll-bg-color
@@ -32,6 +33,12 @@ scrollable()
   &::-webkit-scrollbar-corner
     background scroll-bg-color
 
+hidden-scrollbar()
+  overflow-y auto
+  &::-webkit-scrollbar
+    display none
+  -ms-overflow-style none
+  scrollbar-width none
 
 no-scrollbar()
   &::-webkit-scrollbar

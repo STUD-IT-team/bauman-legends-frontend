@@ -16,6 +16,7 @@ button-edit()
 
 
 .root-profile
+  hidden-scrollbar()
   width 100%
 
   .navbar
