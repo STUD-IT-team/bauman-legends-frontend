@@ -39,7 +39,7 @@ const Store = new Vuex.Store({
       }
       state.commit('SET_USER', data);
     },
-    async DELETE_USER(state) {
+    DELETE_USER(state) {
       state.commit('DELETE_USER');
     },
   }

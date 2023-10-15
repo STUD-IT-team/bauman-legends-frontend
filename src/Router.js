@@ -6,6 +6,7 @@ import Registration from "./views/Registration.vue";
 import Page404 from "./views/Page404.vue";
 import SignIn from "./views/SignIn.vue";
 import ChangePassword from "./views/ChangePassword.vue";
+import Task from "./views/Task.vue";
 
 
 export default function createVueRouter(Store) {
@@ -14,6 +15,7 @@ export default function createVueRouter(Store) {
     {path: '/login', name: 'login', component: SignIn, meta: {noLoginRequired: true}},
     {path: '/profile', name: 'profile', component: Profile, meta: {loginRequired: true}},
     {path: '/login/email', name: 'signInByEmail', component: SignIn, meta: {noLoginRequired: true}},
+    {path: '/task', name: 'task', component: Task, meta: {loginRequired: true}},
     {path: '/password/change', name: 'changePassword', component: ChangePassword, meta: {loginRequired: true}},
     {path: '/password/restore', name: 'restorePassword', component: SignIn, meta: {noLoginRequired: true}},
 

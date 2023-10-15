@@ -53,115 +53,203 @@ button-edit()
         font-bold()
         display flex
         .title
-          flex 1
           color colorText1
+          flex 1
+        .pts-value
         .pts
           color colorEmp1
-      .description
-        font-medium()
-      .info
-        font-small()
-        color colorBgLightExtra
-      .hint-button
-        button()
-        padding 10px 20px
-        background colorEmp1
-        &:hover
-          background colorError
-          color colorText1
-      .answer-form
-        position relative
-        .title
-          font-large()
-        .task-input
-          width 100%
-          background-color colorBg
-          border colorText1 solid 
-          border-radius 25px
-          padding 10px
-          margin 10px auto
-          color colorBgLightExtra
-        .placeholder
-          position absolute
-          top 22px
-          left 10px
-          text-align left
-          padding-left 10px
-          font-medium()
-          opacity .5
-          transition all 0.2s ease
-          pointer-events none
-      .file-form
-        margin 10px auto
-        width auto
+        .pts-value
+          margin-right 10px
+      .info-block
         display flex
-        input[type=file]
+        justify-content space-between
+        font-small()
+        color colorText5
+        margin-bottom 10px
+        .info
           flex 1
-          font-medium()
-          &::file-selector-button
-            button()
-            display inline
-            margin-right 10px
-        .file-submit
-          button()
-          right 0
-          padding 10px 20px
-      .QR-button
-        button()
-        margin 10px auto
-        padding 10px 20px
+        .pts-possible
+          white-space nowrap
 
+      .task-description
+        font-medium()
+        color colorText1
+
+      .answer-block
+        margin-top 10px
+        .QR-button
+          button()
+          margin 10px auto
+          padding 10px 20px
 </style>
 
 <template>
   <div class="root-task">
     <header class="navbar">
-      <span>Профиль / Главная</span>
+      <span>{{ taskData.typeName }}</span>
 <!--      <span>00:04:20</span>-->
     </header>
 
     <div class="main-content">
       <div class="box">
         <div class="task-header">
-          <div class="title">НАЗВАНИЕ ТАСКИ</div>
-          <div class="pts">15 баллов</div>
+          <div class="title">{{ taskData.title }}</div>
+          <vue3autocounter
+            ref='counter'
+            class="pts-value"
+            :startAmount='prevTaskPoints'
+            :endAmount='totalTaskPoints'
+            :duration='1'
+            prefix=''
+            suffix=''
+            separator=''
+            decimalSeparator=','
+            :decimals='0'
+            autoinit
+          ></vue3autocounter>
+          <span class="pts">баллов</span>
         </div>
-        <div class="info">Баллы убывают со временем и при использовании подсказки</div>
-        <br>
-        <div class="description">Описание таски</div>        
-        <div class="answer-form">
-          <!-- <div class="title">ААА</div> -->
-          <input id="answer" class="task-input">
-          <div class="placeholder">Поле ввода ответа</div>
+        <div class="info-block">
+          <div class="info">Баллы убывают со временем и при использовании подсказки</div>
+          <div class="pts-possible">из {{ taskData.maxPoints }}</div>
         </div>
-        <form class="file-form">
-          <input id="file-upload" type="file" accept=".jpg, .jpeg, .png" class="file-input" value="Выбрать файл">
-          <input id="file-submit" type="submit" class="file-submit" value="Отправить">
-        </form>
-        <button class="QR-button" @click="openQR()">Сканировать QR-код</button>
-        <button class="hint-button" @click="showHint()">Подсказка</button>
+
+        <div class="task-description">{{ taskData.text }}</div>
+
+        <div class="answer-block">
+          <FormWithErrors
+            ref="formAnswer"
+            v-if="taskData.typeId === TaskTypeIds.online"
+            :fields="formItems"
+            :loading="loading"
+            submit-text="Отправить"
+            @success="(data) => sendTextAnswer(data.answer)"
+          ></FormWithErrors>
+
+          <DragNDropLoader v-else-if="taskData.typeId === TaskTypeIds.photo"
+                           class="image-loader"
+                           @load="updateAvatar"
+                           :crop-size="cropSize"
+                           :compress-size="compressSize"
+          >
+            <button class="upload-photo">Загрузить фото</button>
+          </DragNDropLoader>
+
+          <button v-else-if="taskData.typeId === TaskTypeIds.tripToNOC || taskData.typeId === TaskTypeIds.withActor" class="QR-button" @click="openQR()">Сканировать QR-код</button>
+        </div>
       </div>
+      <button class="hint-button" @click="showHint()">Подсказка</button>
     </div>
   </div>
 </template>
 
 
 <script>
+import vue3autocounter from 'vue3-autocounter';
+import CircleLoading from "../components/CircleLoading.vue";
+import FormWithErrors from "../components/FormWithErrors.vue";
+import DragNDropLoader from "../components/DragNDropLoader.vue";
+import ImageUploader from "../utils/imageUploader";
+
 
 export default {
+  components: {FormWithErrors, CircleLoading, vue3autocounter, DragNDropLoader},
 
   data() {
     return {
-      hint: "Здесь будет текст подсказки",
+      formItems: {
+        answer: {
+          title: 'Поле для ввода ответа',
+          name: 'answer',
+          placeholder: 'Ваш ответ'
+        }
+      },
+
+      taskData: {
+        title: undefined,
+        text: undefined,
+        typeId: undefined,
+        typeName: undefined,
+        minPoints: undefined,
+        maxPoints: undefined,
+        timeAllotted: undefined,
+        timeStarted: undefined,
+        hintsTaken: [], // [{title, text, pointsPenalty}, ...]
+      },
+      prevTaskPoints: 0,
+      totalTaskPoints: 0,
+
+      TaskTypeIds: {
+        online: 0,
+        photo: 1,
+        tripToNOC: 2,
+        withActor: 3,
+      },
+
+      ImageUploader: new ImageUploader(this.$popups, this.$api.uploadImage, IMAGE_ACHIEVEMENT_MAX_RES, IMAGE_MAX_RES),
+      updatingTotalPointsInterval: undefined,
+      loading: false,
     }
   },
 
+  mounted() {
+    this.getTask();
+    this.updatingTotalPointsInterval = setInterval(this.updateTotalTaskPoints, 1000);
+  },
+  unmounted() {
+    clearInterval(this.updatingTotalPointsInterval);
+  },
+
   methods: {
-    showHint() {
-      this.$modals.alert(this.hint);
+    async getTask() {
+      const {data, code, ok} = this.$api.getTask();
+      if (!ok) {
+        this.$popups.error("Ошибка", "Не удалось получить задание");
+        this.$router.push({name: 'profile'});
+        return;
+      }
+      this.taskData.title = String(data.title);
+      this.taskData.text = String(data.text);
+      this.taskData.typeId = Number(data.typeId);
+      this.taskData.typeName = String(data.typeName);
+      this.taskData.minPoints = Number(data.minPoints);
+      this.taskData.maxPoints = Number(data.maxPoints);
+      this.taskData.timeAllotted = Number(data.timeAllotted);
+      this.taskData.timeStarted = new Date(data.timeStarted);
+      this.taskData.hintsTaken = data.hintsTaken;
     },
-    openQR() {
-      this.$modals.alert("Здесь будет сканер QR");
+
+    async sendTextAnswer(answer) {
+      const {data, code, ok} = this.$api.answerTask(answer);
+      if (!ok) {
+        this.$refs.formAnswer.setError(this.formItems.answer, 'Ответ неверен');
+        return;
+      }
+      this.$popups.success('Верно!', `Начислено ${this.totalTaskPoints}`);
+      this.$router.push({name: 'profile'});
+    },
+
+    updateTotalTaskPoints() {
+      const totalHintsPointsPenalty = this.taskData.hintsTaken.reduce((penalty, hint) => penalty + hint.pointsPenalty, 0);
+      const secondsGone = Number((new Date()) - this.taskData.timeStarted) / 1000;
+      const possiblePoints = (this.taskData.maxPoints - this.taskData.minPoints);
+      const pointsGone = (secondsGone / this.taskData.timeAllotted) * possiblePoints;
+      const timePoints = possiblePoints - pointsGone;
+      this.prevTaskPoints = this.totalTaskPoints;
+      this.totalTaskPoints = totalHintsPointsPenalty + timePoints;
+    },
+
+    async updateAvatar(dataURL) {
+      // this.loading = true;
+      const imageId = await this.ImageUploader.upload(dataURL);
+      // this.loading = false;
+      if (imageId === undefined)
+        return;
+
+      const res = await this.deleteAvatar();
+
+      this.achievement.imageid = imageId;
+      await this.saveAvatar();
     },
   }
 }

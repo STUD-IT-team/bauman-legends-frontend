@@ -9,7 +9,7 @@ border-color-disabled = colorEmp1Disabled
 text-color = colorBg
 text-color-hover-1 = colorEmp2
 text-color-hover-2 = colorText1
-text-color-disabled = colorText4
+text-color-disabled = colorText5
 bg-color = colorEmp1Disabled
 bg-color-hover = saturation(bg-color, 120%)
 bg-color-disabled = saturation(bg-color, 20%)
@@ -38,26 +38,12 @@ button()
     //box-shadow 5px 5px 10px shadow-color
     margin auto
     centered-flex-container()
+    width 70%
 
     &:hover
         color text-color-hover-1
         border-color border-color-hover
         //box-shadow 5px 5px 15px shadow-color
-
-    &[disabled]:not([disabled=false])
-        pointer-events none
-        color text-color-disabled
-        background bg-color-disabled
-        box-shadow none
-
-button-inline()
-    button()
-    padding 0
-
-    &:hover
-        color text-color-hover-1
-        border-color border-color-hover
-        box-shadow: none
 
     &[disabled]:not([disabled=false])
         pointer-events none
@@ -88,7 +74,7 @@ button-success()
     button()
     background mix(colorSuccess, transparent)
     border-color colorSuccess
-    color colorText2
+    color colorText3
     &:hover
         border-color mix(colorSuccess, white)
         color colorText1

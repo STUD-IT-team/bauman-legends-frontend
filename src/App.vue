@@ -99,19 +99,20 @@ footer-height-mobile-small = 30px
       flex-direction column
 
     @media ({mobile})
-      padding 10px
+      padding-top 10px
+      padding-bottom 10px
       height footer-height-mobile
 
     .title
       font-medium()
-      color colorText2
+      color colorText3
       transition all 0.2s ease
       margin-bottom 5px
       @media ({mobile})
         margin-bottom 0
     .info
       font-small()
-      color colorText3
+      color colorText4
       display flex
       align-items center
       gap 5px
@@ -125,7 +126,7 @@ footer-height-mobile-small = 30px
       @media ({mobile})
         height footer-height-mobile-small
       .title
-        color colorText4
+        color colorText5
         @media ({mobile})
           margin-bottom 10px
           font-small-extra()

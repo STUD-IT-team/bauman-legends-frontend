@@ -87,7 +87,7 @@ button-edit()
               font-bold()
             .team-id
               font-medium()
-              color colorText3
+              color colorText4
               margin 0
               padding 0 10px
               display inline-block
@@ -96,7 +96,7 @@ button-edit()
 
           .team-statistics
             font-small()
-            color colorText3
+            color colorText4
             padding 0
             display block
             margin 5px 0 15px 0
