@@ -228,44 +228,46 @@ button-edit()
       <div class="content-block">
         <header class="header">МОЯ КОМАНДА</header>
 <!--        <div class="info">Создание команды станет доступно 14 октября</div>-->
-        <div v-if="this.teamData.__gotten" class="box team-block">
-          <div class="team-name-container">
-            <span>
-              <span class="team-name">{{ teamData.title }}</span>
-              <span class="team-id">#{{ String(teamData.id || '').padStart(4, '0') }}</span>
-            </span>
+        <transition name="opacity" mode="out-in">
+          <div v-if="this.teamData.__gotten" class="box team-block">
+            <div class="team-name-container">
+              <span>
+                <span class="team-name">{{ teamData.title }}</span>
+                <span class="team-id">#{{ String(teamData.id || '').padStart(4, '0') }}</span>
+              </span>
 
-            <button @click="renameTeam" class="rename-team-button">Изменить</button>
-          </div>
-          <p class="team-statistics">{{ teamData.rating }} баллов, {{ teamData.place }} место</p>
+              <button @click="renameTeam" class="rename-team-button">Изменить</button>
+            </div>
+            <p class="team-statistics">{{ teamData.rating }} баллов, {{ teamData.place }} место</p>
 
-          <p class="team-members-info">Состав команды:</p>
-          <div class="user-row" v-for="(member, idx) in teamData.members">
-            <div class="name">{{ member.name }}</div>
-            <select class="dropdown"
-                    @change="changeMemberRole(member.id, member.role, member)"
-                    :disabled="member.role === TeamRoles.lead || userRole !== TeamRoles.lead"
-                    v-model="member._newRole"
-            >
-              <option v-if="member.role === TeamRoles.lead" :value="TeamRoles.lead">Капитан</option>
-              <option :value="TeamRoles.subLead">Зам</option>
-              <option :value="TeamRoles.member">Участник</option>
-            </select>
-            <button class="kick-member-btn" :class="{'hidden': member.role === TeamRoles.lead}" v-if="(userRole === TeamRoles.lead || userRole === TeamRoles.subLead)" @click="deleteMemberFromTeam(idx)"><img src="../res/images/trashbox.svg" alt="Исключить"></button>
-          </div>
+            <p class="team-members-info">Состав команды:</p>
+            <div class="user-row" v-for="(member, idx) in teamData.members">
+              <div class="name">{{ member.name }}</div>
+              <select class="dropdown"
+                      @change="changeMemberRole(member.id, member.role, member)"
+                      :disabled="member.role === TeamRoles.lead || userRole !== TeamRoles.lead"
+                      v-model="member._newRole"
+              >
+                <option v-if="member.role === TeamRoles.lead" :value="TeamRoles.lead">Капитан</option>
+                <option :value="TeamRoles.subLead">Зам</option>
+                <option :value="TeamRoles.member">Участник</option>
+              </select>
+              <button class="kick-member-btn" :class="{'hidden': member.role === TeamRoles.lead}" v-if="(userRole === TeamRoles.lead || userRole === TeamRoles.subLead)" @click="deleteMemberFromTeam(idx)"><img src="../res/images/trashbox.svg" alt="Исключить"></button>
+            </div>
 
-          <div class="buttons-container">
-            <button @click="addMemberToTeam" class="add-member-btn">
-              <img src="../res/images/plus.svg" alt="Добавить участника">Добавить участника</button>
-            <button @click="deleteTeam" class="delete-team-btn">Удалить команду</button>
+            <div class="buttons-container">
+              <button @click="addMemberToTeam" class="add-member-btn">
+                <img src="../res/images/plus.svg" alt="Добавить участника">Добавить участника</button>
+              <button @click="deleteTeam" class="delete-team-btn">Удалить команду</button>
+            </div>
           </div>
-        </div>
-        <div v-else>
-          <div class="buttons-create-team-container">
-            <button @click="createTeam" class="create-team-button box">Создать команду</button>
-            <button @click="showJoinInstruction" class="join-team-button box">Присоединиться к команде</button>
+          <div v-else>
+            <div class="buttons-create-team-container">
+              <button @click="createTeam" class="create-team-button box">Создать команду</button>
+              <button @click="showJoinInstruction" class="join-team-button box">Присоединиться к команде</button>
+            </div>
           </div>
-        </div>
+        </transition>
       </div>
 
       <div class="content-block">
@@ -331,9 +333,9 @@ export default {
         __gotten: false,
       },
       TeamRoles: {
-        lead: 2,
+        lead: 0,
         subLead: 1,
-        member: 0,
+        member: 2,
       },
 
       loading: false,
@@ -368,7 +370,7 @@ export default {
 
   methods: {
     async getCurTeam() {
-      const {data: teamData, code, ok} = this.$api.getTeam();
+      const {data: teamData, code, ok} = await this.$api.getTeam();
       teamData?.members?.forEach(member => {
         member._newRole = member.role;
       });
@@ -392,12 +394,12 @@ export default {
         return;
       }
       this.loading = true;
-      const {data: teamData, ok} = await this.$api.createTeam(teamName);
+      const {ok} = await this.$api.createTeam(teamName);
       this.loading = false;
       if (!ok) {
         this.$popups.error("Неизвестная ошибка", "Не удалось создать команду");
       }
-      this.teamData = teamData;
+      this.getCurTeam();
     },
 
     async deleteTeam() {
