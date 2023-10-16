@@ -105,6 +105,9 @@ button-copy()
                 font-small-extra()
             .copy-id-button
               button-copy()
+              flex 1
+              justify-content flex-start
+              padding 0 10px
             .rename-team-button
               button-edit()
 
@@ -262,7 +265,7 @@ button-copy()
     <div class="main-content">
       <div class="content-block">
         <header class="header">ДОСТУПНЫЕ ЗАДАНИЯ</header>
-        <div class="info">Задания станут доступны после начала предварительного этапа</div>
+        <div class="info">Задания станут доступны после начала основного этапа</div>
   <!--      <div class="tasks">-->
   <!--        <button class="task-button">Онлайн-задание</button>-->
   <!--        <button class="task-button">Фото-задание</button>-->
@@ -275,7 +278,7 @@ button-copy()
         <header class="header">МОЯ КОМАНДА</header>
         <div class="info">Если в вашей команде меньше 5 человек, перед началом основного этапа вы будете объединены с другой командой</div>
 <!--        <div class="info">Создание команды станет доступно 14 октября</div>-->
-<!--        <transition name="opacity" mode="out-in">-->
+        <transition name="opacity" mode="out-in">
           <CircleLoading v-if="loading"></CircleLoading>
           <div v-else-if="this.teamData.__gotten" class="box team-block">
             <div class="team-name-container">
@@ -304,9 +307,8 @@ button-copy()
             </div>
 
             <div v-if="userRole === TeamRoles.lead || userRole === TeamRoles.subLead" class="buttons-container">
-              <button @click="addMemberToTeam()" class="add-member-btn">
-                <img src="../res/images/plus.svg" alt="Добавить участника">Добавить участника</button>
-              <button @click="deleteTeam" class="delete-team-btn">Удалить команду</button>
+              <button v-if="teamData.members.length <= 7" @click="addMemberToTeam()" class="add-member-btn"><img src="../res/images/plus.svg" alt="Добавить участника">Добавить участника</button>
+              <button v-if="userRole === TeamRoles.lead" :disabled="teamData.members.length > 1" @click="deleteTeam" class="delete-team-btn">Удалить команду</button>
             </div>
           </div>
           <div v-else>
@@ -315,7 +317,7 @@ button-copy()
               <button @click="showJoinInstruction" class="join-team-button box">Присоединиться к команде</button>
             </div>
           </div>
-<!--        </transition>-->
+        </transition>
       </div>
 
       <div class="content-block">
@@ -395,7 +397,9 @@ export default {
       loading: false,
     }
   },
-
+  created() {
+    this.loading = true;
+  },
   mounted() {
     this.getCurTeam();
   },
@@ -459,9 +463,7 @@ export default {
     },
 
     async deleteTeam() {
-      this.loading = true;
       const res = await this.$modals.confirm('Удалить команду', 'Вы действительно хотите удалить команду? Отменить действие не получится!');
-      this.loading = false;
       if (!res) {
         return;
       }
@@ -550,9 +552,7 @@ export default {
       }
 
       newUserData[fieldName] = Validators[fieldNameUser].prettifyResult(inputValue);
-      this.loading = true;
       const {ok} = await this.$api.editProfile(newUserData.name, newUserData.group, newUserData.telegram, newUserData.vk, newUserData.email, newUserData.phone_number);
-      this.loading = false;
       if (!ok) {
         this.$popups.error(`Не удалось изменить значение поля ${fieldName}`);
         return;
