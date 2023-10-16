@@ -14,6 +14,15 @@ button-edit()
   font-small-extra()
   color colorBgLightExtra
 
+button-copy()
+  button-edit()
+  opacity 0.6
+  transition all 0.2s ease
+  img
+    width 20px
+    height 20px
+  &:hover
+    opacity 1
 
 .root-profile
   hidden-scrollbar()
@@ -85,14 +94,17 @@ button-edit()
             .team-name
               font-large()
               font-bold()
+              @media({desktop})
+                margin-right 10px
             .team-id
-              font-medium()
+              font-small()
               color colorText4
-              margin 0
-              padding 0 10px
               display inline-block
-            .rename-team-button
-              button-edit()
+              @media({mobile})
+                display block
+                font-small-extra()
+            .copy-id-button
+              button-copy()
 
           .team-statistics
             font-small()
@@ -104,6 +116,7 @@ button-edit()
           .team-members-info
             font-large()
             font-bold()
+            margin 20px 0 5px 0
 
           .user-row
             display flex
@@ -130,10 +143,15 @@ button-edit()
             display flex
             margin-top 20px
             gap 20px
+            @media({mobile})
+              gap 10px
             .add-member-btn
               button()
               padding 5px 20px
               flex 1
+              @media({mobile})
+                font-small()
+                padding 5px 10px 5px 2px
               img
                 width 30px
                 height 30px
@@ -142,6 +160,9 @@ button-edit()
               button-danger()
               flex 0
               padding 5px 20px
+              @media({mobile})
+                font-small()
+                padding 5px 10px
 
         &.user-block
           .user-name-row
@@ -162,10 +183,24 @@ button-edit()
               text-align right
           .user-name-row
             justify-content space-between
-            .user-name
-              font-large()
-              font-bold()
+            .user-name-id-block
               margin 5px 0
+              .user-name
+                font-large()
+                font-bold()
+                @media({desktop})
+                  margin-right 10px
+              .user-id
+                font-small()
+                color colorText4
+                display inline-block
+                @media({mobile})
+                  display block
+                  font-small-extra()
+            .copy-id-button
+              button-copy()
+              justify-content flex-start
+              padding 0 10px
           .buttons-row
             display flex
             justify-content space-between
@@ -192,6 +227,13 @@ button-edit()
           margin 0
           border colorBgLightExtra solid 1px
           border-radius 8px
+          &:disabled
+           -webkit-appearance none
+           -moz-appearance none
+           text-indent 1px
+           text-overflow ''
+           &::-ms-expand
+             display none
 
     .buttons-create-team-container
       display flex
@@ -228,23 +270,25 @@ button-edit()
       <div class="content-block">
         <header class="header">МОЯ КОМАНДА</header>
 <!--        <div class="info">Создание команды станет доступно 14 октября</div>-->
-        <transition name="opacity" mode="out-in">
-          <div v-if="this.teamData.__gotten" class="box team-block">
+<!--        <transition name="opacity" mode="out-in">-->
+          <CircleLoading v-if="loading"></CircleLoading>
+          <div v-else-if="this.teamData.__gotten" class="box team-block">
             <div class="team-name-container">
               <span>
                 <span class="team-name">{{ teamData.title }}</span>
                 <span class="team-id">#{{ String(teamData.id || '').padStart(4, '0') }}</span>
               </span>
+              <button class="copy-id-button" @click="copyToClipboard(teamData.id, 'ID команды')"><img src="../res/images/copy.svg" alt=""></button>
 
-              <button @click="renameTeam" class="rename-team-button">Изменить</button>
+<!--              <button @click="renameTeam" class="rename-team-button">Изменить</button>-->
             </div>
-            <p class="team-statistics">{{ teamData.rating }} баллов, {{ teamData.place }} место</p>
+<!--            <p class="team-statistics">{{ teamData.rating }} баллов, {{ teamData.place }} место</p>-->
 
             <p class="team-members-info">Состав команды:</p>
             <div class="user-row" v-for="(member, idx) in teamData.members">
               <div class="name">{{ member.name }}</div>
               <select class="dropdown"
-                      @change="changeMemberRole(member.id, member.role, member)"
+                      @change="changeMemberRole(member.id, member._newRole, member)"
                       :disabled="member.role === TeamRoles.lead || userRole !== TeamRoles.lead"
                       v-model="member._newRole"
               >
@@ -252,11 +296,11 @@ button-edit()
                 <option :value="TeamRoles.subLead">Зам</option>
                 <option :value="TeamRoles.member">Участник</option>
               </select>
-              <button class="kick-member-btn" :class="{'hidden': member.role === TeamRoles.lead}" v-if="(userRole === TeamRoles.lead || userRole === TeamRoles.subLead)" @click="deleteMemberFromTeam(idx)"><img src="../res/images/trashbox.svg" alt="Исключить"></button>
+              <button class="kick-member-btn" :class="{'hidden': member.role === TeamRoles.lead || (userRole === member.role)}" v-if="(userRole === TeamRoles.lead || userRole === TeamRoles.subLead)" @click="deleteMemberFromTeam(idx)"><img src="../res/images/trashbox.svg" alt="Исключить"></button>
             </div>
 
-            <div class="buttons-container">
-              <button @click="addMemberToTeam" class="add-member-btn">
+            <div v-if="userRole === TeamRoles.lead || userRole === TeamRoles.subLead" class="buttons-container">
+              <button @click="addMemberToTeam()" class="add-member-btn">
                 <img src="../res/images/plus.svg" alt="Добавить участника">Добавить участника</button>
               <button @click="deleteTeam" class="delete-team-btn">Удалить команду</button>
             </div>
@@ -267,14 +311,18 @@ button-edit()
               <button @click="showJoinInstruction" class="join-team-button box">Присоединиться к команде</button>
             </div>
           </div>
-        </transition>
+<!--        </transition>-->
       </div>
 
       <div class="content-block">
         <header class="header">ПРОФИЛЬ</header>
         <div class="box user-block">
           <div class="user-name-row">
-            <div class="user-name">{{ $user.name }}</div>
+            <div class="user-name-id-block">
+              <div class="user-name">{{ $user.name }}</div>
+              <div class="user-id">#{{ String($user.id || '').padStart(4, '0') }}</div>
+            </div>
+            <button class="copy-id-button" @click="copyToClipboard($user.id, 'Твоё ID')"><img src="../res/images/copy.svg" alt=""></button>
             <button class="button-edit" @click="changeUserParam('name')">Изменить</button>
           </div>
           <div class="data-row">
@@ -333,9 +381,9 @@ export default {
         __gotten: false,
       },
       TeamRoles: {
-        lead: 0,
+        lead: 2,
         subLead: 1,
-        member: 2,
+        member: 0,
       },
 
       loading: false,
@@ -370,7 +418,9 @@ export default {
 
   methods: {
     async getCurTeam() {
+      this.loading = true;
       const {data: teamData, code, ok} = await this.$api.getTeam();
+      this.loading = false;
       teamData?.members?.forEach(member => {
         member._newRole = member.role;
       });
@@ -378,7 +428,7 @@ export default {
         this.teamData.__gotten = false;
         return;
       }
-      this.teamData.id = teamData.id;
+      this.teamData.id = teamData.team_id;
       this.teamData.title = teamData.title;
       this.teamData.members = teamData.members;
       this.teamData.__gotten = true;
@@ -403,7 +453,9 @@ export default {
     },
 
     async deleteTeam() {
+      this.loading = true;
       const res = await this.$modals.confirm('Удалить команду', 'Вы действительно хотите удалить команду? Отменить действие не получится!');
+      this.loading = false;
       if (!res) {
         return;
       }
@@ -431,19 +483,22 @@ export default {
       this.teamData.title = teamName;
     },
 
-    async addMemberToTeam() {
-      const newUserId = await this.$modals.prompt('Добавить нового участника', 'Введите ID нового участника');
+    async addMemberToTeam(overrideDescription, defaultValue) {
+      let newUserId = await this.$modals.prompt('Добавить нового участника', overrideDescription || 'Введите ID нового участника', defaultValue);
       if (!newUserId) {
         return;
       }
-      this.loading = true;
-      const {data: userData, ok} = await this.$api.addMember(newUserId);
-      this.loading = false;
+      if (!Validators.id.validate(newUserId)) {
+        this.addMemberToTeam('Неверный формат', newUserId);
+        return;
+      }
+      newUserId = Validators.id.prettifyResult(newUserId);
+      const {ok} = await this.$api.addMember(newUserId);
       if (!ok) {
         this.$popups.error("Неизвестная ошибка", "Не удалось добавить пользователя в команду");
         return;
       }
-      this.teamData.members.push(userData);
+      this.getCurTeam();
     },
 
     async deleteMemberFromTeam(userIdxInList) {
@@ -451,9 +506,7 @@ export default {
       if (!res) {
         return;
       }
-      this.loading = true;
       const {ok} = await this.$api.deleteMember(this.teamData.members[userIdxInList].id);
-      this.loading = false;
       if (!ok) {
         this.$popups.error("Неизвестная ошибка", "Не удалось удалить пользователя из команды");
         return;
@@ -462,9 +515,8 @@ export default {
     },
 
     async changeMemberRole(userId, roleId, userObject) {
-      this.loading = true;
+      console.log(roleId, userObject)
       const {ok} = await this.$api.setMemberRole(userId, roleId);
-      this.loading = false;
       if (!ok) {
         this.$popups.error("Неизвестная ошибка", "Не удалось удалить пользователя из команды");
         return;
@@ -513,6 +565,11 @@ export default {
       }
       this.$store.dispatch("DELETE_USER");
       this.$router.push({name: "login"});
+    },
+
+    copyToClipboard(str, description) {
+      navigator.clipboard.writeText(str);
+      this.$popups.success("Скопировано", `${description} скопировано в буфер обмена`)
     }
   }
 }

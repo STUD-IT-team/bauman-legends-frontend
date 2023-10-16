@@ -21,7 +21,7 @@ export default class API extends REST_API {
     deleteTeam = () => this.delete('/api/team');
     addMember = (id) => this.post(`/api/team/invite`, {id})
     deleteMember = (id) => this.delete(`/api/team/member`, {id});
-    setMemberRole = (userId, roleId) => this.put(`/api/team/member/${userId}`, {roleId});
+    setMemberRole = (id, roleId) => this.put(`/api/team/member`, {id, roleId});
     getTask = () => ({
         data: {
             title: "Очень сложное задание",

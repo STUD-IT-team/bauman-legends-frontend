@@ -26,6 +26,10 @@ export const Validators = {
   password: {
     regExp: /^.{6,}$/i,
   },
+  id: {
+    regExp: /^#?[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i,
+    prettifyResult: (str) => str.replace('#', '').toLowerCase(),
+  }
 }
 Object.entries(Validators).forEach(([name, validator]) => {
   validator.validate = (str) => !validator.regExp || validator.regExp.test(str.trim());
