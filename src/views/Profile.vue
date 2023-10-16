@@ -381,9 +381,9 @@ export default {
         __gotten: false,
       },
       TeamRoles: {
-        lead: 2,
-        subLead: 1,
-        member: 0,
+        lead: 3,
+        subLead: 2,
+        member: 1,
       },
 
       loading: false,
