@@ -1,4 +1,5 @@
 <style scoped lang="stylus">
+
 @require '../styles/constants.styl'
 @require '../styles/buttons.styl'
 @require '../styles/utils.styl'
@@ -52,13 +53,13 @@
 
 
 <script>
-  import CircleLoading from "../components/CircleLoading.vue";
-  import TaskType from "../components/TaskType.vue";
-  import TeamManagement from "../components/ManageTeam.vue";
-  import ProfileInfo from "../components/ProfileInfo.vue";
-  import Header from "../components/Header.vue";
+import CircleLoading from "../components/CircleLoading.vue";
+import TaskType from "../components/TaskType.vue";
+import TeamManagement from "../components/ManageTeam.vue";
+import ProfileInfo from "../components/ProfileInfo.vue";
+import Header from "../components/Header.vue";
 
-  export default {
-    components: {Header, ProfileInfo, TaskType, TeamManagement, CircleLoading},
-  }
+export default {
+  components: {Header, ProfileInfo, TaskType, TeamManagement, CircleLoading},
+}
 </script>

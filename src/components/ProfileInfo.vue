@@ -103,6 +103,10 @@ export default {
 
 <style scoped lang="stylus">
 
+@require '../styles/constants.styl'
+@require '../styles/buttons.styl'
+@require '../styles/utils.styl'
+
 button-edit()
   content "Изменить"
   button()

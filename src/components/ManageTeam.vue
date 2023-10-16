@@ -234,6 +234,10 @@ export default {
 
 <style scoped lang="stylus">
 
+@require '../styles/constants.styl'
+@require '../styles/buttons.styl'
+@require '../styles/utils.styl'
+
 .header
   font-large()
   font-bold()

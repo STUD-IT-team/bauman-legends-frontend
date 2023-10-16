@@ -1,3 +1,32 @@
+<style scoped lang="stylus">
+
+@require '../styles/buttons.styl'
+
+.header
+  font-large()
+  font-bold()
+  margin 0 20px 10px 20px
+  color colorBg
+
+.tasks
+  padding 0
+  margin 0
+  display grid
+  grid-template-columns 1fr 1fr
+  grid-auto-rows 1fr
+  column-gap 5px
+  row-gap 5px
+
+  .task-button
+    button()
+    border-radius 8px
+    background colorBg
+    color colorText1
+    width 100%
+    height 100%
+
+</style>
+
 <template>
   <header class="header">ДОСТУПНЫЕ ЗАДАНИЯ</header>
   <!-- <div class="info">Задания станут доступны после начала основного этапа</div> -->
@@ -15,27 +44,3 @@ export default {
   name: 'TaskType',
 }
 </script>
-
-<style scoped lang="stylus">
-.header
-  font-large()
-  font-bold()
-  margin 0 20px 10px 20px
-  color colorBg
-.tasks
-  padding 0
-  margin 0
-  display grid
-  grid-template-columns 1fr 1fr
-  grid-auto-rows 1fr
-  column-gap 5px
-  row-gap 5px
-
-  .task-button
-    button()
-    border-radius 8px
-    background colorBg
-    color colorText1
-    width 100%
-    height 100%
-</style>
