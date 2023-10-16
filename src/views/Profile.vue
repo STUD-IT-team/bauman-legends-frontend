@@ -105,6 +105,8 @@ button-copy()
                 font-small-extra()
             .copy-id-button
               button-copy()
+            .rename-team-button
+              button-edit()
 
           .team-statistics
             font-small()
@@ -199,8 +201,10 @@ button-copy()
                   font-small-extra()
             .copy-id-button
               button-copy()
+              flex 1
               justify-content flex-start
               padding 0 10px
+
           .buttons-row
             display flex
             justify-content space-between
@@ -269,6 +273,7 @@ button-copy()
 
       <div class="content-block">
         <header class="header">МОЯ КОМАНДА</header>
+        <div class="info">Если в вашей команде меньше 5 человек, перед началом основного этапа вы будете объединены с другой командой</div>
 <!--        <div class="info">Создание команды станет доступно 14 октября</div>-->
 <!--        <transition name="opacity" mode="out-in">-->
           <CircleLoading v-if="loading"></CircleLoading>
@@ -279,8 +284,7 @@ button-copy()
                 <span class="team-id">#{{ String(teamData.id || '').padStart(4, '0') }}</span>
               </span>
               <button class="copy-id-button" @click="copyToClipboard(teamData.id, 'ID команды')"><img src="../res/images/copy.svg" alt=""></button>
-
-<!--              <button @click="renameTeam" class="rename-team-button">Изменить</button>-->
+              <button @click="renameTeam" class="rename-team-button">Изменить</button>
             </div>
 <!--            <p class="team-statistics">{{ teamData.rating }} баллов, {{ teamData.place }} место</p>-->
 
@@ -385,6 +389,8 @@ export default {
         subLead: 2,
         member: 1,
       },
+
+      TEAM_MEMBERS_COUNT_LIMIT: 8,
 
       loading: false,
     }
