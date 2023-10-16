@@ -69,6 +69,8 @@ input-border = 2px solid border-color
       transition opacity 0.2s ease
       pointer-events none
       user-select none
+      &.hidden
+        opacity 0
     .error
       color colorError
     .success
@@ -83,11 +85,11 @@ input-border = 2px solid border-color
 
     &.error
       color colorError
-      .error
+      .error:not(.hidden)
         opacity 1
     &.success
       color colorSuccess
-      .success
+      .success:not(.hidden)
         opacity 1
 
   .submit
@@ -97,14 +99,14 @@ input-border = 2px solid border-color
 </style>
 
 <template>
-  <div class="root-form" @keydown.enter="submit" @input="isSubmittedAlready ? checkFormat : ()=>{}">
+  <div class="root-form" @keydown.enter="submit" @input="() => {isSubmittedAlready ? checkFormat() : null}">
     <div class="input-container" v-for="[fieldName, field] in Object.entries(fields)" :class="{error: field.__error, success: field.__success}">
-      <input v-bind="field" :id="`${uid}-${fieldName}`" v-model="field.value" :autocomplete="field.autocomplete || 'off'">
+      <input v-bind="field" :id="`${uid}-${fieldName}`" :type="field.type || 'text'" v-model="field.value" :autocomplete="field.autocomplete || 'off'" placeholder="-">
       <label :for="`${uid}-${fieldName}`">{{ field.title }}</label>
       <div class="info" v-if="field.info">{{ field.info }}</div>
       <div class="placeholder">{{ field.placeholder }}</div>
-      <div class="error">{{ field.overrideErrorText || field.errorText || 'Неверный формат' }}</div>
-      <div class="success">{{ field.successText || 'Успех' }}</div>
+      <div class="error" :class="{hidden: !errorSuccessShowed}">{{ field.overrideErrorText || field.errorText || 'Неверный формат' }}</div>
+      <div class="success" :class="{hidden: !errorSuccessShowed}">{{ field.successText || 'Успех' }}</div>
     </div>
 
     <button class="submit" @click="submit">
@@ -129,29 +131,32 @@ export default {
       required: true,
       default: {
         some_field: {
-          name: String(),
-          errorText: String(),
+          name: String,
+          errorText: String,
           overrideErrorText: null,
-          successText: String(),
-          value: String(),
+          successText: String,
+          value: String, // initial value
           regExp: RegExp,
-          validator: Function(), // (Any) => Boolean
-          required: Boolean,
+          validator: Function, // (Any) => Boolean
+          required: Boolean, // default: false
+          noTrimValue: Boolean, // default: false. By default the return value will be trimmed
 
-          type: String(),
+          type: String(), // default: 'text'
           placeholder: String(),
+          autocomplete: String(), // default: 'off'
           //other <input> attributes: String()
         }
       }
     },
-    submitText: String,
-    setSuccesses: Boolean,
-    loading: Boolean,
+    submitText: String, // default: 'Отправить'
+    setSuccesses: Boolean, // default: false. Can set on fields only errors
+    loading: Boolean, // default: false
   },
 
   data() {
     return {
       uid: Math.random(),
+      errorSuccessShowed: false,
 
       isSubmittedAlready: false,
     }
@@ -160,6 +165,8 @@ export default {
   methods: {
     submit() {
       this.isSubmittedAlready = true;
+      this.errorSuccessShowed = true;
+      // setTimeout(() => this.errorSuccessShowed = false, 1000);
 
       if (!this.checkFormat()) {
         this.$emit('error');
@@ -177,7 +184,7 @@ export default {
       let res = true;
       Object.values(this.fields).forEach(field => {
         field.value = field.value || '';
-        const validationText = field.type === 'text' ? field.value.trim() : field.value;
+        const validationText = field.type === 'text' ? (field.noTrimValue ? field.value : field.value.trim()) : field.value;
         if (field.validationRegExp) {
           field.__error = !field.validationRegExp.test(validationText);
         } else if (field.validator) {

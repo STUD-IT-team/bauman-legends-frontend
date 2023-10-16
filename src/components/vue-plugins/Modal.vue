@@ -41,8 +41,8 @@ close-btn-size = 20px
 
     .close-btn
       position absolute
-      color colorText2
-      text-shadow colorText2
+      color colorText3
+      text-shadow colorText3
       right 20px
       top 10px
       width close-btn-size
@@ -61,7 +61,7 @@ close-btn-size = 20px
         margin-bottom 10px
       .description
         font-medium()
-        color colorText2
+        color colorText3
 
     .fields-container
       .form-group

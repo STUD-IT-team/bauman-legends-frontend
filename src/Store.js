@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 const Store = new Vuex.Store({
   state: {
     user: {
-      id: Number(),
+      id: String(),
       name: String(),
       group: String(),
       tg: String(),
@@ -16,7 +16,7 @@ const Store = new Vuex.Store({
   },
   mutations: {
     SET_USER(state, userData) {
-      state.user.id = Number(userData.id);
+      state.user.id = String(userData.id);
       state.user.name = String(userData.name);
       state.user.group = String(userData.group);
       state.user.tg = String(userData.telegram);
@@ -39,7 +39,7 @@ const Store = new Vuex.Store({
       }
       state.commit('SET_USER', data);
     },
-    async DELETE_USER(state) {
+    DELETE_USER(state) {
       state.commit('DELETE_USER');
     },
   }

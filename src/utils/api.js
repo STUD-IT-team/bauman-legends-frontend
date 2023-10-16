@@ -7,7 +7,7 @@ export default class API extends REST_API {
     getAllSessions = () => this.get('/api/sessions');
     logoutAnother = () => this.delete('/api/user/sessions/another');
     getUser = () => this.get('/api/user');
-    getUserById = (id) => this.get(`/api/user/${id}`);
+    getUserById = (id) => this.get(`/api/user`, {id});
     sendConfirmationLetter = (name, email) => this.post('/api/email/confirm', {name, email});
     confirmRegistrationByCode = (secretCode) => this.put('/api/user/email/confirm', {secretCode});
     changePassword = (oldPassword, newPassword) => this.put('/api/user/password/restore', {oldPassword, newPassword});
@@ -19,10 +19,30 @@ export default class API extends REST_API {
     editTeam = (name) => this.put('/api/team', {name});
     getTeam = () => this.get('/api/team');
     deleteTeam = () => this.delete('/api/team');
-    addMember = (id) => this.post(`/api/team/join/${id}`);
-    deleteMember = (id) => this.delete(`/api/team/join/${id}`);
-    setMemberRole = (userId, roleId) => this.put(`/api/team/member/${userId}`, {roleId});
-    getTask = () => this.get('/api/task');
+    addMember = (id) => this.post(`/api/team/invite`, {id})
+    deleteMember = (id) => this.delete(`/api/team/member`, {id});
+    setMemberRole = (id, roleId) => this.put(`/api/team/member`, {id, roleId});
+    getTask = () => ({
+        data: {
+            title: "Очень сложное задание",
+            text: "Какое то длииииииииииииииииииииииииии нное еееееееееееееееееее опииииииииииииииииииисани еееееееееее как ого ттооооооооооооооо с сло задаааааааааа ниииииииии ни нииииииии яяяяя!",
+            typeId: 0,
+            typeName: "Онлайн-задание",
+            maxPoints: 130,
+            minPoints: 30,
+            timeAllotted: 60 * 100,
+            timeStarted: '2023-10-13T12:40:52.078Z',
+            hintsTaken: [
+                {
+                    title: "Легкая подсказка",
+                    text: "Какое то длииииииииииииииииииииииииии нное еееееееееееееееееее опииииииииииииииииииисани еееееееееее как ого ттооооооооооооооо с сло задаааааааааа ниииииииии ни нииииииии яяяяя",
+                    pointsPenalty: 15,
+                }
+            ], // [{title, text, pointsPenalty}, ...]
+        },
+        ok: true,
+        code: 200,
+    }) //this.get('/api/task');
     takeTask = (taskTypeId) => this.post('/api/task/take', {taskTypeId});
     getHint = () => this.get('/api/task/hint');
     answerTask = (answer) => this.post('/api/task/answer', {answer});
