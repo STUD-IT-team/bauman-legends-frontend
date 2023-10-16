@@ -16,20 +16,26 @@ export default {
 }
 </script>
 
-<style scoped>
-.content-block {
-  /* стили для .content-block */
-}
+<style scoped lang="stylus">
+.header
+  font-large()
+  font-bold()
+  margin 0 20px 10px 20px
+  color colorBg
+.tasks
+  padding 0
+  margin 0
+  display grid
+  grid-template-columns 1fr 1fr
+  grid-auto-rows 1fr
+  column-gap 5px
+  row-gap 5px
 
-.header {
-  /* стили для .header */
-}
-
-.tasks {
-  /* стили для .tasks */
-}
-
-.task-button {
-  /* стили для .task-button */
-}
+  .task-button
+    button()
+    border-radius 8px
+    background colorBg
+    color colorText1
+    width 100%
+    height 100%
 </style>

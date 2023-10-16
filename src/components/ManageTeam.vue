@@ -46,6 +46,7 @@
 
 <script>
 import CircleLoading from "~/components/CircleLoading.vue";
+import {Validators} from "../utils/validators";
 
 export default {
   name: 'TeamManagement',
@@ -69,42 +70,301 @@ export default {
       loading: false,
     }
   },
-  computed: {
-    userRole() {
-      const userInTeam = this.teamData.members.find((member) => member.id === this.$user.id);
-      return userInTeam?.role;
-    },
-
-    sortedMembers() {
-      const comparator = (a, b) => {
-        if (a.role < b.role) {
-          return 1;
-        } else if (a.role > b.role) {
-          return -1;
-        }
-        if (a.name < b.name)
-          return 1;
-        return -1;
-      }
-
-      return this.teamData.members.slice().sort(comparator);
-    },
+  created() {
+    this.loading = true;
+  },
+  mounted() {
+    this.getCurTeam();
   },
 
+  methods: {
+    async getCurTeam() {
+      this.loading = true;
+      const {data: teamData, code, ok} = await this.$api.getTeam();
+      this.loading = false;
+      teamData?.members?.forEach(member => {
+        member._newRole = member.role;
+      });
+      if (!ok || Object.entries(teamData).length === 0) {
+        this.teamData.__gotten = false;
+        return;
+      }
+      this.teamData.id = teamData.team_id;
+      this.teamData.title = teamData.title;
+      this.teamData.members = teamData.members;
+      this.teamData.__gotten = true;
+    },
+
+    showJoinInstruction() {
+      this.$modals.alert('Сообщи капитану свой ID, чтобы он добавил тебя в команду');
+    },
+
+    async createTeam() {
+      const teamName = await this.$modals.prompt('Название команды', 'Введите название новой команды');
+      if (!teamName) {
+        return;
+      }
+      this.loading = true;
+      const {ok} = await this.$api.createTeam(teamName);
+      this.loading = false;
+      if (!ok) {
+        this.$popups.error("Неизвестная ошибка", "Не удалось создать команду");
+      }
+      this.getCurTeam();
+    },
+
+    async deleteTeam() {
+      const res = await this.$modals.confirm('Удалить команду', 'Вы действительно хотите удалить команду? Отменить действие не получится!');
+      if (!res) {
+        return;
+      }
+      this.loading = true;
+      const {ok} = await this.$api.deleteTeam();
+      this.loading = false;
+      if (!ok) {
+        this.$popups.error("Неизвестная ошибка", "Не удалось удалить команду");
+      }
+      this.teamData = {};
+    },
+
+    async renameTeam() {
+      const teamName = await this.$modals.prompt('Изменить название команды', 'Введите новое название новой команды', this.teamData.title);
+      if (!teamName) {
+        return;
+      }
+      this.loading = true;
+      const {ok} = await this.$api.editTeam(teamName);
+      this.loading = false;
+      if (!ok) {
+        this.$popups.error("Неизвестная ошибка", "Не удалось переименовать команду");
+        return;
+      }
+      this.teamData.title = teamName;
+    },
+
+    async addMemberToTeam(overrideDescription, defaultValue) {
+      let newUserId = await this.$modals.prompt('Добавить нового участника', overrideDescription || 'Введите ID нового участника', defaultValue);
+      if (!newUserId) {
+        return;
+      }
+      if (!Validators.id.validate(newUserId)) {
+        this.addMemberToTeam('Неверный формат', newUserId);
+        return;
+      }
+      newUserId = Validators.id.prettifyResult(newUserId);
+      const {ok} = await this.$api.addMember(newUserId);
+      if (!ok) {
+        this.$popups.error("Неизвестная ошибка", "Не удалось добавить пользователя в команду");
+        return;
+      }
+      this.getCurTeam();
+    },
+
+    async deleteMemberFromTeam(userIdxInList) {
+      const res = await this.$modals.confirm('Удалить участника', `Вы уверены, что хотите удалить участника "${this.teamData.members[userIdxInList].name}"?`);
+      if (!res) {
+        return;
+      }
+      const {ok} = await this.$api.deleteMember(this.teamData.members[userIdxInList].id);
+      if (!ok) {
+        this.$popups.error("Неизвестная ошибка", "Не удалось удалить пользователя из команды");
+        return;
+      }
+      this.teamData.members.splice(userIdxInList, 1);
+    },
+
+    async changeMemberRole(userId, roleId, userObject) {
+      console.log(roleId, userObject)
+      const {ok} = await this.$api.setMemberRole(userId, roleId);
+      if (!ok) {
+        this.$popups.error("Неизвестная ошибка", "Не удалось удалить пользователя из команды");
+        return;
+      }
+      userObject.role = roleId;
+      userObject._newRole = userObject.role;
+    },
+
+    async changeUserParam(fieldName, fieldNameUser=fieldName, overrideHavingValue=null) {
+      const newUserData = {
+        name: this.$user.name,
+        group: this.$user.group,
+        telegram: this.$user.tg,
+        vk: this.$user.vk,
+        email: this.$user.email,
+        phone_number: this.$user.phone,
+      };
+      const inputValue = await this.$modals.prompt(overrideHavingValue ? "Неверный формат" : "Изменить значение поля", "Введите новое значение", overrideHavingValue || newUserData[fieldName]);
+      if (!inputValue) {
+        return;
+      }
+      if (!Validators[fieldNameUser].validate(inputValue)) {
+        this.changeUserParam(fieldName, fieldNameUser, inputValue);
+        return;
+      }
+
+      newUserData[fieldName] = Validators[fieldNameUser].prettifyResult(inputValue);
+      const {ok} = await this.$api.editProfile(newUserData.name, newUserData.group, newUserData.telegram, newUserData.vk, newUserData.email, newUserData.phone_number);
+      if (!ok) {
+        this.$popups.error(`Не удалось изменить значение поля ${fieldName}`);
+        return;
+      }
+      this.$user[fieldNameUser] = newUserData[fieldName];
+    },
+
+    async logout() {
+      this.loading = true;
+      const {data, code, ok} = await this.$api.logout();
+      this.loading = true;
+
+      if (!ok) {
+        this.$popups.error('Не получилось выйти из аккаунта', 'Неизвестная ошибка');
+        return;
+      }
+      this.$store.dispatch("DELETE_USER");
+      this.$router.push({name: "login"});
+    },
+
+    copyToClipboard(str, description) {
+      navigator.clipboard.writeText(str);
+      this.$popups.success("Скопировано", `${description} скопировано в буфер обмена`)
+    }
+  }
 }
 </script>
 
-<style scoped>
+<style scoped lang="stylus">
 
-.header {
-  /* стили для .header */
-}
+.header
+  font-large()
+  font-bold()
+  margin 0 20px 10px 20px
+  color colorBg
 
-.tasks {
-  /* стили для .tasks */
-}
+.info
+  font-medium()
+  margin-left 20px
 
-.task-button {
-  /* стили для .task-button */
-}
+.buttons-create-team-container
+  display flex
+  gap 5px
+  .create-team-button
+  .join-team-button
+    centered-flex-container()
+    flex 1
+    padding 10px 5px
+    text-align center
+    margin 0
+    cursor pointer
+
+.box
+  background-color colorBg
+  border-radius borderRadiusM
+  padding 20px
+  padding-top 10px
+  margin 10px 0
+  text-align left
+  align-content left
+  font-medium()
+  color colorText1
+
+  &.team-block
+    .team-name-container
+      display flex
+      justify-content space-between
+      align-items center
+      .team-name
+        font-large()
+        font-bold()
+        @media({desktop})
+          margin-right 10px
+      .team-id
+        font-small()
+        color colorText4
+        display inline-block
+        @media({mobile})
+          display block
+          font-small-extra()
+      .copy-id-button
+        button-copy()
+        flex 1
+        justify-content flex-start
+        padding 0 10px
+      .rename-team-button
+        button-edit()
+
+    .team-statistics
+      font-small()
+      color colorText4
+      padding 0
+      display block
+      margin 5px 0 15px 0
+
+    .team-members-info
+      font-large()
+      font-bold()
+      margin 20px 0 5px 0
+
+    .user-row
+      display flex
+      margin-top 5px
+      .name
+        flex 1
+        margin auto
+
+      .kick-member-btn
+        all unset
+        box-sizing border-box
+        cursor pointer
+        centered-flex-container()
+        width 40px
+        img
+          width 30px
+          height 30px
+        &.hidden
+          pointer-events none
+          img
+            visibility hidden
+
+    .buttons-container
+      display flex
+      margin-top 20px
+      gap 20px
+      @media({mobile})
+        gap 10px
+      .add-member-btn
+        button()
+        padding 5px 20px
+        flex 1
+        @media({mobile})
+          font-small()
+          padding 5px 10px 5px 2px
+        img
+          width 30px
+          height 30px
+          margin-right 10px
+      .delete-team-btn
+        button-danger()
+        flex 0
+        padding 5px 20px
+        @media({mobile})
+          font-small()
+          padding 5px 10px
+
+  .dropdown
+    width auto
+    background colorBg
+    text-small()
+    color colorText1
+    display inline-block
+    padding 2px 10px
+    margin 0
+    border colorBgLightExtra solid 1px
+    border-radius 8px
+    &:disabled
+      -webkit-appearance none
+      -moz-appearance none
+      text-indent 1px
+      text-overflow ''
+      &::-ms-expand
+        display none
 </style>
