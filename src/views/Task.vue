@@ -263,7 +263,7 @@ export default {
 
   methods: {
     async getTask() {
-      const {data, code, ok} = this.$api.getTask();
+      const {data, code, ok} = await this.$api.getTask();
       if (!ok) {
         this.$popups.error("Ошибка", "Не удалось получить задание");
         this.$router.push({name: 'profile'});

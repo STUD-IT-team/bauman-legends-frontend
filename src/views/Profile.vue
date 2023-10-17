@@ -439,7 +439,7 @@ export default {
 
   methods: {
     async getTask() {
-      const {data, code, ok} = this.$api.getTask();
+      const {data, code, ok} = await this.$api.getTask();
       if (!ok) {
         this.$store.dispatch('DELETE_TASK');
         return;

@@ -40,7 +40,7 @@ export default {
 
   methods: {
     async getAnswers() {
-      const {data, code, ok} = this.$api.getAdminUsersAnswers();
+      const {data, code, ok} = await this.$api.getAdminUsersAnswers();
       if (!ok) {
         this.$popups.error("Неизвестная ошибка", "Не удалось получить ответы");
         return;
