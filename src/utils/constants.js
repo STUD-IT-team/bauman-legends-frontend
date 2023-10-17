@@ -38,3 +38,11 @@ export const HTTP = {
   IM_A_TEAPOT: 418,
   LOCKED: 423,
 }
+
+export const AnswerTypeIds = {
+  text: 0,
+  photo: 1,
+  textPhoto: 2,
+  QR: 3,
+  another: 4,
+}

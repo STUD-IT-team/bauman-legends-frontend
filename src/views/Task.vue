@@ -194,7 +194,7 @@ import CircleLoading from "../components/CircleLoading.vue";
 import FormWithErrors from "../components/FormWithErrors.vue";
 import DragNDropLoader from "../components/DragNDropLoader.vue";
 import ImageUploader from "../utils/imageUploader";
-import {HTTP, IMAGES_MAX_RES} from "../utils/constants";
+import {AnswerTypeIds, HTTP, IMAGES_MAX_RES} from "../utils/constants";
 import QRScanner from "../components/QRScanner.vue";
 import MarkdownRenderer from "../components/Markdown/MarkdownRenderer.vue";
 import Header from "../components/Header.vue";
@@ -228,13 +228,7 @@ export default {
       prevTaskPoints: 0,
       totalTaskPoints: 0,
 
-      AnswerTypeIds: {
-        text: 0,
-        photo: 1,
-        textPhoto: 2,
-        QR: 3,
-        another: 4,
-      },
+      AnswerTypeIds: AnswerTypeIds,
       isQRScannerOpened: true,
       answerText: undefined,
 

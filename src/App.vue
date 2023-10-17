@@ -33,6 +33,7 @@ footer-height-mobile-small = 30px
   position fixed
   height 100%
   max-height 1000px
+  max-width unset
   @media({mobile})
     max-height 600px
     &.small
