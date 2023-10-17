@@ -26,7 +26,7 @@ export const ErrorCodes = {
   goodsNotFound: 4,
 }
 
-export const IMAGES_MAX_RES = 1920;
+export const IMAGES_MAX_RES = 720;
 
 export const HTTP = {
   OK: 200,

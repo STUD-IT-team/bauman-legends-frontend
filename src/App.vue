@@ -144,7 +144,7 @@ footer-height-mobile-small = 30px
 
 <template>
   <img class="background-text-image" src="../src/res/images/BackgroundPatternSmaller.png" alt="background">
-  <img class="bauman-image" src="../src/res/images/Bauman.png" alt="Bauman" :class="{small: isBaumanImageSmall, transparent: isBaumanTransparent}">
+  <img v-if="!isNoBaumanImage" class="bauman-image" src="../src/res/images/Bauman.png" alt="Bauman" :class="{small: isBaumanImageSmall, transparent: isBaumanTransparent}">
   <img src="./res/images/Gerbs.png" class="logo" alt="crest" :class="{small: isFooterShown}">
   <div class="all-page-wrapper">
     <div class="content-wrapper">
@@ -246,6 +246,8 @@ export default {
       prevScrolledPos: 0,
       isFooterShown: false,
       isBaumanImageSmall: true,
+      isNoBaumanImage: false,
+
       isBaumanTransparent: false,
     }
   },
@@ -276,6 +278,9 @@ export default {
         to.path === this.$router.resolve({name: 'register'}).fullPath ||
         to.path === this.$router.resolve({name: 'restorePassword'}).fullPath ||
         to.path === this.$router.resolve({name: 'changePassword'}).fullPath
+      );
+      this.isNoBaumanImage = (
+        to.path === this.$router.resolve({name: 'admin'}).fullPath
       );
     }
   },

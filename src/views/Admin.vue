@@ -44,7 +44,9 @@
       img
         object-fit contain
         transition all 0.2s ease
+        max-height 150px
         &.selected
+          max-height unset
           width calc(100% - 20px)
           height calc(100vh - 20px)
           centered-absolute-transform()
@@ -53,11 +55,18 @@
         &:not(.selected):hover
           cursor pointer
           filter brightness(1.2)
-      .task-title
+      .task-cell
         cursor pointer
-        color colorEmp1
+        transition all 0.2s ease
+        .task-title
+          color colorEmp1
+        .task-type-name
+          color colorText3
+          font-small()
+        .team-title
+          color colorEmp3
         &:hover
-          background mix(colorBgDark, transparent, 70%)
+          filter brightness(1.4)
       .time-gotten
         font-small()
       .dropdown
@@ -92,17 +101,21 @@
     </Header>
 
     <div class="main-content">
-      <span class="header">Название задачи + текст</span>
+      <span class="header">Команда + Задача + время</span>
       <span class="header">Ответ</span>
       <span class="header">Ответ-картинка</span>
       <span class="header">Результат оценки</span>
 
       <div class="answer" v-for="answer in answers" :class="{success: answer.isConfirmed === true, error: answer.isConfirmed === false}">
-        <div>
-          <div class="task-title" @click="$modals.alert(answer.taskTitle, answer.taskDescription)">{{ answer.taskTypeName }} / {{ answer.taskTitle }}</div>
+        <div @click="$modals.alert(answer.taskTitle, answer.taskDescription)" class="task-cell">
+          <div class="team-title">{{ answer.teamTitle }}</div>
+          <div class="task-type-name">{{ answer.taskTypeName }}:</div>
+          <div class="task-title">{{ answer.taskTitle }}</div>
           <div class="time-gotten">{{ answer.timeGotten.toLocaleString() }}</div>
         </div>
-        <div class="answerText">{{ answer.answerText }}</div>
+        <div>
+          <div class="answerText">{{ answer.answerText }}</div>
+        </div>
         <img :src="answer.answerImageBase64" alt="" :class="{selected: answer._imgSelected}" @click="answer._imgSelected = !answer._imgSelected">
         <div>
           <select class="dropdown" v-model="answer._confirmation">
@@ -152,10 +165,12 @@ export default {
         answerId: String(answer.answerId),
         taskId: String(answer.taskId),
         taskTitle: String(answer.taskTitle),
+        teamId: String(answer.teamId),
+        teamTitle: String(answer.teamTitle),
         taskDescription: String(answer.taskDescription),
         taskTypeId: Number(answer.taskTypeId),
         taskTypeName: String(answer.taskTypeName),
-        answerText: String(answer.answerText),
+        answerText: answer.answerText ? String(answer.answerText) : null,
         answerImageBase64: String(answer.answerImageBase64),
         timeGotten: new Date(answer.timeGotten),
         additionalPoints: Number(answer.additionalPoints),

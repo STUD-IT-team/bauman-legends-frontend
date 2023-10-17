@@ -176,7 +176,7 @@ button-edit()
           ></FormWithErrors>
 
           <div v-if="taskData.answerTypeId === AnswerTypeIds.another">
-            <div class="info">В качестве ответа необходимо прислать видео в сообщения группы легенд в VK. Не забудьте указать в сообщении ID команды</div>
+            <div class="info">В качестве ответа необходимо прислать видео в сообщения группы легенд в VK. Не забудьте указать в сообщении название команды</div>
             <a href="https://vk.com/write-198373277" target="_blank" class="link-techsupport-button"><img src="../res/images/external_link.svg" alt="">Отправить видео</a>
           </div>
         </div>
