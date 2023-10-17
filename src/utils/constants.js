@@ -27,3 +27,14 @@ export const ErrorCodes = {
 }
 
 export const IMAGES_MAX_RES = 1920;
+
+export const HTTP = {
+  OK: 200,
+  CREATED: 201,
+  ANAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  CONFLICT: 409,
+  GONE: 410,
+  IM_A_TEAPOT: 418,
+  LOCKED: 423,
+}

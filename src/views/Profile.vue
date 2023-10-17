@@ -244,6 +244,9 @@ button-copy()
         text-align center
         margin 0
         cursor pointer
+
+  .admin-page-button
+    button-danger()
 </style>
 
 <template>
@@ -310,6 +313,8 @@ button-copy()
           </div>
         </transition>
       </div>
+
+      <router-link :to="{name: 'admin'}" class="admin-page-button">На админскую</router-link>
 
       <div class="content-block">
         <header class="header">ПРОФИЛЬ</header>

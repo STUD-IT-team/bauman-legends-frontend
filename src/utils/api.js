@@ -22,33 +22,12 @@ export default class API extends REST_API {
     addMember = (id) => this.post(`/api/team/invite`, {id})
     deleteMember = (id) => this.delete(`/api/team/member`, {id});
     setMemberRole = (id, roleId) => this.put(`/api/team/member`, {id, roleId});
-    getTask = () => ({
-        data: {
-            title: "Очень сложное задание",
-            text: "### Какое то длиии __ииииииии__ ииииииииииии*иии* нное еееееееееееееееееее опииииииииииииииииииисани еееееееееее как ого ттооооооооооооооо с сло задаааааааааа ниииииииии ни нииииииии яяяяя!",
-            typeId: 0,
-            typeName: "Онлайн-задание",
-            maxPoints: 130,
-            minPoints: 30,
-            timeAllotted: 60 * 4,
-            timeStarted: '2023-10-17T11:00:00.000Z',
-            answerTypeId: 4,
-            hintsTaken: [
-                {
-                    title: "Легкая подсказка",
-                    text: "Какое то длииииииии*ииииииии*иии__ииииии__и нное еееееееееееееееееее опииииииииииииииииииисани еееееееееее как ого ттооооооооооооооо с сло задаааааааааа ниииииииии ни нииииииии яяяяя",
-                    pointsPenalty: 15,
-                }
-            ], // [{title, text, pointsPenalty}, ...]
-        },
-        ok: true,
-        code: 200,
-    }) //this.get('/api/task');
+    getTask = () => this.get('/api/task');
     takeTask = (taskTypeId) => this.post('/api/task/take', {taskTypeId});
     getHint = () => this.get('/api/task/hint');
     answerTask = (text, imageUrl) => this.post('/api/task/answer', {text, imageUrl});
     answerSecret = (answer) => this.post('/api/answer/secret_task', {answer});
-    getAdminData = () => this.get('/api/admin');
+    getAdminUsersAnswers = () => this.get('/api/admin/answers');
     uploadImage = (base64) => this.post('/api/image/upload', {base64});
     getTaskTypes = () => this.get('/api/task/types');
 }

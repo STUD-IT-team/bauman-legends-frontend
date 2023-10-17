@@ -7,6 +7,7 @@ import Page404 from "./views/Page404.vue";
 import SignIn from "./views/SignIn.vue";
 import ChangePassword from "./views/ChangePassword.vue";
 import Task from "./views/Task.vue";
+import Admin from "./views/Admin.vue";
 
 
 export default function createVueRouter(Store) {
@@ -18,6 +19,7 @@ export default function createVueRouter(Store) {
     {path: '/task', name: 'task', component: Task, meta: {loginRequired: true}},
     {path: '/password/change', name: 'changePassword', component: ChangePassword, meta: {loginRequired: true}},
     {path: '/password/restore', name: 'restorePassword', component: SignIn, meta: {noLoginRequired: true}},
+    {path: '/admin', name: 'admin', component: Admin, meta: {loginRequired: true}},
 
     {path: '/:pathMatch(.*)*', name: 'page404', component: Page404},
   ];

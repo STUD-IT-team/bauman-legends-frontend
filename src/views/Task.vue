@@ -194,7 +194,7 @@ import CircleLoading from "../components/CircleLoading.vue";
 import FormWithErrors from "../components/FormWithErrors.vue";
 import DragNDropLoader from "../components/DragNDropLoader.vue";
 import ImageUploader from "../utils/imageUploader";
-import {IMAGES_MAX_RES} from "../utils/constants";
+import {HTTP, IMAGES_MAX_RES} from "../utils/constants";
 import QRScanner from "../components/QRScanner.vue";
 import MarkdownRenderer from "../components/Markdown/MarkdownRenderer.vue";
 import Header from "../components/Header.vue";
@@ -318,7 +318,9 @@ export default {
       this.loading = true;
       const {data: answerData, code, ok} = await this.$api.answerTask(answerText, imageUrl);
       this.loading = false;
-      if (!ok) {
+      if (code === HTTP.GONE) {
+        this.$popups.alert("Срок задачи истек", "Ответ отправлен после истечения срока и засчитан как неверный");
+      } else if (!ok) {
         this.$popups.error("Незвестная ошибка", "Не удалось загрузить ответ");
         return;
       }
