@@ -25,3 +25,5 @@ export const ErrorCodes = {
   userNotFound: 0,
   goodsNotFound: 4,
 }
+
+export const IMAGES_MAX_RES = 1920;

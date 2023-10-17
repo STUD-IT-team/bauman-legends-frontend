@@ -25,17 +25,18 @@ export default class API extends REST_API {
     getTask = () => ({
         data: {
             title: "Очень сложное задание",
-            text: "Какое то длииииииииииииииииииииииииии нное еееееееееееееееееее опииииииииииииииииииисани еееееееееее как ого ттооооооооооооооо с сло задаааааааааа ниииииииии ни нииииииии яяяяя!",
+            text: "### Какое то длиии __ииииииии__ ииииииииииии*иии* нное еееееееееееееееееее опииииииииииииииииииисани еееееееееее как ого ттооооооооооооооо с сло задаааааааааа ниииииииии ни нииииииии яяяяя!",
             typeId: 0,
             typeName: "Онлайн-задание",
             maxPoints: 130,
             minPoints: 30,
-            timeAllotted: 60 * 100,
-            timeStarted: '2023-10-13T12:40:52.078Z',
+            timeAllotted: 60 * 4,
+            timeStarted: '2023-10-17T11:00:00.000Z',
+            answerTypeId: 4,
             hintsTaken: [
                 {
                     title: "Легкая подсказка",
-                    text: "Какое то длииииииииииииииииииииииииии нное еееееееееееееееееее опииииииииииииииииииисани еееееееееее как ого ттооооооооооооооо с сло задаааааааааа ниииииииии ни нииииииии яяяяя",
+                    text: "Какое то длииииииии*ииииииии*иии__ииииии__и нное еееееееееееееееееее опииииииииииииииииииисани еееееееееее как ого ттооооооооооооооо с сло задаааааааааа ниииииииии ни нииииииии яяяяя",
                     pointsPenalty: 15,
                 }
             ], // [{title, text, pointsPenalty}, ...]
@@ -45,7 +46,9 @@ export default class API extends REST_API {
     }) //this.get('/api/task');
     takeTask = (taskTypeId) => this.post('/api/task/take', {taskTypeId});
     getHint = () => this.get('/api/task/hint');
-    answerTask = (answer) => this.post('/api/task/answer', {answer});
+    answerTask = (text, imageUrl) => this.post('/api/task/answer', {text, imageUrl});
     answerSecret = (answer) => this.post('/api/answer/secret_task', {answer});
     getAdminData = () => this.get('/api/admin');
+    uploadImage = (base64) => this.post('/api/image/upload', {base64});
+    getTaskTypes = () => this.get('/api/task/types');
 }

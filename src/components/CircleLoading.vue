@@ -17,9 +17,12 @@
   position: absolute;
   width: 7%;
   height: 7%;
-  background: colorSuccess;
+  background: colorBgDark;
   border-radius: 50%;
   animation: lds-default 1.2s linear infinite;
+}
+.lds-default.light div {
+  background: colorBgLightMax;
 }
 .lds-default div:nth-child(1) {
   animation-delay: 0s;
@@ -96,7 +99,7 @@
 
 <template>
   <div class="circle-loading" :style="`height: ${size}; width: ${size};`">
-    <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    <div class="lds-default" :class="{light}"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
   </div>
 </template>
 
@@ -105,6 +108,10 @@ export default {
   props: {
     size: {
       default: '60px'
+    },
+    light: {
+      type: Boolean,
+      default: false,
     }
   }
 };

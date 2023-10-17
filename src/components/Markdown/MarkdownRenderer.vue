@@ -94,6 +94,12 @@ export default {
       const parsed = marked.parse(this.text, {breaks: true});
       this.html = sanitizeHtml(parsed, this.sanitizeOptions);
     }
+  },
+
+  watch: {
+    initialText() {
+      this.update(this.initialText);
+    }
   }
 };
 </script>

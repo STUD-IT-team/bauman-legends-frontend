@@ -35,12 +35,12 @@ export default class ImageUploader {
         const {data, code, ok} = await this.apiUpload(dataURL);
 
         if (!ok) {
-            this.popups.error(`Ошибка ${code}!`, `Не удалось загрузить картинку на сервер: ${response.info}`);
+            this.popups.error(`Ошибка ${code}!`, `Не удалось загрузить картинку на сервер: ${JSON.stringify(data)}`);
             return;
         }
         this.popups.success('Загружено', 'Картинка загружена');
-        const id = data.id;
+        const url = data.url;
 
-        return id;
+        return url;
     }
 }

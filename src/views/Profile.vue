@@ -28,15 +28,6 @@ button-copy()
   hidden-scrollbar()
   width 100%
 
-  .navbar
-    width 100%
-    background-color colorBg
-    padding 10px
-    font-large()
-    color colorText1
-    display flex
-    justify-content space-between
-
   .main-content
     padding 20px
     max-width 600px
@@ -257,21 +248,19 @@ button-copy()
 
 <template>
   <div class="root-profile">
-    <header class="navbar">
-      <span>Профиль / Главная</span>
-<!--      <span>00:04:20</span>-->
-    </header>
+    <Header with-points>
+      <span>Профиль / главная</span>
+    </Header>
 
     <div class="main-content">
       <div class="content-block">
         <header class="header">ДОСТУПНЫЕ ЗАДАНИЯ</header>
-        <div class="info">Задания станут доступны после начала основного этапа</div>
-  <!--      <div class="tasks">-->
-  <!--        <button class="task-button">Онлайн-задание</button>-->
-  <!--        <button class="task-button">Фото-задание</button>-->
-  <!--        <button class="task-button">Путешествие в НОЦ</button>-->
-  <!--        <button class="task-button">Задание с актёром</button>-->
-  <!--      </div>-->
+<!--        <div class="info">Задания станут доступны после начала основного этапа</div>-->
+        <div class="tasks">
+          <transition-group name="opacity">
+            <button v-for="taskType in taskTypes" class="task-button" @click="takeTask(taskType.id)" :disabled="!taskType.isActive">{{ taskType.name }}</button>
+          </transition-group>
+        </div>
       </div>
 
       <div class="content-block">
@@ -279,7 +268,7 @@ button-copy()
         <div class="info">Если в вашей команде меньше 5 человек, перед началом основного этапа вы будете объединены с другой командой</div>
 <!--        <div class="info">Создание команды станет доступно 14 октября</div>-->
         <transition name="opacity" mode="out-in">
-          <CircleLoading v-if="loading"></CircleLoading>
+          <CircleLoading v-if="loadingTeams"></CircleLoading>
           <div v-else-if="this.teamData.__gotten" class="box team-block">
             <div class="team-name-container">
               <span>
@@ -287,12 +276,14 @@ button-copy()
                 <span class="team-id">#{{ String(teamData.id || '').padStart(4, '0') }}</span>
               </span>
               <button class="copy-id-button" @click="copyToClipboard(teamData.id, 'ID команды')"><img src="../res/images/copy.svg" alt=""></button>
-              <button @click="renameTeam" class="rename-team-button">Изменить</button>
+
+              <CircleLoading v-if="loadingTeamsSmall" size="30px" light></CircleLoading>
+              <button v-else @click="renameTeam" class="rename-team-button">Изменить</button>
             </div>
-<!--            <p class="team-statistics">{{ teamData.rating }} баллов, {{ teamData.place }} место</p>-->
+            <p class="team-statistics">{{ teamData.points }} баллов</p>
 
             <p class="team-members-info">Состав команды:</p>
-            <div class="user-row" v-for="(member, idx) in teamData.members">
+            <div class="user-row" v-for="(member, idx) in sortedMembers">
               <div class="name">{{ member.name }}</div>
               <select class="dropdown"
                       @change="changeMemberRole(member.id, member._newRole, member)"
@@ -329,7 +320,9 @@ button-copy()
               <div class="user-id">#{{ String($user.id || '').padStart(4, '0') }}</div>
             </div>
             <button class="copy-id-button" @click="copyToClipboard($user.id, 'Твоё ID')"><img src="../res/images/copy.svg" alt=""></button>
-            <button class="button-edit" @click="changeUserParam('name')">Изменить</button>
+
+            <CircleLoading v-if="loadingProfile" size="30px" light></CircleLoading>
+            <button v-else class="button-edit" @click="changeUserParam('name')">Изменить</button>
           </div>
           <div class="data-row">
             <div class="field">Группа:</div>
@@ -358,7 +351,7 @@ button-copy()
           </div>
 
           <div class="buttons-row">
-            <router-link :to="{name: 'changePassword'}" style="opacity: 0; pointer-events: none;">
+            <router-link :to="{name: 'changePassword'}">
               <button class="change-password">Сменить пароль</button>
             </router-link>
 
@@ -374,18 +367,21 @@ button-copy()
 <script>
 import CircleLoading from "../components/CircleLoading.vue";
 import {Validators} from "../utils/validators";
+import Header from "../components/Header.vue";
 
 
 export default {
-  components: {CircleLoading},
+  components: {Header, CircleLoading},
   data() {
     return {
       teamData: {
         id: undefined,
         title: undefined,
         members: [],
+        points: undefined,
         __gotten: false,
       },
+      taskTypes: [],
       TeamRoles: {
         lead: 3,
         subLead: 2,
@@ -394,14 +390,24 @@ export default {
 
       TEAM_MEMBERS_COUNT_LIMIT: 8,
 
-      loading: false,
+      loadingTaskTypes: false,
+      loadingTeams: false,
+      loadingTeamsSmall: false,
+      loadingProfile: false,
+      updatingTaskTypesInterval: undefined,
     }
   },
   created() {
-    this.loading = true;
+    this.loadingTeams = true;
   },
   mounted() {
     this.getCurTeam();
+    this.getTaskTypes();
+    this.getTask();
+    this.updatingTaskTypesInterval = setInterval(this.getTaskTypes, 5000);
+  },
+  unmounted() {
+    clearInterval(this.updatingTaskTypesInterval);
   },
 
   computed: {
@@ -427,21 +433,56 @@ export default {
   },
 
   methods: {
+    async getTask() {
+      const {data, code, ok} = this.$api.getTask();
+      if (!ok) {
+        this.$store.dispatch('DELETE_TASK');
+        return;
+      }
+      this.$store.dispatch('SET_TASK', {
+        points: data.maxPoints,
+        timeFinish: Number(new Date(data.timeStarted)) / 1000 + data.timeAllotted,
+      });
+    },
     async getCurTeam() {
-      this.loading = true;
+      this.loadingTeams = true;
       const {data: teamData, code, ok} = await this.$api.getTeam();
-      this.loading = false;
+      this.loadingTeams = false;
       teamData?.members?.forEach(member => {
         member._newRole = member.role;
       });
       if (!ok || Object.entries(teamData).length === 0) {
+        this.$store.dispatch('DELETE_TEAM');
         this.teamData.__gotten = false;
         return;
       }
       this.teamData.id = teamData.team_id;
       this.teamData.title = teamData.title;
       this.teamData.members = teamData.members;
+      this.teamData.points = teamData.points;
       this.teamData.__gotten = true;
+      this.$store.dispatch('SET_TEAM', this.teamData);
+    },
+    async getTaskTypes() {
+      this.loadingTaskTypes = true;
+      const {data, code, ok} = await this.$api.getTaskTypes();
+      this.loadingTaskTypes = false;
+      if (!ok) {
+        this.$popups.error("Ошибка", "Не удалось получить список возможных типов заданий", 1000);
+        return;
+      }
+      this.taskTypes = data.taskTypes;
+    },
+    async takeTask(taskTypeId) {
+      this.loadingTaskTypes = true;
+      const {data, code, ok} = await this.$api.takeTask(taskTypeId);
+      this.loadingTaskTypes = false;
+      if (!ok) {
+        this.$popups.error("Незивестная ошибка", "Не удалось взять задание");
+        return;
+      }
+
+      this.$router.push({name: 'task'});
     },
 
     showJoinInstruction() {
@@ -453,9 +494,9 @@ export default {
       if (!teamName) {
         return;
       }
-      this.loading = true;
+      this.loadingTeams = true;
       const {ok} = await this.$api.createTeam(teamName);
-      this.loading = false;
+      this.loadingTeams = false;
       if (!ok) {
         this.$popups.error("Неизвестная ошибка", "Не удалось создать команду");
       }
@@ -467,9 +508,9 @@ export default {
       if (!res) {
         return;
       }
-      this.loading = true;
+      this.loadingTeams = true;
       const {ok} = await this.$api.deleteTeam();
-      this.loading = false;
+      this.loadingTeams = false;
       if (!ok) {
         this.$popups.error("Неизвестная ошибка", "Не удалось удалить команду");
       }
@@ -481,9 +522,9 @@ export default {
       if (!teamName) {
         return;
       }
-      this.loading = true;
+      this.loadingTeams = true;
       const {ok} = await this.$api.editTeam(teamName);
-      this.loading = false;
+      this.loadingTeams = false;
       if (!ok) {
         this.$popups.error("Неизвестная ошибка", "Не удалось переименовать команду");
         return;
@@ -501,7 +542,9 @@ export default {
         return;
       }
       newUserId = Validators.id.prettifyResult(newUserId);
+      this.loadingTeamsSmall = true;
       const {ok} = await this.$api.addMember(newUserId);
+      this.loadingTeamsSmall = false;
       if (!ok) {
         this.$popups.error("Неизвестная ошибка", "Не удалось добавить пользователя в команду");
         return;
@@ -514,7 +557,9 @@ export default {
       if (!res) {
         return;
       }
+      this.loadingTeamsSmall = true;
       const {ok} = await this.$api.deleteMember(this.teamData.members[userIdxInList].id);
+      this.loadingTeamsSmall = false;
       if (!ok) {
         this.$popups.error("Неизвестная ошибка", "Не удалось удалить пользователя из команды");
         return;
@@ -523,8 +568,9 @@ export default {
     },
 
     async changeMemberRole(userId, roleId, userObject) {
-      console.log(roleId, userObject)
+      this.loadingTeamsSmall = true;
       const {ok} = await this.$api.setMemberRole(userId, roleId);
+      this.loadingTeamsSmall = false;
       if (!ok) {
         this.$popups.error("Неизвестная ошибка", "Не удалось удалить пользователя из команды");
         return;
@@ -552,7 +598,9 @@ export default {
       }
 
       newUserData[fieldName] = Validators[fieldNameUser].prettifyResult(inputValue);
+      this.loadingProfile = true;
       const {ok} = await this.$api.editProfile(newUserData.name, newUserData.group, newUserData.telegram, newUserData.vk, newUserData.email, newUserData.phone_number);
+      this.loadingProfile = false;
       if (!ok) {
         this.$popups.error(`Не удалось изменить значение поля ${fieldName}`);
         return;
@@ -561,9 +609,9 @@ export default {
     },
 
     async logout() {
-      this.loading = true;
+      this.loadingProfile = true;
       const {data, code, ok} = await this.$api.logout();
-      this.loading = true;
+      this.loadingProfile = true;
 
       if (!ok) {
         this.$popups.error('Не получилось выйти из аккаунта', 'Неизвестная ошибка');

@@ -61,7 +61,22 @@ button-submit()
         border-color border-color-hover-2
     &[disabled]:not([disabled=false])
         background colorBgLight
-        border-color border-color-disabled-2
+        border-color bg-color-disabled
+
+button-no-fill()
+    button()
+    padding 10px 20px
+    min-height 40px
+    background transparent
+    border colorButton solid 2px
+    color colorText1
+    &:hover
+        background colorButton
+        color colorTextDark1
+        border-color colorButton
+    &[disabled]:not([disabled=false])
+        color colorText3
+        background mix(colorButton, transparent, 40%)
 
 button-danger()
     button()
