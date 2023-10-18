@@ -36,7 +36,7 @@ const Store = new Vuex.Store({
       state.user.vk = String(userData.vk);
       state.user.email = String(userData.email);
       state.user.phone = String(userData.phone_number);
-      state.user.isAdmin = Boolean(userData.isAdmin);
+      state.user.isAdmin = Boolean(userData.is_admin);
 
       state.user.isSignedIn = true;
     },
