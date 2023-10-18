@@ -50,17 +50,74 @@
     min-height 100vh
 </style>
 
+<style lang="stylus" scoped>
+@require '../src/styles/constants.styl'
+@require '../src/styles/fonts.styl'
+@require '../src/styles/utils.styl'
+
+.root-technical-works
+  .box
+    background-color colorBg
+    border-radius borderRadiusM
+    padding 20px
+    padding-top 15px
+    width 100%
+    max-width 600px
+    text-align left
+    align-content left
+    font-medium()
+    color colorText1
+    margin-top 100px
+    centered-margin()
+    @media ({mobile})
+      margin-left 10px
+      margin-right 10px
+      width calc(100% - 20px)
+    .main-content
+      header
+        font-large()
+        font-bold()
+        margin-bottom 10px
+      article
+        font-medium()
+        color colorText3
+      sub
+        display flex
+        gap 30px
+        align-items flex-end
+        justify-content space-between
+        img
+          height 10em
+          opacity 0.5
+          margin-left -20px
+        span
+          text-align right
+          font-small()
+          color colorText3
+          margin-bottom 1em
+</style>
+
 <template>
   <div class="bg"></div>
   <img class="background-text-image" src="../src/res/images/BackgroundPatternSmaller.png" alt="background">
   <img class="bauman-image" src="../src/res/images/Bauman.png" alt="Bauman">
   <img src="./res/images/Gerbs.png" class="logo" alt="crest">
   <div class="wrapper">
-    <router-view v-slot="{ Component }">
-      <transition name="scale-in">
-        <component :is="Component"/>
-      </transition>
-    </router-view>
+    <div class="root-technical-works">
+      <main class="box">
+        <div class="main-content">
+          <header>Ведутся технические работы</header>
+          <article>В данный момент на сайте появляется что-то новое и классное. К сожалению, на это нужно время, зайдите сюда немного позже</article>
+          <sub>
+            <img src="./res/images/technical-works.svg" alt="technical works">
+            <span>
+              Мы обязательно всё починим. <br>
+              С любовью, IT-отдел СтудСовета.
+            </span>
+          </sub>
+        </div>
+      </main>
+    </div>
   </div>
 
   <Modal ref="modal"></Modal>
