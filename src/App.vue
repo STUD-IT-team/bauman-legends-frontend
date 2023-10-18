@@ -69,77 +69,77 @@ footer-height-mobile-small = 30px
     @media ({mobile})
       height footer-height-mobile
 
-.all-page-wrapper
+//.all-page-wrapper
+width 100%
+min-height 100vh
+.content-wrapper
   width 100%
   min-height 100vh
-  .content-wrapper
+  & > *
+    //position absolute
     width 100%
-    min-height 100vh
-    & > *
-      //position absolute
-      width 100%
-      height 100%
-      min-height 'calc(100vh - %s)' % footer-height
-      margin-bottom footer-height
-      @media({mobile})
-        min-height 'calc(100vh - %s)' % footer-height-mobile
-        margin-bottom footer-height-mobile
+    height 100%
+    min-height 'calc(100vh - %s)' % footer-height
+    margin-bottom footer-height
+    @media({mobile})
+      min-height 'calc(100vh - %s)' % footer-height-mobile
+      margin-bottom footer-height-mobile
 
-  .footer
-    position fixed
-    width 100%
-    bottom 0
-    height footer-height
-    background colorBgDark
+.footer
+  position fixed
+  width 100%
+  bottom 0
+  height footer-height
+  background colorBgDark
+  transition all 0.2s ease
+  padding 20px
+  display flex
+  gap 20px
+  cursor pointer
+  @media (max-width: 400px)
+    flex-direction column
+
+  @media ({mobile})
+    padding-top 10px
+    padding-bottom 10px
+    height footer-height-mobile
+
+  .title
+    font-medium()
+    color colorText3
     transition all 0.2s ease
-    padding 20px
-    display flex
-    gap 20px
-    cursor pointer
-    @media (max-width: 400px)
-      flex-direction column
-
+    margin-bottom 5px
     @media ({mobile})
-      padding-top 10px
-      padding-bottom 10px
-      height footer-height-mobile
+      margin-bottom 0
+  .info
+    font-small()
+    color colorText4
+    display flex
+    align-items center
+    gap 5px
+    img
+      width 20px
+      height 20px
 
+  &.small
+    height footer-height-small
+    padding-top 5px
+    @media ({mobile})
+      height footer-height-mobile-small
     .title
-      font-medium()
-      color colorText3
-      transition all 0.2s ease
-      margin-bottom 5px
+      color colorText5
       @media ({mobile})
-        margin-bottom 0
-    .info
-      font-small()
-      color colorText4
-      display flex
-      align-items center
-      gap 5px
-      img
-        width 20px
-        height 20px
+        margin-bottom 10px
+        font-small-extra()
+    a
+      pointer-events none
 
-    &.small
-      height footer-height-small
-      padding-top 5px
-      @media ({mobile})
-        height footer-height-mobile-small
+  @media ({desktop})
+    &.small:hover
+      height footer-height-small + 10px
+    &:hover
       .title
-        color colorText5
-        @media ({mobile})
-          margin-bottom 10px
-          font-small-extra()
-      a
-        pointer-events none
-
-    @media ({desktop})
-      &.small:hover
-        height footer-height-small + 10px
-      &:hover
-        .title
-          color colorText1
+        color colorText1
 </style>
 
 <style lang="stylus" scoped>
@@ -148,6 +148,7 @@ footer-height-mobile-small = 30px
 @require '../src/styles/utils.styl'
 
 .root-technical-works
+  padding-top 100px
   .box
     background-color colorBg
     border-radius borderRadiusM
@@ -159,7 +160,6 @@ footer-height-mobile-small = 30px
     align-content left
     font-medium()
     color colorText1
-    margin-top 100px
     centered-margin()
     @media ({mobile})
       margin-left 10px
@@ -197,8 +197,9 @@ footer-height-mobile-small = 30px
     <div class="root-technical-works">
       <main class="box">
         <div class="main-content">
-          <header>Ведутся технические работы</header>
-          <article>В данный момент на сайте появляется что-то новое и классное. К сожалению, на это нужно время, зайдите сюда немного позже</article>
+          <header>Ведутся технические работы до 2024г.</header>
+          <article>В данный момент на сайте появляется что-то новое и классное. К сожалению, на это нужно время, зайдите сюда немножчко позже</article>
+          <article>Все зарегистрированные команды сохранены, приходите 19.10 в ауд</article>
           <sub>
             <img src="./res/images/technical-works.svg" alt="technical works">
             <span>
@@ -209,22 +210,20 @@ footer-height-mobile-small = 30px
         </div>
       </main>
     </div>
-    <div class="all-page-wrapper">
-      <div class="footer" :class="{small: !isFooterShown}" @click="isFooterShown = !isFooterShown">
-        <a href="https://vk.com/write-198373277" target="_blank">
-          <div class="title">Техническая поддержка</div>
-          <div class="info">
-            <img src="../src/res/images/vk-logo.svg" alt="vk">Легенды Бауманки 2023
-          </div>
-        </a>
-        <a>
-          <div class="title">Сайт создан</div>
-          <div class="info" style="gap: 0;">
-            <img src="../src/res/images/vk-logo.svg" alt="tg" style="opacity: 0; max-width: 0;">
-            IT-отделом СтудСовета
-          </div>
-        </a>
-      </div>
+    <div class="footer" :class="{small: !isFooterShown}" @click="isFooterShown = !isFooterShown">
+      <a href="https://vk.com/write-198373277" target="_blank">
+        <div class="title">Техническая поддержка</div>
+        <div class="info">
+          <img src="../src/res/images/vk-logo.svg" alt="vk">Легенды Бауманки 2023
+        </div>
+      </a>
+      <a>
+        <div class="title">Сайт создан</div>
+        <div class="info" style="gap: 0;">
+          <img src="../src/res/images/vk-logo.svg" alt="tg" style="opacity: 0; max-width: 0;">
+          IT-отделом СтудСовета
+        </div>
+      </a>
     </div>
   </div>
 
