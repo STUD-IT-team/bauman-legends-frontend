@@ -409,10 +409,10 @@ export default {
     this.getCurTeam();
     this.getTaskTypes();
     this.getTask();
-    this.updatingTaskTypesInterval = setInterval(this.getTaskTypes, 5000);
+    // this.updatingTaskTypesInterval = setInterval(this.getTaskTypes, 5000);
   },
   unmounted() {
-    clearInterval(this.updatingTaskTypesInterval);
+    // clearInterval(this.updatingTaskTypesInterval);
   },
 
   computed: {

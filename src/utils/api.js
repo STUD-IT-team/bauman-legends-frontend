@@ -10,7 +10,7 @@ export default class API extends REST_API {
     getUserById = (id) => this.get(`/api/user`, {id});
     sendConfirmationLetter = (name, email) => this.post('/api/email/confirm', {name, email});
     confirmRegistrationByCode = (secretCode) => this.put('/api/user/email/confirm', {secretCode});
-    changePassword = (oldPassword, newPassword) => this.put('/api/user/password/restore', {oldPassword, newPassword});
+    changePassword = (oldPassword, newPassword) => this.put('/api/user/password', {oldPassword, newPassword});
     editProfile = (name, group, telegram, vk, email, phone_number) => this.put('/api/user', {name, group, telegram, vk, email, phone_number});
     sendRestorePasswordLetter = (secretCode, newPassword) => this.post('/api/user/password/restore', {secretCode, newPassword});
     restorePassword = (secretCode, newPassword) => this.put('/api/user/password', {secretCode, newPassword});
