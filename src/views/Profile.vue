@@ -446,7 +446,6 @@ export default {
       }
       this.$store.dispatch('SET_TASK', {
         points: data.maxPoints,
-        timeFinish: Number(new Date(data.timeStarted)) / 1000 + data.timeAllotted,
       });
     },
     async getCurTeam() {

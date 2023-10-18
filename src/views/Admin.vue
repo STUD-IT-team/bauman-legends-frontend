@@ -98,6 +98,7 @@
     <Header>
       <router-link :to="{name: 'profile'}">&lt; В профиль</router-link>
       <span>Админская</span>
+      <div></div>
     </Header>
 
     <div class="main-content">

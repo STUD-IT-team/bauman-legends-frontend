@@ -1,6 +1,7 @@
 <style lang="stylus" scoped>
 @require '../styles/constants.styl'
 @require '../styles/fonts.styl'
+@require '../styles/utils.styl'
 
 .navbar
   width 100%
@@ -14,6 +15,10 @@
   .info-name
     font-medium()
     color colorText1
+  img.info-name
+    width 22px
+    height 22px
+    margin-right 5px
   .info-value
     display inline-block
     text-align left
@@ -33,13 +38,15 @@
     .info-name
       &.last
         margin-right 20px
+  .points
+    centered-flex-container()
 </style>
 
 <template>
   <header class="navbar">
     <slot></slot>
     <span v-if="withPoints" class="points">
-      <span class="info-name">Баллов: </span>
+      <img class="info-name" src="../res/images/ticket.svg" alt="tickets">
       <span class="info-value">
         <vue3autocounter
           :start-amount="0"
@@ -49,10 +56,6 @@
         ></vue3autocounter>
       </span>
     </span>
-    <router-link :to="{name: 'task'}" v-if="$store?.state?.task?.isGotten" class="time-left">
-      <span class="info-name last">На задачу: </span>
-      <span class="info-value last">{{ $store?.state?.task?.timeLeftString }}</span>
-    </router-link>
   </header>
 </template>
 

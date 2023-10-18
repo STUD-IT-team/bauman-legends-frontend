@@ -220,7 +220,6 @@ export default {
         typeName: undefined,
         minPoints: undefined,
         maxPoints: undefined,
-        timeAllotted: undefined,
         timeStarted: undefined,
         hintsTaken: [], // [{title, text, pointsPenalty}, ...]
         answerTypeId: undefined,
@@ -246,7 +245,6 @@ export default {
     await this.getTask();
     this.$store.dispatch('SET_TASK', {
       points: this.taskData.maxPoints,
-      timeFinish: Number(new Date(this.taskData.timeStarted)) / 1000 + this.taskData.timeAllotted,
     });
     // this.updateTotalTaskPoints();
     this.updatingTotalPointsInterval = setInterval(this.updateTotalTaskPoints, 1000);
@@ -269,8 +267,6 @@ export default {
       this.taskData.typeName = String(data.typeName);
       this.taskData.minPoints = Number(data.minPoints);
       this.taskData.maxPoints = Number(data.maxPoints);
-      this.taskData.timeAllotted = Number(data.timeAllotted);
-      this.taskData.timeStarted = new Date(data.timeStarted);
       this.taskData.hintsTaken = data.hintsTaken;
       this.taskData.answerTypeId = Number(data.answerTypeId);
     },
@@ -286,13 +282,7 @@ export default {
     // },
 
     updateTotalTaskPoints() {
-      const totalHintsPointsPenalty = this.taskData.hintsTaken.reduce((penalty, hint) => penalty + hint.pointsPenalty, 0);
-      const secondsGone = Number((new Date()) - this.taskData.timeStarted) / 1000;
-      const possibleDiffPoints = (this.taskData.maxPoints - this.taskData.minPoints);
-      const pointsGone = (secondsGone / this.taskData.timeAllotted) * possibleDiffPoints;
-      const timePoints = this.taskData.minPoints + possibleDiffPoints - pointsGone;
-      this.prevTaskPoints = this.totalTaskPoints;
-      this.totalTaskPoints = totalHintsPointsPenalty + timePoints;
+      this.totalTaskPoints = -1 * this.taskData.hintsTaken.reduce((penalty, hint) => penalty + hint.pointsPenalty, 0);
     },
 
     async answer(answerText=null) {
