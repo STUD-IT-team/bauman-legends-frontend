@@ -209,20 +209,22 @@ footer-height-mobile-small = 30px
         </div>
       </main>
     </div>
-    <div class="footer" :class="{small: !isFooterShown}" @click="isFooterShown = !isFooterShown">
-      <a href="https://vk.com/write-198373277" target="_blank">
-        <div class="title">Техническая поддержка</div>
-        <div class="info">
-          <img src="../src/res/images/vk-logo.svg" alt="vk">Легенды Бауманки 2023
-        </div>
-      </a>
-      <a>
-        <div class="title">Сайт создан</div>
-        <div class="info" style="gap: 0;">
-          <img src="../src/res/images/vk-logo.svg" alt="tg" style="opacity: 0; max-width: 0;">
-          IT-отделом СтудСовета
-        </div>
-      </a>
+    <div class="all-page-wrapper">
+      <div class="footer" :class="{small: !isFooterShown}" @click="isFooterShown = !isFooterShown">
+        <a href="https://vk.com/write-198373277" target="_blank">
+          <div class="title">Техническая поддержка</div>
+          <div class="info">
+            <img src="../src/res/images/vk-logo.svg" alt="vk">Легенды Бауманки 2023
+          </div>
+        </a>
+        <a>
+          <div class="title">Сайт создан</div>
+          <div class="info" style="gap: 0;">
+            <img src="../src/res/images/vk-logo.svg" alt="tg" style="opacity: 0; max-width: 0;">
+            IT-отделом СтудСовета
+          </div>
+        </a>
+      </div>
     </div>
   </div>
 
