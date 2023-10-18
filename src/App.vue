@@ -143,7 +143,7 @@ footer-height-mobile-small = 30px
 </style>
 
 <template>
-  <img class="background-text-image" src="../src/res/images/BackgroundPatternSmaller.png" alt="background">
+  <img class="background-text-image" src="../src/res/images/BackgroundPattern-2000x2000.png" alt="background">
   <img v-if="!isNoBaumanImage" class="bauman-image" src="../src/res/images/Bauman.png" alt="Bauman" :class="{small: isBaumanImageSmall, transparent: isBaumanTransparent}">
   <img src="./res/images/Gerbs.png" class="logo" alt="crest" :class="{small: isFooterShown}">
   <div class="all-page-wrapper">
