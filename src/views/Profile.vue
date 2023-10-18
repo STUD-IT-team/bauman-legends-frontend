@@ -314,7 +314,7 @@ button-copy()
         </transition>
       </div>
 
-      <router-link :to="{name: 'admin'}" class="admin-page-button">На админскую</router-link>
+      <router-link v-if="$user?.isAdmin" :to="{name: 'admin'}" class="admin-page-button">На админскую</router-link>
 
       <div class="content-block">
         <header class="header">ПРОФИЛЬ</header>

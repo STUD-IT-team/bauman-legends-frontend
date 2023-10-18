@@ -19,7 +19,7 @@ export default function createVueRouter(Store) {
     {path: '/task', name: 'task', component: Task, meta: {loginRequired: true}},
     {path: '/password/change', name: 'changePassword', component: ChangePassword, meta: {loginRequired: true}},
     {path: '/password/restore', name: 'restorePassword', component: SignIn, meta: {noLoginRequired: true}},
-    {path: '/admin', name: 'admin', component: Admin, meta: {loginRequired: true}},
+    {path: '/admin', name: 'admin', component: Admin, meta: {adminRequired: true}},
 
     {path: '/:pathMatch(.*)*', name: 'page404', component: Page404},
   ];
@@ -54,7 +54,7 @@ export default function createVueRouter(Store) {
     }
 
     // Login required redirects
-    if (to.matched.some(record => record.meta.loginRequired === true)) {
+    if (to.matched.some(record => record.meta.loginRequired === true || record.meta.adminRequired === true)) {
       if (Store.state.user.isSignedIn) {
         next();
         return;
@@ -63,6 +63,14 @@ export default function createVueRouter(Store) {
       return;
     } else if (to.matched.some(record => record.meta.noLoginRequired === true)) {
       if (!Store.state.user.isSignedIn) {
+        next();
+        return;
+      }
+      next(loginedRedirect);
+      return;
+    }
+    if (to.matched.some(record => record.meta.adminRequired === true)) {
+      if (Store.state.user.isAdmin) {
         next();
         return;
       }
