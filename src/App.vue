@@ -158,10 +158,10 @@ footer-height-mobile-small = 30px
       </router-view>
     </div>
     <div class="footer" :class="{small: !isFooterShown}" @click="isFooterShown = !isFooterShown">
-      <a href="https://t.me/tyapkin_s" target="_blank">
+      <a href="https://vk.com/write-198373277" target="_blank">
         <div class="title">Техническая поддержка</div>
         <div class="info">
-          <img src="../src/res/images/telegram-logo.svg" alt="tg">Сергей Тяпкин
+          <img src="../src/res/images/vk-logo.svg" alt="vk">Легенды Бауманки 2023
         </div>
       </a>
       <a>
