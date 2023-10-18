@@ -475,7 +475,11 @@ export default {
         this.$popups.error("Ошибка", "Не удалось получить список возможных типов заданий", 1000);
         return;
       }
-      this.taskTypes = data.taskTypes;
+      this.taskTypes = data.taskTypes.map(taskType => ({
+        id: String(taskType.id),
+        name: String(taskType.name),
+        isActive: Boolean(taskType.is_active),
+      }));
     },
     async takeTask(taskTypeId) {
       this.loadingTaskTypes = true;
