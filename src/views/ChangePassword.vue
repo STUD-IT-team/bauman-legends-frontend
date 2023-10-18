@@ -39,29 +39,23 @@
 <template>
   <div class="root-signin">
     <div class="form">
-      ВХОД<br>
+      СМЕНА ПАРОЛЯ<br>
       <FormWithErrors
         ref="form"
         :fields="fields"
-        submitText="Вход"
-        @success="login"
+        submitText="Сменить пароль"
+        @success="changePassword"
         :loading="loading"
       ></FormWithErrors>
-      <router-link class="profile-link" :to="{name: 'register'}">
-        <button class="profile-button">Зарегистрироваться</button>
+      <router-link class="profile-link" :to="{name: 'profile'}">
+        <button class="profile-button">Назад</button>
       </router-link>
-
-<!--      <div class="signin-links">-->
-<!--        <router-link class="signin-by-email-link" :to="{name: 'signInByEmail'}">Войти по почте</router-link>-->
-<!--        <router-link class="restore-password-link" :to="{name: 'restorePassword'}">Восстановить пароль</router-link>-->
-<!--      </div>-->
     </div>
   </div>
 </template>
 
 <script>
 import FormWithErrors from "../components/FormWithErrors.vue";
-import {detectBrowser, detectOS} from "../utils/utils";
 import CircleLoading from "../components/CircleLoading.vue";
 import {Validators} from "../utils/validators";
 
@@ -71,39 +65,53 @@ export default {
   data() {
     return {
       fields: {
-        email: {
-          title: 'Электронная почта',
-          name: 'email',
-          type: 'text',
-          placeholder: 'legends@bmstu.ru',
-          validationRegExp: Validators.email.regExp,
-          prettifyResult: Validators.email.prettifyResult,
-          autocomplete: 'email',
-        },
-        password: {
-          title: 'Пароль',
+        oldPassword: {
+          title: 'Старый пароль',
           name: 'password',
           type: 'password',
           placeholder: '●●●●●●',
           validationRegExp: Validators.password.regExp,
           prettifyResult: Validators.password.prettifyResult,
           autocomplete: 'password',
-        }
+        },
+        newPassword: {
+          title: 'Новый пароль',
+          name: 'new-password',
+          type: 'password',
+          placeholder: '●●●●●●',
+          validationRegExp: Validators.password.regExp,
+          prettifyResult: Validators.password.prettifyResult,
+        },
+        newPasswordAgain: {
+          title: 'Новый пароль ещё раз',
+          name: 'new-password',
+          type: 'password',
+          placeholder: '●●●●●●',
+          validationRegExp: Validators.password.regExp,
+          prettifyResult: Validators.password.prettifyResult,
+        },
       },
       loading: false,
     }
   },
 
   methods: {
-    async login(data) {
+    async changePassword(data) {
+      if (data.newPassword !== data.newPasswordAgain) {
+        this.$refs.form.setError([this.fields.newPassword, this.fields.newPasswordAgain], 'Пароли не совпадают');
+        return;
+      }
+
       this.loading = true;
-      const {ok} = await this.$api.login(data.email, data.password, detectBrowser(), detectOS());
+      const {ok} = await this.$api.changePassword(data.oldPassword, data.newPassword);
       this.loading = false;
 
       if (!ok) {
-        this.$refs.form.setError([this.fields.email, this.fields.password], 'Неверные email или пароль');
+        this.$refs.form.setError(this.fields.oldPassword, 'Неверный пароль');
         return;
       }
+      this.$popups.success('Пароль изменен', 'Пароль умпешно изменен');
+
       this.loading = true;
       await this.$store.dispatch('GET_USER');
       this.loading = false;

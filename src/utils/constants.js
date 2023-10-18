@@ -25,3 +25,24 @@ export const ErrorCodes = {
   userNotFound: 0,
   goodsNotFound: 4,
 }
+
+export const IMAGES_MAX_RES = 720;
+
+export const HTTP = {
+  OK: 200,
+  CREATED: 201,
+  ANAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  CONFLICT: 409,
+  GONE: 410,
+  IM_A_TEAPOT: 418,
+  LOCKED: 423,
+}
+
+export const AnswerTypeIds = {
+  text: 0,
+  photo: 1,
+  textPhoto: 2,
+  QR: 3,
+  another: 4,
+}

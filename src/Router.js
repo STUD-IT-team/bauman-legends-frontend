@@ -5,6 +5,9 @@ import Profile from "./views/Profile.vue";
 import Registration from "./views/Registration.vue";
 import Page404 from "./views/Page404.vue";
 import SignIn from "./views/SignIn.vue";
+import ChangePassword from "./views/ChangePassword.vue";
+import Task from "./views/Task.vue";
+import Admin from "./views/Admin.vue";
 
 
 export default function createVueRouter(Store) {
@@ -13,10 +16,12 @@ export default function createVueRouter(Store) {
     {path: '/login', name: 'login', component: SignIn, meta: {noLoginRequired: true}},
     {path: '/profile', name: 'profile', component: Profile, meta: {loginRequired: true}},
     {path: '/login/email', name: 'signInByEmail', component: SignIn, meta: {noLoginRequired: true}},
+    {path: '/task', name: 'task', component: Task, meta: {loginRequired: true}},
+    {path: '/password/change', name: 'changePassword', component: ChangePassword, meta: {loginRequired: true}},
     {path: '/password/restore', name: 'restorePassword', component: SignIn, meta: {noLoginRequired: true}},
-    {path: '/password/change', name: 'changePassword', component: SignIn, meta: {loginRequired: true}},
+    {path: '/admin', name: 'admin', component: Admin, meta: {adminRequired: true}},
 
-    {path: '/:pathMatch(.*)*', name: 'default', component: Page404},
+    {path: '/:pathMatch(.*)*', name: 'page404', component: Page404},
   ];
 
   const Router = createRouter({
@@ -49,15 +54,23 @@ export default function createVueRouter(Store) {
     }
 
     // Login required redirects
-    if (to.matched.some(record => record.meta.loginRequired)) {
+    if (to.matched.some(record => record.meta.loginRequired === true || record.meta.adminRequired === true)) {
       if (Store.state.user.isSignedIn) {
         next();
         return;
       }
       next(notLoginedRedirect);
       return;
-    } else if (to.matched.some(record => record.meta.noLoginRequired)) {
+    } else if (to.matched.some(record => record.meta.noLoginRequired === true)) {
       if (!Store.state.user.isSignedIn) {
+        next();
+        return;
+      }
+      next(loginedRedirect);
+      return;
+    }
+    if (to.matched.some(record => record.meta.adminRequired === true)) {
+      if (Store.state.user.isAdmin) {
         next();
         return;
       }

@@ -11,6 +11,12 @@
     "dist": "vite build --out-dir dist"
   },
   "dependencies": {
+    "@korolion/get-image-as-dataurl": "^0.3.0",
+    "marked": "^4.0.12",
+    "qr-scanner": "^1.4.1",
+    "qrcode-generator-es6": "^1.1.4",
+    "sanitize-html": "^2.10.0",
+    "vue3-autocounter": "^1.0.6",
     "@vitejs/plugin-vue": "^4.2.3",
     "vite": "^4.3.9",
     "vue": "3.2.37",
