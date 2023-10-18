@@ -12,14 +12,14 @@ import Admin from "./views/Admin.vue";
 
 export default function createVueRouter(Store) {
   const routes = [
-    {path: '/register', name: 'register', component: Registration, meta: {noLoginRequired: false}},
-    {path: '/login', name: 'login', component: SignIn, meta: {noLoginRequired: false}},
-    {path: '/profile', name: 'profile', component: Profile, meta: {loginRequired: false}},
-    {path: '/login/email', name: 'signInByEmail', component: SignIn, meta: {noLoginRequired: false}},
-    {path: '/task', name: 'task', component: Task, meta: {loginRequired: false}},
-    {path: '/password/change', name: 'changePassword', component: ChangePassword, meta: {loginRequired: false}},
-    {path: '/password/restore', name: 'restorePassword', component: SignIn, meta: {noLoginRequired: false}},
-    {path: '/admin', name: 'admin', component: Admin, meta: {loginRequired: false}},
+    {path: '/register', name: 'register', component: Registration, meta: {noLoginRequired: true}},
+    {path: '/login', name: 'login', component: SignIn, meta: {noLoginRequired: true}},
+    {path: '/profile', name: 'profile', component: Profile, meta: {loginRequired: true}},
+    {path: '/login/email', name: 'signInByEmail', component: SignIn, meta: {noLoginRequired: true}},
+    {path: '/task', name: 'task', component: Task, meta: {loginRequired: true}},
+    {path: '/password/change', name: 'changePassword', component: ChangePassword, meta: {loginRequired: true}},
+    {path: '/password/restore', name: 'restorePassword', component: SignIn, meta: {noLoginRequired: true}},
+    {path: '/admin', name: 'admin', component: Admin, meta: {loginRequired: true}},
 
     {path: '/:pathMatch(.*)*', name: 'page404', component: Page404},
   ];
