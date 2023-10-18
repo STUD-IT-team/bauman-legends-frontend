@@ -15,6 +15,7 @@
   borderRadius = 2px
 
   .popup-messages
+    pointer-events none
     position fixed
     top indent
     right indent

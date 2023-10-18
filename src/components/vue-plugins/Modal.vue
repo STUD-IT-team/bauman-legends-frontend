@@ -31,6 +31,9 @@ close-btn-size = 20px
     background colorBg
     padding 20px
     border-radius 10px
+    @media (max-width: 600px)
+      margin-left 10px
+      margin-right 10px
 
     .confirm-button
       width 45%
@@ -41,8 +44,8 @@ close-btn-size = 20px
 
     .close-btn
       position absolute
-      color colorText2
-      text-shadow colorText2
+      color colorText3
+      text-shadow colorText3
       right 20px
       top 10px
       width close-btn-size
@@ -61,7 +64,7 @@ close-btn-size = 20px
         margin-bottom 10px
       .description
         font-medium()
-        color colorText2
+        color colorText3
 
     .fields-container
       .form-group
