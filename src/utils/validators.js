@@ -1,38 +1,40 @@
 export const Validators = {
   name: {
-    regExp: /^[а-я]+ [а-я]+( [а-я]+)?$/i,
-    validate: (str) => this.regExp.test(str),
+    regExp: /^(([а-я]+-)*[a-я]+) +(([а-я]+-)*[a-я]+)( +(([а-я]+-)*[a-я]+))?$/i,
+    prettifyResult: (str) => str.replaceAll(/ {2,}/g, ' '),
   },
   group: {
-    regExp: /^(иу|ибм|мт|см|бмт|рл|э|рк|фн|л|юр|сгн|вуц|гуимц|уц|фмоп|фоф|исот|ркт|ак|пс|рт|лт|оэ|оэп)\d\d?и?-1\d[АМБ]?$/i,
-    validate: (str) => this.regExp.test(str),
+    regExp: /(^(иу|ибм|мт|см|бмт|рл|э|рк|фн|л|сгн|вуц|гуимц|уц|фмоп|фоф|исот|ркт|ак|пс|рт|лт|оэ|оэп)\d\d?и?-1\d[АМБамб]?$)|(^юр-1\d$)/i,
     prettifyResult: (str) => str.toUpperCase(),
   },
   tg: {
-    regExp: /^((https:\/\/)?(t\.me\/)|@)?\w{5,}$/,
-    validate: (str) => this.regExp.test(str),
-    prettifyResult:  (str) => str.replace('https://', '').replace('t.me/', '').replace('@', ''),
+    regExp: /^((https:\/\/)?(t\.me\/)|@)?\w{5,}$/i,
+    prettifyResult:  (str) => str.replace(/https:\/\//i, '').replace(/t\.me\//i, '').replace('@', ''),
   },
   vk: {
-    regExp: /^(https:\/\/)?(vk\.com\/|@)?\w+$/,
-    validate: (str) => this.regExp.test(str),
-    prettifyResult: (str) => str.replace('https://', '').replace('vk.com/', '').replace('@', ''),
+    regExp: /^(https:\/\/)?(vk\.com\/|@)?(\w+\.)*\w+$/i,
+    prettifyResult: (str) => str.replace(/https:\/\//i, '').replace(/vk\.com\//i, '').replace('@', ''),
   },
   email: {
-    regExp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    validate: (str) => this.regExp.test(str),
+    regExp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i,
     prettifyResult: (str) => str.toLowerCase(),
   },
   phone: {
     regExp: /^((\+7)|8)[-\s.]?((\(\d\d\d\))|(\d\d\d))[-\s.]?\d\d\d[-\s.]?\d\d[-\s.]?\d\d$/,
-    validate: (str) => this.regExp.test(str),
     prettifyResult: (str) => str.replace('+7', '8').replace('-', '').replace('(', '').replace(')', ''),
   },
   password: {
-    regExp: /^.{6,}$/,
-    validate: (str) => this.regExp.test(str),
+    regExp: /^.{6,}$/i,
   },
+  id: {
+    regExp: /^#?[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i,
+    prettifyResult: (str) => str.replace('#', '').toLowerCase(),
+  }
 }
+Object.entries(Validators).forEach(([name, validator]) => {
+  validator.validate = (str) => !validator.regExp || validator.regExp.test(str.trim());
+});
+
 
 export function getValidatedAndPrettified(field, str) {
   if (!field.validate || field.validate(str)) {

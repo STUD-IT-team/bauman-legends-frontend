@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 
 import App from './App.vue'
-import Storage from './Storage.js'
+import Storage from './Store.js'
 import createVueRouter from './Router.js'
 
 // глобальное подключение css файла с базовыми стилями
